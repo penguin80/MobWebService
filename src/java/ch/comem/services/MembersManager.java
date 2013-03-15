@@ -20,8 +20,8 @@ public class MembersManager implements MembersManagerLocal {
         member.setFirstName(firstName);
         member.setLastName(lastName);
         member.setAge(age);
-        em.flush();
         persist(member);
+        em.flush();
         return member.getId();
     }
     

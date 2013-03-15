@@ -22,6 +22,7 @@ public class Member implements Serializable {
     private Long id;
     private String firstName;
     private String lastName;
+    private int age;
 
     public String getFirstName() {
         return firstName;
@@ -46,7 +47,6 @@ public class Member implements Serializable {
     public void setAge(int age) {
         this.age = age;
     }
-    private int age;
 
     public Long getId() {
         return id;
