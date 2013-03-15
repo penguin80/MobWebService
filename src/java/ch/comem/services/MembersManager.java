@@ -26,22 +26,33 @@ public class MembersManager implements MembersManagerLocal {
     }
     
     @Override
-    public String deleteMember(Member m) {
-        em.detach(m);
-        em.remove(m);
-        em.flush();
-        return "Membre supprimé";
+    public String deleteMember(Long id) {
+        String str = "";
+        Member m = em.find(Member.class, id);
+        if (m != null) {
+            em.remove(m);
+            str = str.concat("Membre supprimé!");
+        } else {
+            str = str.concat("Impossible de supprimer le membre demandé!");
+        }
+        return str;
     }
 
     @Override
-    public String modifyMember(Member m, String firstName, String lastName, int age) {
-        em.detach(m);
-        m.setFirstName(firstName);
-        m.setLastName(lastName);
-        m.setAge(age);
-        em.flush();
-        persist(m);
-        return "Membre modifié";
+    public String modifyMember(Long id, String firstName, String lastName, int age) {
+        String str = "";
+        Member m  = em.find(Member.class, id);
+        if (m != null) {
+            m.setFirstName(firstName);
+            m.setLastName(lastName);
+            m.setAge(age);
+            persist(m);
+            em.flush();
+            str = str.concat("Membre modifié!");
+        } else {
+            str = str.concat("Impossible de modifier le membre demandé!");
+        }
+        return str;
     }
     
     
