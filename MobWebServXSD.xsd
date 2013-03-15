@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2013 (x64) (http://www.altova.com) by Rieker (HEIG VD) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:element name="Publication">
+		<xs:annotation>
+			<xs:documentation>Affichage de pâtisseries</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="Photo"/>
+				<xs:element ref="Category"/>
+				<xs:element name="DateOfPublication"/>
+				<xs:element name="DateOfLatestModification" minOccurs="0"/>
+				<xs:element ref="Recipe" minOccurs="0"/>
+				<xs:element ref="Member"/>
+				<xs:element name="Rating">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="Comment" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+							<xs:element name="Voting" minOccurs="0" maxOccurs="unbounded">
+								<xs:simpleType>
+									<xs:restriction base="xs:boolean">
+										<xs:pattern value="-1"/>
+										<xs:pattern value="1"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+			<xs:attribute ref="Id" use="required"/>
+			<xs:attribute name="Type" use="required">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="Salted"/>
+						<xs:enumeration value="Sweet"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Recipe">
+		<xs:annotation>
+			<xs:documentation>Affichage de la recette</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Ingredient" maxOccurs="unbounded">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="Name" type="xs:string"/>
+							<xs:element name="Quantity">
+								<xs:simpleType>
+									<xs:restriction base="xs:double">
+										<xs:minInclusive value="0.0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="Unit">
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:enumeration value="gram"/>
+										<xs:enumeration value="teaspoon"/>
+										<xs:enumeration value="tablespoon"/>
+										<xs:enumeration value="cl"/>
+										<xs:enumeration value="quarter"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Member">
+		<xs:annotation>
+			<xs:documentation>Affichage du membre</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="FirstName" type="xs:string"/>
+				<xs:element name="LastName" type="xs:string"/>
+				<xs:element name="Age">
+					<xs:simpleType>
+						<xs:restriction base="xs:int">
+							<xs:minInclusive value="1"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+				<xs:element name="Ranking" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element name="Reward" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+			<xs:attribute ref="Id" use="required"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:attribute name="Id">
+		<xs:annotation>
+			<xs:documentation>Numéro d'identification</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:int">
+				<xs:minInclusive value="1"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:attribute>
+	<xs:element name="Photo">
+		<xs:annotation>
+			<xs:documentation>Affichage d'une image</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Source" type="xs:string"/>
+				<xs:element name="Alternative" type="xs:string" minOccurs="0"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Category">
+		<xs:annotation>
+			<xs:documentation>Affichage de la catégorie des pâtisseries</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:element name="Authentication">
+		<xs:annotation>
+			<xs:documentation>Identification du membre</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Username"/>
+				<xs:element name="Password"/>
+			</xs:sequence>
+			<xs:attribute ref="Id" use="required"/>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>
