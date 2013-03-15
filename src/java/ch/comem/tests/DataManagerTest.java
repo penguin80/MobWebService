@@ -31,7 +31,8 @@ public class DataManagerTest implements DataManagerTestLocal {
     @Override
     public void testMethods() {
         for (int index = 0; index < 10; index++) {
-            mm.createMember(firstNames[index], lastNames[index], ages[index]);
+            long x = mm.createMember(firstNames[index], lastNames[index], ages[index]);
+            System.out.println(x);
         }
     }
 
