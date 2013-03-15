@@ -20,27 +20,26 @@ public class MembersManager implements MembersManagerLocal {
         member.setFirstName(firstName);
         member.setLastName(lastName);
         member.setAge(age);
+        persist(member);
         em.flush();
-        //persist(member);
         return member.getId();
     }
     
     @Override
-    public String deleteMember(Member m) {
-        em.detach(m);
+    public String deleteMember(Long id) {
+        Member m = em.find(Member.class, id);
         em.remove(m);
-        em.flush();
         return "Membre supprimé";
     }
 
     @Override
-    public String modifyMember(Member m, String firstName, String lastName, int age) {
-        em.detach(m);
+    public String modifyMember(Long id, String firstName, String lastName, int age) {
+        Member m = em.find(Member.class, id);
         m.setFirstName(firstName);
         m.setLastName(lastName);
         m.setAge(age);
-        em.flush();
         persist(m);
+        em.flush();
         return "Membre modifié";
     }
     

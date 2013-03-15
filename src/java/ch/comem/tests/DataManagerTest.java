@@ -4,7 +4,8 @@
  */
 package ch.comem.tests;
 
-import ch.comem.services.MembersManager;
+import ch.comem.services.MembersManagerLocal;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.jws.WebService;
 
@@ -26,7 +27,8 @@ public class DataManagerTest implements DataManagerTestLocal {
     
     private int[] ages = {55, 432, 28, 33, 24, 94, 230, 33, 23, 18};
 
-    private MembersManager mm;
+    @EJB
+    private MembersManagerLocal mm;
     
     @Override
     public void testMethods() {

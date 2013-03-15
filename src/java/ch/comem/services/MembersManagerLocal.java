@@ -16,8 +16,8 @@ public interface MembersManagerLocal {
 
     long createMember(String firstName, String lastName, int age);
 
-    String deleteMember(Member m);
+    String deleteMember(Long id);
 
-    String modifyMember(Member m, String firstName, String lastName, int age);
+    String modifyMember(Long id, String firstName, String lastName, int age);
     
 }
