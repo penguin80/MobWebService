@@ -21,7 +21,7 @@ public class MembersManager implements MembersManagerLocal {
         member.setLastName(lastName);
         member.setAge(age);
         em.flush();
-        persist(member);
+        //persist(member);
         return member.getId();
     }
     
