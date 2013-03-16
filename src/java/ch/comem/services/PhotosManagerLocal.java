@@ -4,6 +4,7 @@
  */
 package ch.comem.services;
 
+import ch.comem.model.Publication;
 import javax.ejb.Local;
 
 /**
@@ -13,6 +14,6 @@ import javax.ejb.Local;
 @Local
 public interface PhotosManagerLocal {
 
-    Long createPhoto(String source, String alt);
+    Long createPhoto(String source, String alt, Publication publication);
     
 }
