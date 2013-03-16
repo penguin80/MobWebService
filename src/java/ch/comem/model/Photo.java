@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 
 /**
  *
@@ -22,6 +23,12 @@ public class Photo implements Serializable {
     private Long id;
     private String source;
     private String alt;
+    @OneToOne
+    Publication publication;
+
+    public void setPublication(Publication publication) {
+        this.publication = publication;
+    }
 
     public String getSource() {
         return source;
