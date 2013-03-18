@@ -86,7 +86,7 @@ public class Publication implements Serializable {
 
     public void addComment(Comment comment) {
         getComment().add(comment);
-        comment.setPublication(this);
+        comment.addPublication(this);
     }
 
     public Category getCategoryConcerned() {
