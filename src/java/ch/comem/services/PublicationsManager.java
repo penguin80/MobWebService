@@ -75,47 +75,56 @@ public class PublicationsManager implements PublicationsManagerLocal {
         System.out.println(str);
         return str;
     }
-
-    @Override
-    public Long createPublication(Photo photo, Category categoryConcerned, 
-                                    Membership publisher) {
-        Publication p = new Publication();
+    
+    private void setPublicationParameters(Publication p, Long photoId, 
+                                             Long categoryId, Long publisherId) {
         p.setDateOfPublication(buildDate());
         p.setDateOfLastPublication(null);
-        p.setImagingPhoto(photo);
+        Photo photo = em.find(Photo.class, photoId);
+        if (photo != null)
+            p.setImagingPhoto(photo);
+        Category categoryConcerned = em.find(Category.class, categoryId);
+        if (categoryConcerned != null)
+            p.setCategoryConcerned(categoryConcerned);
+        Membership publisher = em.find(Membership.class, publisherId);
+        if (publisher != null)
+            p.setMemberInvolved(publisher);
+    }
+
+    @Override
+    public Long createPublication(Long photoId, Long categoryId, 
+                                    Long publisherId) {
+        Publication p = new Publication();
+        setPublicationParameters(p, photoId, categoryId, publisherId);
         p.setRecepie(null);
-        p.setCategoryConcerned(categoryConcerned);
-        p.setMemberInvolved(publisher);
         persist(p);
         em.flush();
         return p.getId();
     }
 
     @Override
-    public Long createPublication(Photo photo, Category categoryConcerned, 
-                                    Membership publisher, Long recipieId) {
+    public Long createPublication(Long photoId, Long categoryId, 
+                                    Long publisherId, Long recipieId) {
         Publication p = new Publication();
-        p.setDateOfPublication(buildDate());
-        p.setDateOfLastPublication(null);
-        p.setImagingPhoto(photo);
+        setPublicationParameters(p, photoId, categoryId, publisherId);
         Recipie r = em.find(Recipie.class, recipieId);
         if (r != null)
             p.setRecepie(r);
-        p.setCategoryConcerned(categoryConcerned);
-        p.setMemberInvolved(publisher);
         persist(p);
         em.flush();
         return p.getId();
     }
     
     @Override
-    public String modifyPublication(Long publicationId, Category categoryConcerned, 
+    public String modifyPublication(Long publicationId, Long categoryId, 
                                       Long recipieId) {
         String str = "";
         Publication p = em.find(Publication.class, publicationId);
         if (p != null) {
             p.setDateOfLastPublication(buildDate());
-            p.setCategoryConcerned(categoryConcerned);
+            Category categoryConcerned = em.find(Category.class, categoryId);
+            if (categoryConcerned != null)
+                p.setCategoryConcerned(categoryConcerned);
             Recipie r = em.find(Recipie.class, recipieId);
             if (r != null)
                 p.setRecepie(r);

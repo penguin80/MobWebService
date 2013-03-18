@@ -18,6 +18,7 @@ public class CategoriesManager implements CategoriesManagerLocal {
     @Override
     public Long createCategory(String name) {
         Category c = new Category();
+        c.setCategoryNamesByDefault();
         Collection<String> categoryNames = c.getCategoryNames();
         if (categoryNames.contains(name))
             c.setCurrentCategoryNameSelected(name);

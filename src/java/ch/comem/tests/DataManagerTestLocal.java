@@ -16,5 +16,7 @@ public interface DataManagerTestLocal {
     void testMethods();
 
     void testRelationRecipieIngredients();
+
+    void testPublicationRelations();
     
 }
