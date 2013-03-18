@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 /**
@@ -27,6 +28,12 @@ public class Publication implements Serializable {
     private Photo photo;
     @OneToOne
     private Recipie recepie;
+    @OneToMany
+    private Comment comment;
+    @OneToOne
+    private Member memeber;
+    @OneToMany
+    private Like likes;
 
     public String getDateOfPublication() {
         return dateOfPublication;
