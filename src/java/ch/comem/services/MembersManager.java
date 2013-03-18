@@ -71,8 +71,11 @@ public class MembersManager implements MembersManagerLocal {
         Membership m = em.find(Membership.class, id);
         if (m != null) {
             Liking l = em.find(Liking.class, likeId);
-            if (l != null)
+            if (l != null) {
                 m.addLike(l);
+                persist(m);
+                em.flush();
+            }
         }
     }
 
@@ -84,6 +87,8 @@ public class MembersManager implements MembersManagerLocal {
             Comment c = em.find(Comment.class, commentId);
             if (c != null) {
                 m.addComment(c);
+                persist(m);
+                em.flush();
                 str = str.concat("Votre commentaire est publié");
             } else
                 str = str.concat("Commentaire inexistant!");
@@ -100,6 +105,8 @@ public class MembersManager implements MembersManagerLocal {
             Publication p = em.find(Publication.class, publicationId);
             if (p != null) {
                 m.addPublication(p);
+                persist(m);
+                em.flush();
                 str = str.concat("Vous avez publié une recette");
             } else
                 str = str.concat("Publication inexistante!");
