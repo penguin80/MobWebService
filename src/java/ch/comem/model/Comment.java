@@ -39,7 +39,7 @@ public class Comment implements Serializable {
         return publicationCom;
     }
 
-    public void setPublication(Publication publication) {
+    public void addPublication(Publication publication) {
         this.publicationCom = publication;
     }
     

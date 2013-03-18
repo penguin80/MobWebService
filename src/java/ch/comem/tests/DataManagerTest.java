@@ -4,7 +4,7 @@
  */
 package ch.comem.tests;
 
-import ch.comem.model.Ingredient;
+import ch.comem.services.CommentsManagerLocal;
 import ch.comem.services.IngredientsManagerLocal;
 import ch.comem.services.MembersManagerLocal;
 import ch.comem.services.RecipieManagerLocal;
@@ -15,8 +15,6 @@ import java.util.Set;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.jws.WebService;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 
 /**
  *
@@ -25,13 +23,15 @@ import javax.persistence.PersistenceContext;
 @Stateless
 @WebService
 public class DataManagerTest implements DataManagerTestLocal {
-
     @EJB
     private MembersManagerLocal mm;
     @EJB
     private RecipieManagerLocal rm;
     @EJB
     private IngredientsManagerLocal im;
+    @EJB
+    private CommentsManagerLocal cm;
+    
     
     private String[] firstNames = {"Paul", "Arthur", "Danielle", "Georges",
                                    "Isabelle", "Chuck", "Mario", "Joëlle",
