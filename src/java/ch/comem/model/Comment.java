@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 /**
  *
@@ -21,6 +22,24 @@ public class Comment implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String texte;
+    @ManyToOne
+    private Publication publicationCom;
+
+    public String getTexte() {
+        return texte;
+    }
+
+    public void setTexte(String texte) {
+        this.texte = texte;
+    }
+
+    public Publication getPublication() {
+        return publicationCom;
+    }
+
+    public void setPublication(Publication publication) {
+        this.publicationCom = publication;
+    }
     
 
     public Long getId() {

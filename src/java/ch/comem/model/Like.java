@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 
 /**
  *
@@ -21,6 +22,8 @@ public class Like implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private boolean status;
+//    @ManyToMany
+//    private Publication publication;
 
     public Long getId() {
         return id;

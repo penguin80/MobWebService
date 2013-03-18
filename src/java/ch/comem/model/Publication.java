@@ -5,6 +5,8 @@
 package ch.comem.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -28,15 +30,39 @@ public class Publication implements Serializable {
     private Photo photo;
     @OneToOne
     private Recipie recepie;
-    @OneToMany
-    private Comment comment;
-    @OneToOne
-    private Member memeber;
-    @OneToMany
-    private Like likes;
+    @OneToMany(mappedBy="publicationCom")
+    private Collection<Comment> comment = new ArrayList<>();
+//    @OneToOne
+//    private Member memeber;
+//    @ManyToMany
+//    private Like likes;
+
+    public Collection<Comment> getComment() {
+        return comment;
+    }
+
+    public void setComment(Collection<Comment> comment) {
+        this.comment = comment;
+    }
 
     public String getDateOfPublication() {
         return dateOfPublication;
+    }
+
+    public Photo getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(Photo photo) {
+        this.photo = photo;
+    }
+
+    public Recipie getRecepie() {
+        return recepie;
+    }
+
+    public void setRecepie(Recipie recepie) {
+        this.recepie = recepie;
     }
 
     public void setDateOfPublication(String dateOfPublication) {
