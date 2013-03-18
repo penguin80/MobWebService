@@ -9,41 +9,18 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
 
 /**
  *
  * @author raphaelbaumann
  */
 @Entity
-public class Publication implements Serializable {
+public class Category implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String dateOfPublication;
-    private String dateOfLastPublication;
-    @OneToOne
-    private Photo photo;
-    @OneToOne
-    private Recipie recepie;
-
-    public String getDateOfPublication() {
-        return dateOfPublication;
-    }
-
-    public void setDateOfPublication(String dateOfPublication) {
-        this.dateOfPublication = dateOfPublication;
-    }
-
-    public String getDateOfLastPublication() {
-        return dateOfLastPublication;
-    }
-
-    public void setDateOfLastPublication(String dateOfLastPublication) {
-        this.dateOfLastPublication = dateOfLastPublication;
-    }
-    
+    private String name;
 
     public Long getId() {
         return id;
@@ -63,10 +40,10 @@ public class Publication implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Publication)) {
+        if (!(object instanceof Category)) {
             return false;
         }
-        Publication other = (Publication) object;
+        Category other = (Category) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -75,7 +52,7 @@ public class Publication implements Serializable {
 
     @Override
     public String toString() {
-        return "ch.comem.model.Publication[ id=" + id + " ]";
+        return "ch.comem.model.Category[ id=" + id + " ]";
     }
     
 }

@@ -16,34 +16,35 @@ import javax.persistence.OneToOne;
  * @author raphaelbaumann
  */
 @Entity
-public class Publication implements Serializable {
+public class Photo implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String dateOfPublication;
-    private String dateOfLastPublication;
+    private String source;
+    private String alt;
     @OneToOne
-    private Photo photo;
-    @OneToOne
-    private Recipie recepie;
+    Publication publication;
 
-    public String getDateOfPublication() {
-        return dateOfPublication;
+    public void setPublication(Publication publication) {
+        this.publication = publication;
     }
 
-    public void setDateOfPublication(String dateOfPublication) {
-        this.dateOfPublication = dateOfPublication;
+    public String getSource() {
+        return source;
     }
 
-    public String getDateOfLastPublication() {
-        return dateOfLastPublication;
+    public void setSource(String source) {
+        this.source = source;
     }
 
-    public void setDateOfLastPublication(String dateOfLastPublication) {
-        this.dateOfLastPublication = dateOfLastPublication;
+    public String getAlt() {
+        return alt;
     }
-    
+
+    public void setAlt(String alt) {
+        this.alt = alt;
+    }
 
     public Long getId() {
         return id;
@@ -63,10 +64,10 @@ public class Publication implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Publication)) {
+        if (!(object instanceof Photo)) {
             return false;
         }
-        Publication other = (Publication) object;
+        Photo other = (Photo) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -75,7 +76,7 @@ public class Publication implements Serializable {
 
     @Override
     public String toString() {
-        return "ch.comem.model.Publication[ id=" + id + " ]";
+        return "ch.comem.model.Photo[ id=" + id + " ]";
     }
     
 }
