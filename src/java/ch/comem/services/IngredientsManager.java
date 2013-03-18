@@ -16,7 +16,7 @@ public class IngredientsManager implements IngredientsManagerLocal {
     private EntityManager em;
 
     @Override
-    public long createIngredient(String name, int quantity, String quantityUnit) {
+    public Long createIngredient(String name, int quantity, String quantityUnit) {
         Ingredient i = new Ingredient();
         i.setName(name);
         i.setQuantity(quantity);
@@ -28,8 +28,8 @@ public class IngredientsManager implements IngredientsManagerLocal {
     }
 
     @Override
-    public long createIngredient(String name, int quantity, String quantityUnit, long recipieId) {
-        long ingredientId = createIngredient(name, quantity, quantityUnit);
+    public Long createIngredient(String name, int quantity, String quantityUnit, Long recipieId) {
+        Long ingredientId = createIngredient(name, quantity, quantityUnit);
         Recipie r = em.find(Recipie.class, recipieId);
         if (r != null) {
             Ingredient i = em.find(Ingredient.class, ingredientId);
@@ -41,7 +41,7 @@ public class IngredientsManager implements IngredientsManagerLocal {
     }
 
     @Override
-    public String modifyIngredient(int ingredientId, String name, int quantity, 
+    public String modifyIngredient(Long ingredientId, String name, int quantity, 
                                      String quantityUnit) {
         String str = "";
         Ingredient i  = em.find(Ingredient.class, ingredientId);
@@ -59,8 +59,8 @@ public class IngredientsManager implements IngredientsManagerLocal {
     }
 
     @Override
-    public String modifyIngredient(int ingredientId, String name, int quantity, 
-                                     String quantityUnit, long recipieId) {
+    public String modifyIngredient(Long ingredientId, String name, int quantity, 
+                                     String quantityUnit, Long recipieId) {
         String str = "";
         Ingredient i  = em.find(Ingredient.class, ingredientId);
         if (i != null) {
@@ -81,7 +81,7 @@ public class IngredientsManager implements IngredientsManagerLocal {
     }
 
     @Override
-    public String deleteIngredient(int id) {
+    public String deleteIngredient(Long id) {
         String str = "";
         Ingredient i = em.find(Ingredient.class, id);
         if (i != null) {

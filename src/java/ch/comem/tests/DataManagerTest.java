@@ -65,7 +65,7 @@ public class DataManagerTest implements DataManagerTestLocal {
         ingredientsId.add(new Long(i2));
         ingredientsId.add(new Long(i3));
         ingredientsId.add(new Long(i4));
-        long recipieId = rm.createRecipie(steps, ingredientsId);
+        Long recipieId = rm.createRecipie(steps, ingredientsId);
         
         im.createIngredient("poudre à lever", 1, "c.c", recipieId);
     }
