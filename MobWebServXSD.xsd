@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- edited with XMLSpy v2013 (x64) (http://www.altova.com) by Rieker (HEIG VD) -->
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:altova="http://www.altova.com/xml-schema-extensions" elementFormDefault="qualified" attributeFormDefault="unqualified">
 	<xs:element name="Publication">
 		<xs:annotation>
 			<xs:documentation>Affichage de pâtisseries</xs:documentation>
@@ -46,6 +46,70 @@
 		</xs:annotation>
 		<xs:complexType>
 			<xs:sequence>
+				<xs:element name="Difficulty">
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="Easy"/>
+							<xs:enumeration value="Medium"/>
+							<xs:enumeration value="Hard"/>
+							<xs:enumeration value="Expert"/>
+							<xs:enumeration value="Undefined"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+				<xs:element name="TimeTaken" minOccurs="0">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="Value">
+								<xs:simpleType>
+									<xs:restriction base="xs:int">
+										<xs:minInclusive value="1"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="Unit">
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:enumeration value="minutes"/>
+										<xs:enumeration value="hours"/>
+										<xs:enumeration value="days"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="Price">
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="Cheap"/>
+							<xs:enumeration value="Average"/>
+							<xs:enumeration value="Expensive"/>
+							<xs:enumeration value="Undefined"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+				<xs:element name="Description">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="Summary" type="xs:string"/>
+							<xs:element name="Step" maxOccurs="unbounded">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="StepNumber">
+											<xs:simpleType>
+												<xs:restriction base="xs:int">
+													<xs:minInclusive value="1"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
+										<xs:element name="Text" type="xs:string"/>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
 				<xs:element name="Ingredient" maxOccurs="unbounded">
 					<xs:complexType>
 						<xs:sequence>
@@ -89,8 +153,14 @@
 						</xs:restriction>
 					</xs:simpleType>
 				</xs:element>
-				<xs:element name="Ranking" minOccurs="0" maxOccurs="unbounded"/>
-				<xs:element name="Reward" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element name="Pseudo" type="xs:string"/>
+				<xs:element name="Email">
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:pattern value="^([0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*@([0-9a-zA-Z][-\w]*[0-9a-zA-Z]\.)+[a-zA-Z]{2,9})$"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
 			</xs:sequence>
 			<xs:attribute ref="Id" use="required"/>
 		</xs:complexType>
@@ -120,6 +190,14 @@
 		<xs:annotation>
 			<xs:documentation>Affichage de la catégorie des pâtisseries</xs:documentation>
 		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:enumeration value="gâteau"/>
+				<xs:enumeration value="biscuit"/>
+				<xs:enumeration value="macaron"/>
+				<xs:enumeration value="cake"/>
+			</xs:restriction>
+		</xs:simpleType>
 	</xs:element>
 	<xs:element name="Authentication">
 		<xs:annotation>

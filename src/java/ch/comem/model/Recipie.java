@@ -5,12 +5,14 @@
 package ch.comem.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Set;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.OneToMany;
 
 /**
  *
@@ -23,17 +25,17 @@ public class Recipie implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Set<String> steps;
-    private Set<Ingredient> ingredients;
-    @OneToOne
-    private Publication publication;
+    @OneToMany(mappedBy="recipieInvolved")
+    private Collection<Ingredient> ingredientsNeeded = new ArrayList<>();
+    
 
-    public Publication getPublication() {
-        return publication;
-    }
-
-    public void setPublication(Publication publication) {
-        this.publication = publication;
-    }
+//    public Publication getPublication() {
+//        return publication;
+//    }
+//
+//    public void setPublication(Publication publication) {
+//        this.publication = publication;
+//    }
 
     public Set<String> getSteps() {
         return steps;
@@ -43,12 +45,13 @@ public class Recipie implements Serializable {
         this.steps = steps;
     }
 
-    public Set<Ingredient> getIngredients() {
-        return ingredients;
+    public Collection<Ingredient> getIngredients() {
+        return ingredientsNeeded;
     }
 
-    public void setIngredients(Set<Ingredient> ingredients) {
-        this.ingredients = ingredients;
+    public void addIngredient(Ingredient ingredient) {
+        getIngredients().add(ingredient);
+        ingredient.setRecipieInvolved(this);
     }
 
     public Long getId() {

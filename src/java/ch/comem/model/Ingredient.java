@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 /**
  *
@@ -23,7 +24,9 @@ public class Ingredient implements Serializable {
     private String name;
     private String quantity;
     private String unit;
-
+    @ManyToOne
+    private Recipie recipieInvolved;
+    
     public String getName() {
         return name;
     }
@@ -54,6 +57,14 @@ public class Ingredient implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+    
+    public Recipie getRecipieInvolved() {
+        return recipieInvolved;
+    }
+
+    public void setRecipieInvolved(Recipie recipieInvolved) {
+        this.recipieInvolved = recipieInvolved;
     }
 
     @Override

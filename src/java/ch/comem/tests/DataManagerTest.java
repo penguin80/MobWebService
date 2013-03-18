@@ -38,6 +38,9 @@ public class DataManagerTest implements DataManagerTestLocal {
         }
     }
 
-    
+    @Override
+    public void testRelationRecipieIngredients(long recipieId, String ingredientId) {
+        
+    }
 
 }

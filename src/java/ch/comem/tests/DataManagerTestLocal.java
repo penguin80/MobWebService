@@ -14,5 +14,7 @@ import javax.ejb.Local;
 public interface DataManagerTestLocal {
 
     void testMethods();
+
+    void testRelationRecipieIngredients(long recipieId, String ingredientId);
     
 }
