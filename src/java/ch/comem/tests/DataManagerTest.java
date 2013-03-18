@@ -25,8 +25,7 @@ import javax.persistence.PersistenceContext;
 @Stateless
 @WebService
 public class DataManagerTest implements DataManagerTestLocal {
-    @PersistenceContext(unitName = "PastyChefPU")
-    private EntityManager em;
+
     @EJB
     private MembersManagerLocal mm;
     @EJB
@@ -68,9 +67,5 @@ public class DataManagerTest implements DataManagerTestLocal {
         Long recipieId = rm.createRecipie(steps, ingredientsId);
         
         im.createIngredient("poudre à lever", 1, "c.c", recipieId);
-    }
-
-    public void persist(Object object) {
-        em.persist(object);
     }
 }
