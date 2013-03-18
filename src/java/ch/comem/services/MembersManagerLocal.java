@@ -13,7 +13,7 @@ import javax.ejb.Local;
 @Local
 public interface MembersManagerLocal {
 
-    long createMember(String firstName, String lastName, int age, 
+    Long createMember(String firstName, String lastName, int age, 
                        String pseudo, String email);
 
     String deleteMember(Long id);

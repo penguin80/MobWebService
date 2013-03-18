@@ -28,7 +28,7 @@ public class MembersManager implements MembersManagerLocal {
     }
 
     @Override
-    public long createMember(String firstName, String lastName, int age, 
+    public Long createMember(String firstName, String lastName, int age, 
                               String pseudo, String email) {
         Membership member = new Membership();
         setMemberParameters(member, firstName, lastName, age, pseudo, email);
