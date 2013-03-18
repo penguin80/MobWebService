@@ -10,6 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
+import javax.validation.constraints.NotNull;
 
 /**
  *
@@ -21,9 +22,10 @@ public class Photo implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @NotNull
     private String source;
     private String alt;
-    @OneToOne
+    @OneToOne(mappedBy="imagingPhoto")
     Publication publication;
 
     public void setPublication(Publication publication) {

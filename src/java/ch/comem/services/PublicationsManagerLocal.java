@@ -15,4 +15,13 @@ public interface PublicationsManagerLocal {
     Long createPublication(Photo photo, Category categoryConcerned, 
                              Membership publisher);
     
+    Long createPublication(Photo photo, Category categoryConcerned, 
+                             Membership publisher, Long recipieId);
+    
+    String modifyPublication(Long publicationId, Category categoryConcerned, 
+                               Long recipieId);
+    
+    String addComment(Long publicationId, Long commentId);
+    
+    String addLike(Long publicationId, Long likeId);
 }

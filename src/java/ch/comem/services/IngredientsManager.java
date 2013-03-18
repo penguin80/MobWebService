@@ -74,9 +74,8 @@ public class IngredientsManager implements IngredientsManagerLocal {
             persist(i);
             em.flush();
             str = str.concat("Ingrédient modifié!");
-        } else {
+        } else
             str = str.concat("Impossible de modifier l'ingrédient demandé!");
-        }
         return str;
     }
 

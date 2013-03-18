@@ -42,9 +42,9 @@ public class RecipieManager implements RecipieManagerLocal {
         Recipie m = em.find(Recipie.class, recipieId);
         if (m != null) {
             em.remove(m);
-            str = str.concat("Recette supprimé!");
+            str = str.concat("Recette supprimée!");
         } else {
-            str = str.concat("Impossible de supprimer la recette demandé!");
+            str = str.concat("Impossible de supprimer la recette demandée!");
         }
         return str;
     }
@@ -63,7 +63,7 @@ public class RecipieManager implements RecipieManagerLocal {
             r.setSteps(steps);
             persist(r);
             em.flush();
-            str = str.concat("Recette modifié!");
+            str = str.concat("Recette modifiée!");
         } else {
             str = str.concat("Impossible de modifier la recette demandée!");
         }

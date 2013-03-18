@@ -11,6 +11,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -30,8 +31,9 @@ public class Publication implements Serializable {
     private String dateOfPublication;
     private String dateOfLastPublication;
     @OneToOne
-    private Photo photo;
-    @OneToOne
+    @JoinColumn(name="PHOTOID", referencedColumnName="ID")
+    private Photo imagingPhoto;
+    @OneToOne(mappedBy="publicationConcerned")
     private Recipie recepie;
     @OneToMany(mappedBy="publicationCom")
     private Collection<Comment> comment = new ArrayList<>();
@@ -46,12 +48,12 @@ public class Publication implements Serializable {
         return dateOfPublication;
     }
 
-    public Photo getPhoto() {
-        return photo;
+    public Photo getImagingPhoto() {
+        return imagingPhoto;
     }
 
-    public void setPhoto(Photo photo) {
-        this.photo = photo;
+    public void setImagingPhoto(Photo imagingPhoto) {
+        this.imagingPhoto = imagingPhoto;
     }
 
     public void setDateOfPublication(String dateOfPublication) {

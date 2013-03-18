@@ -12,7 +12,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 /**
  *
@@ -27,7 +29,9 @@ public class Recipie implements Serializable {
     private Set<String> steps;
     @OneToMany(mappedBy="recipieInvolved")
     private Collection<Ingredient> ingredientsNeeded = new ArrayList<>();
-    
+    @OneToOne
+    @JoinColumn(name="PUBLICATIONID", referencedColumnName="ID")
+    private Publication publicationConcerned;
 
 //    public Publication getPublication() {
 //        return publication;
