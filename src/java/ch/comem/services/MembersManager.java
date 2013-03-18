@@ -1,6 +1,6 @@
 package ch.comem.services;
 
-import ch.comem.model.Member;
+import ch.comem.model.Membership;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -16,7 +16,7 @@ public class MembersManager implements MembersManagerLocal {
 
     @Override
     public long createMember(String firstName, String lastName, int age) {
-        Member member = new Member();
+        Membership member = new Membership();
         member.setFirstName(firstName);
         member.setLastName(lastName);
         member.setAge(age);
@@ -28,7 +28,7 @@ public class MembersManager implements MembersManagerLocal {
     @Override
     public String deleteMember(Long id) {
         String str = "";
-        Member m = em.find(Member.class, id);
+        Membership m = em.find(Membership.class, id);
         if (m != null) {
             em.remove(m);
             str = str.concat("Membre supprimé!");
@@ -41,7 +41,7 @@ public class MembersManager implements MembersManagerLocal {
     @Override
     public String modifyMember(Long id, String firstName, String lastName, int age) {
         String str = "";
-        Member m  = em.find(Member.class, id);
+        Membership m  = em.find(Membership.class, id);
         if (m != null) {
             m.setFirstName(firstName);
             m.setLastName(lastName);

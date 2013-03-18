@@ -5,17 +5,20 @@
 package ch.comem.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 /**
  *
  * @author raphaelbaumann
  */
 @Entity
-public class Member implements Serializable {
+public class Membership implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,7 +26,16 @@ public class Member implements Serializable {
     private String firstName;
     private String lastName;
     private int age;
+    private String pseudo;
+    private String email;
 
+    @OneToMany(mappedBy="memberInvolved")
+    private Collection<Publication> publicationsConcerned = new ArrayList<>();
+    @OneToMany(mappedBy="memberCommenting")
+    private Collection<Comment> commentsConcerned = new ArrayList<>();
+    @OneToMany(mappedBy="memberLiking")
+    private Collection<Liking> likesConcerned = new ArrayList<>();
+    
     public String getFirstName() {
         return firstName;
     }
@@ -48,6 +60,49 @@ public class Member implements Serializable {
         this.age = age;
     }
 
+    public String getPseudo() {
+        return pseudo;
+    }
+
+    public void setPseudo(String pseudo) {
+        this.pseudo = pseudo;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public Collection<Publication> getPublicationsConcerned() {
+        return publicationsConcerned;
+    }
+
+    public void addPublication(Publication publication) {
+        getPublicationsConcerned().add(publication);
+        publication.setMemberInvolved(this);
+    }
+
+    public Collection<Comment> getCommentsConcerned() {
+        return commentsConcerned;
+    }
+
+    public void addComment(Comment comment) {
+        getCommentsConcerned().add(comment);
+        comment.setMemberCommenting(this);
+    }
+
+    public Collection<Liking> getLikesConcerned() {
+        return likesConcerned;
+    }
+
+    public void addLike(Liking like) {
+        getLikesConcerned().add(like);
+        like.setMemberLiking(this);
+    }
+
     public Long getId() {
         return id;
     }
@@ -66,10 +121,10 @@ public class Member implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Member)) {
+        if (!(object instanceof Membership)) {
             return false;
         }
-        Member other = (Member) object;
+        Membership other = (Membership) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }

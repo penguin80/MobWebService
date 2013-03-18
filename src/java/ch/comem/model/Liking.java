@@ -9,21 +9,47 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 
 /**
  *
  * @author raphaelbaumann
  */
 @Entity
-public class Like implements Serializable {
+public class Liking implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private boolean status;
-//    @ManyToMany
-//    private Publication publication;
+    @ManyToOne
+    private Publication publicationLiked;
+    @ManyToOne
+    private Membership memberLiking;
+
+    public boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
+    }
+
+    public Publication getPublication() {
+        return publicationLiked;
+    }
+
+    public void setPublication(Publication publication) {
+        this.publicationLiked = publication;
+    }
+
+    public Membership getMemberLiking() {
+        return memberLiking;
+    }
+
+    public void setMemberLiking(Membership memberLiking) {
+        this.memberLiking = memberLiking;
+    }
 
     public Long getId() {
         return id;
@@ -43,10 +69,10 @@ public class Like implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Like)) {
+        if (!(object instanceof Liking)) {
             return false;
         }
-        Like other = (Like) object;
+        Liking other = (Liking) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }

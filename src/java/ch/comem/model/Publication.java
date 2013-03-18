@@ -11,6 +11,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
@@ -32,18 +33,12 @@ public class Publication implements Serializable {
     private Recipie recepie;
     @OneToMany(mappedBy="publicationCom")
     private Collection<Comment> comment = new ArrayList<>();
-//    @OneToOne
-//    private Member memeber;
-//    @ManyToMany
-//    private Like likes;
-
-    public Collection<Comment> getComment() {
-        return comment;
-    }
-
-    public void setComment(Collection<Comment> comment) {
-        this.comment = comment;
-    }
+    @ManyToOne
+    private Category categoryConcerned;
+    @ManyToOne
+    private Membership memberInvolved;
+    @OneToMany(mappedBy="publicationLiked")
+    private Collection<Liking> likes = new ArrayList<>();
 
     public String getDateOfPublication() {
         return dateOfPublication;
@@ -55,14 +50,6 @@ public class Publication implements Serializable {
 
     public void setPhoto(Photo photo) {
         this.photo = photo;
-    }
-
-    public Recipie getRecepie() {
-        return recepie;
-    }
-
-    public void setRecepie(Recipie recepie) {
-        this.recepie = recepie;
     }
 
     public void setDateOfPublication(String dateOfPublication) {
@@ -77,13 +64,54 @@ public class Publication implements Serializable {
         this.dateOfLastPublication = dateOfLastPublication;
     }
     
-
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Recipie getRecepie() {
+        return recepie;
+    }
+
+    public void setRecepie(Recipie recepie) {
+        this.recepie = recepie;
+    }
+
+    public Collection<Comment> getComment() {
+        return comment;
+    }
+
+    public void addComment(Comment comment) {
+        getComment().add(comment);
+        comment.setPublication(this);
+    }
+
+    public Category getCategoryConcerned() {
+        return categoryConcerned;
+    }
+
+    public void setCategoryConcerned(Category categoryConcerned) {
+        this.categoryConcerned = categoryConcerned;
+    }
+
+    public Membership getMemberInvolved() {
+        return memberInvolved;
+    }
+
+    public void setMemberInvolved(Membership memberInvolved) {
+        this.memberInvolved = memberInvolved;
+    }
+
+    public Collection<Liking> getLikes() {
+        return likes;
+    }
+
+    public void addLike(Liking like) {
+        getLikes().add(like);
+        like.setPublication(this);
     }
 
     @Override

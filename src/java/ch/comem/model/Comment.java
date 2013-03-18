@@ -24,6 +24,8 @@ public class Comment implements Serializable {
     private String texte;
     @ManyToOne
     private Publication publicationCom;
+    @ManyToOne
+    private Membership memberCommenting;
 
     public String getTexte() {
         return texte;
@@ -41,6 +43,13 @@ public class Comment implements Serializable {
         this.publicationCom = publication;
     }
     
+    public Membership getMemberCommenting() {
+        return memberCommenting;
+    }
+
+    public void setMemberCommenting(Membership memberCommenting) {
+        this.memberCommenting = memberCommenting;
+    }
 
     public Long getId() {
         return id;
