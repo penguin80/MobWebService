@@ -60,8 +60,9 @@ public class DataManagerTest implements DataManagerTestLocal {
     @Override
     public void testMethods() {
         for (int index = 0; index < 10; index++) {
-            long x = mm.createMember(firstNames[index], lastNames[index], ages[index]);
-            System.out.println(x);
+            long x = mm.createMember(firstNames[index], lastNames[index], ages[index], 
+                                     "pseudo" + index, firstNames[index] + "." + 
+                                     lastNames[index] + "@test.org");
         }
     }
 
@@ -97,7 +98,8 @@ public class DataManagerTest implements DataManagerTestLocal {
         ingredientsId.add(i3);
         Long r1 = rm.createRecipie(steps, ingredientsId);
         Long ph1 = phm.createPhoto(sources[2], "Logo de Comem+", null);
-        Long m1 = mm.createMember(firstNames[5], lastNames[5], ages[5]);
+        Long m1 = mm.createMember(firstNames[5], lastNames[5], ages[5], "Chuck", 
+                                  "I.destroy@everything.com");
         Long cam1 = cam.createCategory("Crèmes et Flans");
 //        Long cam1 = cam.createCategory("Cancres et Surdoués");
         Long pum1 = pum.createPublication(ph1, cam1, m1);

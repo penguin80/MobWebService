@@ -49,6 +49,7 @@ public class Category implements Serializable {
     }
 
     public void setCategoryNamesByDefault() {
+        this.categoryNames = new ArrayList<>();
         this.categoryNames.add("Biscuits");
         this.categoryNames.add("Gâteaux");
         this.categoryNames.add("Petits gâteaux");

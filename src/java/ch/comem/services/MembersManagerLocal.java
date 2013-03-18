@@ -13,10 +13,18 @@ import javax.ejb.Local;
 @Local
 public interface MembersManagerLocal {
 
-    long createMember(String firstName, String lastName, int age);
+    long createMember(String firstName, String lastName, int age, 
+                       String pseudo, String email);
 
     String deleteMember(Long id);
 
-    String modifyMember(Long id, String firstName, String lastName, int age);
+    String modifyMember(Long id, String firstName, String lastName, int age, 
+                         String pseudo, String email);
+    
+    void chooseLike(Long id, Long likeId);
+    
+    String postComment(Long id, Long commentId);
+    
+    String ownPublication(Long id, Long publicationId);
     
 }

@@ -25,6 +25,8 @@ public class PhotosManager implements PhotosManagerLocal {
         photo.setSource(source);
         photo.setAlt(alt);
         photo.setPublication(publication);
+        persist(photo);
+        em.flush();
         return photo.getId();
     }
 
