@@ -52,19 +52,19 @@ public class DataManagerTest implements DataManagerTestLocal {
 
     @Override
     public void testRelationRecipieIngredients() {
-        long i1 = im.createIngredient("farine", 300, "grammes");
-        long i2 = im.createIngredient("sucre", 120, "grammes");
-        long i3 = im.createIngredient("oeuf", 2, "unités");
-        long i4 = im.createIngredient("cacao en poudre", 3, "c.s");
+        Long i1 = im.createIngredient("farine", 300, "grammes");
+        Long i2 = im.createIngredient("sucre", 120, "grammes");
+        Long i3 = im.createIngredient("oeuf", 2, "unités");
+        Long i4 = im.createIngredient("cacao en poudre", 3, "c.s");
         Set<String> steps = new HashSet<>();
         steps.add("Battre les oeufs");
         steps.add("Ajouter le sucre aux oeufs");
         steps.add("Blanchir les oeufs");
         Collection<Long> ingredientsId = new ArrayList<>();
-        ingredientsId.add(new Long(i1));
-        ingredientsId.add(new Long(i2));
-        ingredientsId.add(new Long(i3));
-        ingredientsId.add(new Long(i4));
+        ingredientsId.add(i1);
+        ingredientsId.add(i2);
+        ingredientsId.add(i3);
+        ingredientsId.add(i4);
         Long recipieId = rm.createRecipie(steps, ingredientsId);
         
         im.createIngredient("poudre à lever", 1, "c.c", recipieId);

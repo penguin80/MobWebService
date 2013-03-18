@@ -27,10 +27,12 @@ public class RecipieManager implements RecipieManagerLocal {
         Recipie recipie = new Recipie();
         ArrayList<Long> ingredientIdsA = (ArrayList<Long>) ingredientIds;
         for(int i = 0; i < ingredientIdsA.size(); i++){
-            Ingredient ing = em.find(Ingredient.class, ingredientIdsA.get(i).longValue());
+            Ingredient ing = em.find(Ingredient.class, ingredientIdsA.get(i));
             recipie.addIngredient(ing);
         }
         recipie.setSteps(steps);
+        persist(recipie);
+        em.flush();
         return recipie.getId();
     }
 

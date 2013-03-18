@@ -15,13 +15,17 @@ public class IngredientsManager implements IngredientsManagerLocal {
     @PersistenceContext(unitName = "PastyChefPU")
     private EntityManager em;
 
-    @Override
-    public Long createIngredient(String name, int quantity, String quantityUnit) {
-        Ingredient i = new Ingredient();
+    private void setIngredientParameters(Ingredient i, String name, 
+                                            int quantity, String quantityUnit) {
         i.setName(name);
         i.setQuantity(quantity);
         i.setQuantityUnit(quantityUnit);
-        i.setRecipieInvolved(null);
+    }
+    
+    @Override
+    public Long createIngredient(String name, int quantity, String quantityUnit) {
+        Ingredient i = new Ingredient();
+        setIngredientParameters(i, name, quantity, quantityUnit);
         persist(i);
         em.flush();
         return i.getId();
@@ -29,15 +33,15 @@ public class IngredientsManager implements IngredientsManagerLocal {
 
     @Override
     public Long createIngredient(String name, int quantity, String quantityUnit, Long recipieId) {
-        Long ingredientId = createIngredient(name, quantity, quantityUnit);
+        Ingredient i = new Ingredient();
+        setIngredientParameters(i, name, quantity, quantityUnit);
         Recipie r = em.find(Recipie.class, recipieId);
         if (r != null) {
-            Ingredient i = em.find(Ingredient.class, ingredientId);
             i.setRecipieInvolved(r);
             persist(i);
             em.flush();
         }
-        return ingredientId;
+        return i.getId();
     }
 
     @Override
@@ -46,9 +50,7 @@ public class IngredientsManager implements IngredientsManagerLocal {
         String str = "";
         Ingredient i  = em.find(Ingredient.class, ingredientId);
         if (i != null) {
-            i.setName(name);
-            i.setQuantity(quantity);
-            i.setQuantityUnit(quantityUnit);
+            setIngredientParameters(i, name, quantity, quantityUnit);
             persist(i);
             em.flush();
             str = str.concat("Ingrédient modifié!");
@@ -64,9 +66,7 @@ public class IngredientsManager implements IngredientsManagerLocal {
         String str = "";
         Ingredient i  = em.find(Ingredient.class, ingredientId);
         if (i != null) {
-            i.setName(name);
-            i.setQuantity(quantity);
-            i.setQuantityUnit(quantityUnit);
+            setIngredientParameters(i, name, quantity, quantityUnit);
             Recipie r = em.find(Recipie.class, recipieId);
             if (r != null) {
                 i.setRecipieInvolved(r);
