@@ -22,8 +22,8 @@ public class Ingredient implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String name;
-    private String quantity;
-    private String unit;
+    private int quantity;
+    private String quantityUnit;
     @ManyToOne
     private Recipie recipieInvolved;
     
@@ -35,20 +35,20 @@ public class Ingredient implements Serializable {
         this.name = name;
     }
 
-    public String getQuantity() {
+    public int getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(String quantity) {
+    public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
 
-    public String getUnit() {
-        return unit;
+    public String getQuantityUnit() {
+        return quantityUnit;
     }
 
-    public void setUnit(String unit) {
-        this.unit = unit;
+    public void setQuantityUnit(String quantityUnit) {
+        this.quantityUnit = quantityUnit;
     }
 
     public Long getId() {
