@@ -5,7 +5,6 @@
 package ch.comem.services;
 
 import ch.comem.model.Photo;
-import ch.comem.model.Publication;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -20,11 +19,10 @@ public class PhotosManager implements PhotosManagerLocal {
     private EntityManager em;
     
     @Override
-    public Long createPhoto(String source, String alt, Publication publication) {
+    public Long createPhoto(String source, String alt) {
         Photo photo = new Photo();
         photo.setSource(source);
         photo.setAlt(alt);
-        photo.setPublication(publication);
         persist(photo);
         em.flush();
         return photo.getId();

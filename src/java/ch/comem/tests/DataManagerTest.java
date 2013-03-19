@@ -97,7 +97,7 @@ public class DataManagerTest implements DataManagerTestLocal {
         ingredientsId.add(i2);
         ingredientsId.add(i3);
         Long r1 = rm.createRecipie(steps, ingredientsId);
-        Long ph1 = phm.createPhoto(sources[2], "Logo de Comem+", null);
+        Long ph1 = phm.createPhoto(sources[2], "Logo de Comem+");
         Long m1 = mm.createMember(firstNames[5], lastNames[5], ages[5], "Chuck", 
                                   "I.destroy@everything.com");
         Long cam1 = cam.createCategory("Crèmes et Flans");

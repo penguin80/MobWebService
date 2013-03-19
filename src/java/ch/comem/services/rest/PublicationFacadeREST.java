@@ -1,7 +1,9 @@
 package ch.comem.services.rest;
 
 import ch.comem.model.Publication;
+import ch.comem.services.PublicationsManagerLocal;
 import java.util.List;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -20,63 +22,60 @@ import javax.ws.rs.Produces;
  */
 @Stateless
 @Path("ch.comem.model.publication")
-public class PublicationFacadeREST extends AbstractFacade<Publication> {
+public class PublicationFacadeREST {
+    @EJB
+    private PublicationsManagerLocal pm;
     @PersistenceContext(unitName = "PastyChefPU")
     private EntityManager em;
 
-    public PublicationFacadeREST() {
-        super(Publication.class);
-    }
-
     @POST
-    @Override
     @Consumes({"application/xml", "application/json"})
     public void create(Publication entity) {
-        super.create(entity);
+        pm.createPublication(entity.getImagingPhoto().getId(), 
+                             entity.getCategoryConcerned().getId(), 
+                             entity.getMemberInvolved().getId(), 
+                             entity.getRecepie().getId());
     }
 
     @PUT
-    @Override
     @Consumes({"application/xml", "application/json"})
     public void edit(Publication entity) {
-        super.edit(entity);
+        pm.modifyPublication(entity.getId(),
+                             entity.getCategoryConcerned().getId(), 
+                             entity.getRecepie().getId());
     }
 
-    @DELETE
-    @Path("{id}")
-    public void remove(@PathParam("id") Long id) {
-        super.remove(super.find(id));
-    }
+//    @DELETE
+//    @Path("{id}")
+//    public void remove(@PathParam("id") Long id) {}
 
     @GET
     @Path("{id}")
     @Produces({"application/xml", "application/json"})
     public Publication find(@PathParam("id") Long id) {
-        return super.find(id);
+        return getEntityManager().find(Publication.class, id);
     }
 
-    @GET
-    @Override
-    @Produces({"application/xml", "application/json"})
-    public List<Publication> findAll() {
-        return super.findAll();
-    }
+//    @GET
+//    @Produces({"application/xml", "application/json"})
+//    public List<Publication> findAll() {
+//        return super.findAll();
+//    }
 
-    @GET
-    @Path("{from}/{to}")
-    @Produces({"application/xml", "application/json"})
-    public List<Publication> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
-        return super.findRange(new int[]{from, to});
-    }
+//    @GET
+//    @Path("{from}/{to}")
+//    @Produces({"application/xml", "application/json"})
+//    public List<Publication> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
+//        return super.findRange(new int[]{from, to});
+//    }
 
-    @GET
-    @Path("count")
-    @Produces("text/plain")
-    public String countREST() {
-        return String.valueOf(super.count());
-    }
+//    @GET
+//    @Path("count")
+//    @Produces("text/plain")
+//    public String countREST() {
+//        return String.valueOf(super.count());
+//    }
 
-    @Override
     protected EntityManager getEntityManager() {
         return em;
     }

@@ -1,7 +1,9 @@
 package ch.comem.services.rest;
 
 import ch.comem.model.Liking;
+import ch.comem.services.LikesManagerLocal;
 import java.util.List;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -20,63 +22,56 @@ import javax.ws.rs.Produces;
  */
 @Stateless
 @Path("ch.comem.model.liking")
-public class LikingFacadeREST extends AbstractFacade<Liking> {
+public class LikingFacadeREST {
+    @EJB
+    private LikesManagerLocal lm;
     @PersistenceContext(unitName = "PastyChefPU")
     private EntityManager em;
 
-    public LikingFacadeREST() {
-        super(Liking.class);
-    }
-
     @POST
-    @Override
     @Consumes({"application/xml", "application/json"})
     public void create(Liking entity) {
-        super.create(entity);
+        lm.createLike(entity.getMemberLiking().getId(), 
+                      entity.getPublication().getId(), entity.isStatus());
     }
 
     @PUT
-    @Override
     @Consumes({"application/xml", "application/json"})
     public void edit(Liking entity) {
-        super.edit(entity);
+        lm.modifyLike(entity.getId());
     }
 
-    @DELETE
-    @Path("{id}")
-    public void remove(@PathParam("id") Long id) {
-        super.remove(super.find(id));
-    }
+//    @DELETE
+//    @Path("{id}")
+//    public void remove(@PathParam("id") Long id) {}
 
     @GET
     @Path("{id}")
     @Produces({"application/xml", "application/json"})
     public Liking find(@PathParam("id") Long id) {
-        return super.find(id);
+        return getEntityManager().find(Liking.class, id);
     }
 
-    @GET
-    @Override
-    @Produces({"application/xml", "application/json"})
-    public List<Liking> findAll() {
-        return super.findAll();
-    }
+//    @GET
+//    @Produces({"application/xml", "application/json"})
+//    public List<Liking> findAll() {
+//        return super.findAll();
+//    }
 
-    @GET
-    @Path("{from}/{to}")
-    @Produces({"application/xml", "application/json"})
-    public List<Liking> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
-        return super.findRange(new int[]{from, to});
-    }
+//    @GET
+//    @Path("{from}/{to}")
+//    @Produces({"application/xml", "application/json"})
+//    public List<Liking> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
+//        return super.findRange(new int[]{from, to});
+//    }
 
-    @GET
-    @Path("count")
-    @Produces("text/plain")
-    public String countREST() {
-        return String.valueOf(super.count());
-    }
+//    @GET
+//    @Path("count")
+//    @Produces("text/plain")
+//    public String countREST() {
+//        return String.valueOf(super.count());
+//    }
 
-    @Override
     protected EntityManager getEntityManager() {
         return em;
     }

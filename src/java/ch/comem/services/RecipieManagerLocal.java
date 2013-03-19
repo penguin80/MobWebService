@@ -18,8 +18,8 @@ public interface RecipieManagerLocal {
 
     Long createRecipie(Set<String> steps, Collection<Long> ingredientIds);
 
-    String deleteRecipie(String recipieId);
+    String deleteRecipie(Long recipieId);
 
-    String modifyRecipie(String recipieId, Set<String> steps, Collection<Long> ingredientIds);
+    String modifyRecipie(Long recipieId, Set<String> steps, Collection<Long> ingredientIds);
     
 }

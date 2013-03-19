@@ -1,7 +1,9 @@
 package ch.comem.services.rest;
 
 import ch.comem.model.Membership;
+import ch.comem.services.MembersManagerLocal;
 import java.util.List;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -20,63 +22,60 @@ import javax.ws.rs.Produces;
  */
 @Stateless
 @Path("ch.comem.model.membership")
-public class MembershipFacadeREST extends AbstractFacade<Membership> {
+public class MembershipFacadeREST {
+    @EJB
+    private MembersManagerLocal mm;
     @PersistenceContext(unitName = "PastyChefPU")
     private EntityManager em;
 
-    public MembershipFacadeREST() {
-        super(Membership.class);
-    }
-
     @POST
-    @Override
     @Consumes({"application/xml", "application/json"})
     public void create(Membership entity) {
-        super.create(entity);
+        mm.createMember(entity.getFirstName(), entity.getLastName(), 
+                        entity.getAge(), entity.getPseudo(), entity.getEmail());
     }
 
     @PUT
-    @Override
     @Consumes({"application/xml", "application/json"})
     public void edit(Membership entity) {
-        super.edit(entity);
+        mm.modifyMember(entity.getId(), entity.getFirstName(), 
+                        entity.getLastName(), entity.getAge(), 
+                        entity.getPseudo(), entity.getEmail());
     }
 
     @DELETE
     @Path("{id}")
     public void remove(@PathParam("id") Long id) {
-        super.remove(super.find(id));
+        mm.deleteMember(id);
     }
 
     @GET
     @Path("{id}")
     @Produces({"application/xml", "application/json"})
     public Membership find(@PathParam("id") Long id) {
-        return super.find(id);
+        return getEntityManager().find(Membership.class, id);
     }
 
-    @GET
-    @Override
-    @Produces({"application/xml", "application/json"})
-    public List<Membership> findAll() {
-        return super.findAll();
-    }
+//    @GET
+//    @Produces({"application/xml", "application/json"})
+//    public List<Membership> findAll() {
+//        return super.findAll();
+//    }
 
-    @GET
-    @Path("{from}/{to}")
-    @Produces({"application/xml", "application/json"})
-    public List<Membership> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
-        return super.findRange(new int[]{from, to});
-    }
+//    @GET
+//    @Path("{from}/{to}")
+//    @Produces({"application/xml", "application/json"})
+//    public List<Membership> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
+//        return super.findRange(new int[]{from, to});
+//    }
 
-    @GET
-    @Path("count")
-    @Produces("text/plain")
-    public String countREST() {
-        return String.valueOf(super.count());
-    }
+//    @GET
+//    @Path("count")
+//    @Produces("text/plain")
+//    public String countREST() {
+//        return String.valueOf(super.count());
+//    }
 
-    @Override
     protected EntityManager getEntityManager() {
         return em;
     }

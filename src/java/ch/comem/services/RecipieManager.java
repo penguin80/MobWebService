@@ -25,9 +25,8 @@ public class RecipieManager implements RecipieManagerLocal {
     @Override
     public Long createRecipie(Set<String> steps, Collection<Long> ingredientIds) {
         Recipie recipie = new Recipie();
-        ArrayList<Long> ingredientIdsA = (ArrayList<Long>) ingredientIds;
-        for(int i = 0; i < ingredientIdsA.size(); i++){
-            Ingredient ing = em.find(Ingredient.class, ingredientIdsA.get(i));
+        for(Long id : ingredientIds){
+            Ingredient ing = em.find(Ingredient.class, id);
             recipie.addIngredient(ing);
         }
         recipie.setSteps(steps);
@@ -37,7 +36,7 @@ public class RecipieManager implements RecipieManagerLocal {
     }
 
     @Override
-    public String deleteRecipie(String recipieId) {
+    public String deleteRecipie(Long recipieId) {
                 String str = "";
         Recipie m = em.find(Recipie.class, recipieId);
         if (m != null) {
@@ -50,14 +49,13 @@ public class RecipieManager implements RecipieManagerLocal {
     }
     
     @Override
-    public String modifyRecipie(String recipieId, Set<String> steps, Collection<Long> ingredientIds) {
+    public String modifyRecipie(Long recipieId, Set<String> steps, Collection<Long> ingredientIds) {
                     String str = "";
         Recipie r  = em.find(Recipie.class, recipieId);
         if (r != null) {
             r.getIngredients().clear();
-            ArrayList<Long> ingredientIdsA = (ArrayList<Long>) ingredientIds;
-            for(int i = 0; i < ingredientIdsA.size(); i++){
-                Ingredient ing = em.find(Ingredient.class, ingredientIdsA.get(i).longValue());
+            for(Long id : ingredientIds){
+                Ingredient ing = em.find(Ingredient.class, id);
                 r.addIngredient(ing);
             }
             r.setSteps(steps);

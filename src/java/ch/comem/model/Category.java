@@ -27,8 +27,7 @@ public class Category implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String currentCategoryNameSelected;
-    private Collection<String> categoryNames;
+    private String name;
     @OneToMany(mappedBy="categoryConcerned")
     private Collection<Publication> categorizedPublications = new ArrayList<>();
     
@@ -40,43 +39,14 @@ public class Category implements Serializable {
         this.id = id;
     }
 
-    public String getCurrentCategoryNameSelected() {
-        return currentCategoryNameSelected;
+    public String getName() {
+        return name;
     }
 
-    public void setCurrentCategoryNameSelected(String name) {
-        this.currentCategoryNameSelected = name;
-    }
-
-    public Collection<String> getCategoryNames() {
-        return categoryNames;
-    }
-
-    public void setCategoryNamesByDefault() {
-        this.categoryNames = new ArrayList<>();
-        this.categoryNames.add("Biscuits");
-        this.categoryNames.add("Gâteaux");
-        this.categoryNames.add("Petits gâteaux");
-        this.categoryNames.add("Gâteaux d'anniversaire");
-        this.categoryNames.add("Macarons");
-        this.categoryNames.add("Cake pops");
-        this.categoryNames.add("Cupcakes");
-        this.categoryNames.add("Gâteaux au yaourt");
-        this.categoryNames.add("Pâte à sucre");
-        this.categoryNames.add("Crèmes et Flans");
-        this.categoryNames.add("Vacherins glacés");
-        this.categoryNames.add("Tartes");
-        this.categoryNames.add("Muffins");
+    public void setName(String name) {
+        this.name = name;
     }
     
-    public void addCategoryName(String name) {
-        this.categoryNames.add(name);
-    }
-    
-    public void removeCategoryName(String name) {
-        this.categoryNames.remove(name);
-    }
-
     @XmlTransient
     @JsonIgnore
     public Collection<Publication> getCategorizedPublications() {

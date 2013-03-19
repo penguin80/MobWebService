@@ -1,7 +1,9 @@
 package ch.comem.services.rest;
 
 import ch.comem.model.Photo;
+import ch.comem.services.PhotosManagerLocal;
 import java.util.List;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -20,63 +22,53 @@ import javax.ws.rs.Produces;
  */
 @Stateless
 @Path("ch.comem.model.photo")
-public class PhotoFacadeREST extends AbstractFacade<Photo> {
+public class PhotoFacadeREST {
+    @EJB
+    private PhotosManagerLocal pm;
     @PersistenceContext(unitName = "PastyChefPU")
     private EntityManager em;
 
-    public PhotoFacadeREST() {
-        super(Photo.class);
-    }
-
     @POST
-    @Override
     @Consumes({"application/xml", "application/json"})
     public void create(Photo entity) {
-        super.create(entity);
+        pm.createPhoto(entity.getSource(), entity.getAlt());
     }
 
-    @PUT
-    @Override
-    @Consumes({"application/xml", "application/json"})
-    public void edit(Photo entity) {
-        super.edit(entity);
-    }
+//    @PUT
+//    @Consumes({"application/xml", "application/json"})
+//    public void edit(Photo entity) {}
 
-    @DELETE
-    @Path("{id}")
-    public void remove(@PathParam("id") Long id) {
-        super.remove(super.find(id));
-    }
+//    @DELETE
+//    @Path("{id}")
+//    public void remove(@PathParam("id") Long id) {}
 
     @GET
     @Path("{id}")
     @Produces({"application/xml", "application/json"})
     public Photo find(@PathParam("id") Long id) {
-        return super.find(id);
+        return getEntityManager().find(Photo.class, id);
     }
 
-    @GET
-    @Override
-    @Produces({"application/xml", "application/json"})
-    public List<Photo> findAll() {
-        return super.findAll();
-    }
+//    @GET
+//    @Produces({"application/xml", "application/json"})
+//    public List<Photo> findAll() {
+//        return super.findAll();
+//    }
 
-    @GET
-    @Path("{from}/{to}")
-    @Produces({"application/xml", "application/json"})
-    public List<Photo> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
-        return super.findRange(new int[]{from, to});
-    }
+//    @GET
+//    @Path("{from}/{to}")
+//    @Produces({"application/xml", "application/json"})
+//    public List<Photo> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
+//        return super.findRange(new int[]{from, to});
+//    }
 
-    @GET
-    @Path("count")
-    @Produces("text/plain")
-    public String countREST() {
-        return String.valueOf(super.count());
-    }
+//    @GET
+//    @Path("count")
+//    @Produces("text/plain")
+//    public String countREST() {
+//        return String.valueOf(super.count());
+//    }
 
-    @Override
     protected EntityManager getEntityManager() {
         return em;
     }

@@ -1,7 +1,9 @@
 package ch.comem.services.rest;
 
 import ch.comem.model.Category;
+import ch.comem.services.CategoriesManagerLocal;
 import java.util.List;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -20,63 +22,54 @@ import javax.ws.rs.Produces;
  */
 @Stateless
 @Path("ch.comem.model.category")
-public class CategoryFacadeREST extends AbstractFacade<Category> {
+public class CategoryFacadeREST {
+    @EJB
+    private CategoriesManagerLocal cm;
     @PersistenceContext(unitName = "PastyChefPU")
     private EntityManager em;
 
-    public CategoryFacadeREST() {
-        super(Category.class);
-    }
-
     @POST
-    @Override
     @Consumes({"application/xml", "application/json"})
     public void create(Category entity) {
-        super.create(entity);
+        cm.createCategory(entity.getName());
     }
 
-    @PUT
-    @Override
-    @Consumes({"application/xml", "application/json"})
-    public void edit(Category entity) {
-        super.edit(entity);
-    }
+//    @PUT
+//    @Consumes({"application/xml", "application/json"})
+//    public void edit(Category entity) {}
 
-    @DELETE
-    @Path("{id}")
-    public void remove(@PathParam("id") Long id) {
-        super.remove(super.find(id));
-    }
+//    @DELETE
+//    @Path("{id}")
+//    public void remove(@PathParam("id") Long id) {}
 
     @GET
     @Path("{id}")
     @Produces({"application/xml", "application/json"})
     public Category find(@PathParam("id") Long id) {
-        return super.find(id);
+        return getEntityManager().find(Category.class, id);
     }
 
-    @GET
-    @Override
-    @Produces({"application/xml", "application/json"})
-    public List<Category> findAll() {
-        return super.findAll();
-    }
+//    @GET
+//    @Override
+//    @Produces({"application/xml", "application/json"})
+//    public List<Category> findAll() {
+//        return super.findAll();
+//    }
 
-    @GET
-    @Path("{from}/{to}")
-    @Produces({"application/xml", "application/json"})
-    public List<Category> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
-        return super.findRange(new int[]{from, to});
-    }
+//    @GET
+//    @Path("{from}/{to}")
+//    @Produces({"application/xml", "application/json"})
+//    public List<Category> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
+//        return super.findRange(new int[]{from, to});
+//    }
 
-    @GET
-    @Path("count")
-    @Produces("text/plain")
-    public String countREST() {
-        return String.valueOf(super.count());
-    }
+//    @GET
+//    @Path("count")
+//    @Produces("text/plain")
+//    public String countREST() {
+//        return String.valueOf(super.count());
+//    }
 
-    @Override
     protected EntityManager getEntityManager() {
         return em;
     }
