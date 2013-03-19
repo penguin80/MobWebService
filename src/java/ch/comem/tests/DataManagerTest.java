@@ -20,7 +20,7 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.jws.WebService;
 
-/**
+/** Toto
  *
  * @author Pierre-Alexandre
  */
