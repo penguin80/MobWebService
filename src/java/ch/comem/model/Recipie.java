@@ -16,6 +16,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+import org.codehaus.jackson.annotate.JsonIgnore;
 
 /**
  *
@@ -51,6 +53,8 @@ public class Recipie implements Serializable {
         this.steps = steps;
     }
 
+    @XmlTransient
+    @JsonIgnore
     public Collection<Ingredient> getIngredients() {
         return ingredientsNeeded;
     }

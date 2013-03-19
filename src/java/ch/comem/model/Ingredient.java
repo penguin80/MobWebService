@@ -11,6 +11,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+import org.codehaus.jackson.annotate.JsonIgnore;
 
 /**
  *
@@ -61,6 +63,8 @@ public class Ingredient implements Serializable {
         this.id = id;
     }
     
+    @XmlTransient
+    @JsonIgnore
     public Recipie getRecipieInvolved() {
         return recipieInvolved;
     }
