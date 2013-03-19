@@ -14,12 +14,16 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+import org.codehaus.jackson.annotate.JsonIgnore;
 
 /**
  *
  * @author raphaelbaumann
  */
 @Entity
+@XmlRootElement
 public class Membership implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -83,6 +87,8 @@ public class Membership implements Serializable {
         this.email = email;
     }
 
+    @XmlTransient
+    @JsonIgnore
     public Collection<Publication> getPublicationsConcerned() {
         return publicationsConcerned;
     }
@@ -92,6 +98,8 @@ public class Membership implements Serializable {
         publication.setMemberInvolved(this);
     }
 
+    @XmlTransient
+    @JsonIgnore
     public Collection<Comment> getCommentsConcerned() {
         return commentsConcerned;
     }
@@ -101,6 +109,8 @@ public class Membership implements Serializable {
         comment.setMemberCommenting(this);
     }
 
+    @XmlTransient
+    @JsonIgnore
     public Collection<Liking> getLikesConcerned() {
         return likesConcerned;
     }

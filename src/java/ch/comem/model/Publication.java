@@ -16,12 +16,16 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+import org.codehaus.jackson.annotate.JsonIgnore;
 
 /**
  *
  * @author raphaelbaumann
  */
 @Entity
+@XmlRootElement
 public class Publication implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -84,6 +88,8 @@ public class Publication implements Serializable {
         this.recepie = recepie;
     }
 
+    @XmlTransient
+    @JsonIgnore
     public Collection<Comment> getComment() {
         return comment;
     }
@@ -109,6 +115,8 @@ public class Publication implements Serializable {
         this.memberInvolved = memberInvolved;
     }
 
+    @XmlTransient
+    @JsonIgnore
     public Collection<Liking> getLikes() {
         return likes;
     }

@@ -15,12 +15,14 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
  * @author raphaelbaumann
  */
 @Entity
+@XmlRootElement
 public class Recipie implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id

@@ -12,12 +12,16 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+import org.codehaus.jackson.annotate.JsonIgnore;
 
 /**
  *
  * @author raphaelbaumann
  */
 @Entity
+@XmlRootElement
 public class Category implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -73,6 +77,8 @@ public class Category implements Serializable {
         this.categoryNames.remove(name);
     }
 
+    @XmlTransient
+    @JsonIgnore
     public Collection<Publication> getCategorizedPublications() {
         return categorizedPublications;
     }
