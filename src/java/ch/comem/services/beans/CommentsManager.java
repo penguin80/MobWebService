@@ -2,10 +2,11 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package ch.comem.services;
+package ch.comem.services.beans;
 
 import ch.comem.model.Comment;
 import ch.comem.model.Publication;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -29,6 +30,11 @@ public class CommentsManager implements CommentsManagerLocal {
         return comment.getId();
     }
     
+    @Override
+    public List<Comment> findAllComments() {
+        return em.createNamedQuery("findAllComments").getResultList();
+    }
+
     public void persist(Object object) {
         em.persist(object);
     }

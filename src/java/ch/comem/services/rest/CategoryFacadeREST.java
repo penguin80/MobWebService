@@ -1,7 +1,7 @@
 package ch.comem.services.rest;
 
 import ch.comem.model.Category;
-import ch.comem.services.CategoriesManagerLocal;
+import ch.comem.services.beans.CategoriesManagerLocal;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -49,26 +49,28 @@ public class CategoryFacadeREST {
         return getEntityManager().find(Category.class, id);
     }
 
-//    @GET
-//    @Override
-//    @Produces({"application/xml", "application/json"})
-//    public List<Category> findAll() {
-//        return super.findAll();
-//    }
+    @GET
+    @Produces({"application/xml", "application/json"})
+    public List<Category> findAll() {
+        return cm.findAllCategories();
+    }
 
-//    @GET
-//    @Path("{from}/{to}")
-//    @Produces({"application/xml", "application/json"})
-//    public List<Category> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
-//        return super.findRange(new int[]{from, to});
-//    }
+    @GET
+    @Path("{from}/{to}")
+    @Produces({"application/xml", "application/json"})
+    public List<Category> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
+        List<Category> allCategories = cm.findAllCategories();
+        List<Category> subSelection = allCategories.subList(from.intValue(), 
+                                                            to.intValue());
+        return subSelection;
+    }
 
-//    @GET
-//    @Path("count")
-//    @Produces("text/plain")
-//    public String countREST() {
-//        return String.valueOf(super.count());
-//    }
+    @GET
+    @Path("count")
+    @Produces("text/plain")
+    public String countREST() {
+        return String.valueOf(cm.findAllCategories().size());
+    }
 
     protected EntityManager getEntityManager() {
         return em;

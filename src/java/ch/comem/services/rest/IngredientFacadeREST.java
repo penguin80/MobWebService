@@ -1,7 +1,7 @@
 package ch.comem.services.rest;
 
 import ch.comem.model.Ingredient;
-import ch.comem.services.IngredientsManagerLocal;
+import ch.comem.services.beans.IngredientsManagerLocal;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -55,25 +55,28 @@ public class IngredientFacadeREST {
         return getEntityManager().find(Ingredient.class, id);
     }
 
-//    @GET
-//    @Produces({"application/xml", "application/json"})
-//    public List<Ingredient> findAll() {
-//        return super.findAll();
-//    }
+    @GET
+    @Produces({"application/xml", "application/json"})
+    public List<Ingredient> findAll() {
+        return im.findAllIngredients();
+    }
 
-//    @GET
-//    @Path("{from}/{to}")
-//    @Produces({"application/xml", "application/json"})
-//    public List<Ingredient> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
-//        return super.findRange(new int[]{from, to});
-//    }
+    @GET
+    @Path("{from}/{to}")
+    @Produces({"application/xml", "application/json"})
+    public List<Ingredient> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
+        List<Ingredient> allIngredients = im.findAllIngredients();
+        List<Ingredient> subSelection = allIngredients.subList(from.intValue(), 
+                                                               to.intValue());
+        return subSelection;
+    }
 
-//    @GET
-//    @Path("count")
-//    @Produces("text/plain")
-//    public String countREST() {
-//        return String.valueOf(super.count());
-//    }
+    @GET
+    @Path("count")
+    @Produces("text/plain")
+    public String countREST() {
+        return String.valueOf(im.findAllIngredients().size());
+    }
 
     protected EntityManager getEntityManager() {
         return em;

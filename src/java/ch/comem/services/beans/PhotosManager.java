@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package ch.comem.services;
+package ch.comem.services.beans;
 
 import ch.comem.model.Photo;
 import javax.ejb.Stateless;

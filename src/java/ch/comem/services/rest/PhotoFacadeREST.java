@@ -1,7 +1,7 @@
 package ch.comem.services.rest;
 
 import ch.comem.model.Photo;
-import ch.comem.services.PhotosManagerLocal;
+import ch.comem.services.beans.PhotosManagerLocal;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;

@@ -4,18 +4,18 @@
  */
 package ch.comem.tests;
 
-import ch.comem.services.CategoriesManagerLocal;
-import ch.comem.services.CommentsManagerLocal;
-import ch.comem.services.IngredientsManagerLocal;
-import ch.comem.services.LikesManagerLocal;
-import ch.comem.services.MembersManagerLocal;
-import ch.comem.services.PhotosManagerLocal;
-import ch.comem.services.PublicationsManagerLocal;
-import ch.comem.services.RecipieManagerLocal;
+import ch.comem.services.beans.CategoriesManagerLocal;
+import ch.comem.services.beans.CommentsManagerLocal;
+import ch.comem.services.beans.IngredientsManagerLocal;
+import ch.comem.services.beans.LikesManagerLocal;
+import ch.comem.services.beans.MembersManagerLocal;
+import ch.comem.services.beans.PhotosManagerLocal;
+import ch.comem.services.beans.PublicationsManagerLocal;
+import ch.comem.services.beans.RecipieManagerLocal;
+import ch.comem.services.beans.StepsManagerLocal;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.jws.WebService;
@@ -27,6 +27,8 @@ import javax.jws.WebService;
 @Stateless
 @WebService
 public class DataManagerTest implements DataManagerTestLocal {
+    @EJB
+    private StepsManagerLocal sm;
     @EJB
     private PublicationsManagerLocal pum;
     @EJB
@@ -68,35 +70,41 @@ public class DataManagerTest implements DataManagerTestLocal {
 
     @Override
     public void testRelationRecipieIngredients() {
+        String name = "TestRecette";
         Long i1 = im.createIngredient("farine", 300, "grammes");
         Long i2 = im.createIngredient("sucre", 120, "grammes");
         Long i3 = im.createIngredient("oeuf", 2, "unités");
         Long i4 = im.createIngredient("cacao en poudre", 3, "c.s");
-        Set<String> steps = new HashSet<>();
-        steps.add("Battre les oeufs");
-        steps.add("Ajouter le sucre aux oeufs");
-        steps.add("Blanchir les oeufs");
-        Collection<Long> ingredientsId = new ArrayList<>();
+        Long i5 = im.createIngredient("poudre à lever", 1, "c.c");
+        List<Long> ingredientsId = new ArrayList<>();
         ingredientsId.add(i1);
         ingredientsId.add(i2);
         ingredientsId.add(i3);
         ingredientsId.add(i4);
-        Long recipieId = rm.createRecipie(steps, ingredientsId);
+        ingredientsId.add(i5);
+        Long s1 = sm.createStep(1, "Battre les oeufs");
+        Long s2 = sm.createStep(2, "Ajouter le sucre aux oeufs");
+        Long s3 = sm.createStep(3, "Blanchir les oeufs");
+        List<Long> stepsId = new ArrayList<>();
+        stepsId.add(s1);
+        stepsId.add(s2);
+        stepsId.add(s3);
+        Long recipieId = rm.createRecipie(name, ingredientsId, stepsId);
         
-        im.createIngredient("poudre à lever", 1, "c.c", recipieId);
     }
 
     @Override
     public void testPublicationRelations() {
+        String name = "TestEcole";
         Long i1 = im.createIngredient("étudiants", 3000, "personnes");
         Long i2 = im.createIngredient("professeurs", 200, "personnes");
         Long i3 = im.createIngredient("cours", 80, "branches");
-        Set<String> steps = new HashSet<>();
+        Collection<Long> stepsId = new ArrayList<>();
         Collection<Long> ingredientsId = new ArrayList<>();
         ingredientsId.add(i1);
         ingredientsId.add(i2);
         ingredientsId.add(i3);
-        Long r1 = rm.createRecipie(steps, ingredientsId);
+        Long r1 = rm.createRecipie(name, ingredientsId, stepsId);
         Long ph1 = phm.createPhoto(sources[2], "Logo de Comem+");
         Long m1 = mm.createMember(firstNames[5], lastNames[5], ages[5], "Chuck", 
                                   "I.destroy@everything.com");

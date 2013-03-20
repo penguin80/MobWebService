@@ -1,7 +1,7 @@
 package ch.comem.services.rest;
 
 import ch.comem.model.Liking;
-import ch.comem.services.LikesManagerLocal;
+import ch.comem.services.beans.LikesManagerLocal;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;

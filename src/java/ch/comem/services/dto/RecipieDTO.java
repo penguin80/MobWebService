@@ -1,40 +1,20 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-package ch.comem.model;
+package ch.comem.services.dto;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
-import org.codehaus.jackson.annotate.JsonIgnore;
 
 /**
  *
  * @author raphaelbaumann
  */
-@NamedQuery(name="findAllRecipies", query="SELECT r FROM Recipie r")
-@Entity
-@XmlRootElement
-public class Recipie implements Serializable {
+@XmlRootElement(name="recipie")
+public class RecipieDTO implements Serializable {
     private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    @OneToMany(fetch=FetchType.LAZY)
-    private List<Step> steps = new ArrayList<>();
-    @OneToMany(fetch=FetchType.LAZY)
-    private List<Ingredient> ingredients = new ArrayList<>();
+    private List<StepDTO> steps;
+    private List<IngredientDTO> ingredients;
 
     public String getName() {
         return name;
@@ -44,23 +24,21 @@ public class Recipie implements Serializable {
         this.name = name;
     }
     
-    @XmlTransient
-    @JsonIgnore
-    public List<Step> getSteps() {
+    public List<StepDTO> getSteps() {
         return steps;
     }
 
-    public void setSteps(List<Step> steps) {
+    public void setSteps(List<StepDTO> steps) {
         this.steps = steps;
     }
 
-    @XmlTransient
-    @JsonIgnore
-    public List<Ingredient> getIngredients() {
+//    @XmlTransient
+//    @JsonIgnore
+    public List<IngredientDTO> getIngredients() {
         return ingredients;
     }
 
-    public void setIngredients(List<Ingredient> ingredients) {
+    public void setIngredients(List<IngredientDTO> ingredients) {
         this.ingredients = ingredients;
     }
     
@@ -82,10 +60,10 @@ public class Recipie implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Recipie)) {
+        if (!(object instanceof RecipieDTO)) {
             return false;
         }
-        Recipie other = (Recipie) object;
+        RecipieDTO other = (RecipieDTO) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }

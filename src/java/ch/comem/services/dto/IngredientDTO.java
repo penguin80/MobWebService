@@ -1,28 +1,15 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-package ch.comem.model;
+package ch.comem.services.dto;
 
 import java.io.Serializable;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.NamedQuery;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
  * @author raphaelbaumann
  */
-@NamedQuery(name="findAllIngredients", query="SELECT i FROM Ingredient i")
-@Entity
-@XmlRootElement
-public class Ingredient implements Serializable {
+@XmlRootElement(name="ingredient")
+public class IngredientDTO implements Serializable {
     private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
     private int quantity;
@@ -70,10 +57,10 @@ public class Ingredient implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Ingredient)) {
+        if (!(object instanceof IngredientDTO)) {
             return false;
         }
-        Ingredient other = (Ingredient) object;
+        IngredientDTO other = (IngredientDTO) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }

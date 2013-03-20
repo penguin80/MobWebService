@@ -1,7 +1,7 @@
 package ch.comem.services.rest;
 
 import ch.comem.model.Comment;
-import ch.comem.services.CommentsManagerLocal;
+import ch.comem.services.beans.CommentsManagerLocal;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -49,25 +49,28 @@ public class CommentFacadeREST {
         return getEntityManager().find(Comment.class, id);
     }
 
-//    @GET
-//    @Produces({"application/xml", "application/json"})
-//    public List<Comment> findAll() {
-//        return super.findAll();
-//    }
+    @GET
+    @Produces({"application/xml", "application/json"})
+    public List<Comment> findAll() {
+        return cm.findAllComments();
+    }
 
-//    @GET
-//    @Path("{from}/{to}")
-//    @Produces({"application/xml", "application/json"})
-//    public List<Comment> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
-//        return super.findRange(new int[]{from, to});
-//    }
+    @GET
+    @Path("{from}/{to}")
+    @Produces({"application/xml", "application/json"})
+    public List<Comment> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
+        List<Comment> allComments = cm.findAllComments();
+        List<Comment> subSelection = allComments.subList(from.intValue(), 
+                                                         to.intValue());
+        return subSelection;
+    }
 
-//    @GET
-//    @Path("count")
-//    @Produces("text/plain")
-//    public String countREST() {
-//        return String.valueOf(super.count());
-//    }
+    @GET
+    @Path("count")
+    @Produces("text/plain")
+    public String countREST() {
+        return String.valueOf(cm.findAllComments().size());
+    }
 
     protected EntityManager getEntityManager() {
         return em;

@@ -7,10 +7,12 @@ package ch.comem.model;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -20,6 +22,7 @@ import org.codehaus.jackson.annotate.JsonIgnore;
  *
  * @author raphaelbaumann
  */
+@NamedQuery(name="findAllCategories", query="SELECT c FROM Category c")
 @Entity
 @XmlRootElement
 public class Category implements Serializable {

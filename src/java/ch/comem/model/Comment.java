@@ -6,27 +6,30 @@ package ch.comem.model;
 
 import java.io.Serializable;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQuery;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
  * @author raphaelbaumann
  */
+@NamedQuery(name="findAllComments", query="SELECT c FROM Comment c")
 @Entity
 @XmlRootElement
 public class Comment implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String texte;
-    @ManyToOne
+    @ManyToOne(fetch=FetchType.LAZY)
     private Publication publicationCom;
-    @ManyToOne
+    @ManyToOne(fetch=FetchType.LAZY)
     private Membership memberCommenting;
 
     public String getTexte() {

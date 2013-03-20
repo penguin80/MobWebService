@@ -1,7 +1,7 @@
 package ch.comem.services.rest;
 
 import ch.comem.model.Publication;
-import ch.comem.services.PublicationsManagerLocal;
+import ch.comem.services.beans.PublicationsManagerLocal;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;

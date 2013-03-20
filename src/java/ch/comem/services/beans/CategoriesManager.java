@@ -1,7 +1,7 @@
-package ch.comem.services;
+package ch.comem.services.beans;
 
 import ch.comem.model.Category;
-import java.util.Collection;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -24,6 +24,11 @@ public class CategoriesManager implements CategoriesManagerLocal {
         return c.getId();
     }
 
+    @Override
+    public List<Category> findAllCategories() {
+        return em.createNamedQuery("findAllCategories").getResultList();
+    }
+    
     public void persist(Object object) {
         em.persist(object);
     }

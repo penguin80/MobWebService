@@ -37,7 +37,7 @@ public class Publication implements Serializable {
     @OneToOne
     @JoinColumn(name="PHOTOID", referencedColumnName="ID")
     private Photo imagingPhoto;
-    @OneToOne(mappedBy="publicationConcerned")
+    @OneToOne
     private Recipie recepie;
     @OneToMany(mappedBy="publicationCom")
     private Collection<Comment> comment = new ArrayList<>();

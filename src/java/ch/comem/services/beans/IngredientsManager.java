@@ -1,7 +1,7 @@
-package ch.comem.services;
+package ch.comem.services.beans;
 
 import ch.comem.model.Ingredient;
-import ch.comem.model.Recipie;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -32,45 +32,12 @@ public class IngredientsManager implements IngredientsManagerLocal {
     }
 
     @Override
-    public Long createIngredient(String name, int quantity, String quantityUnit, Long recipieId) {
-        Ingredient i = new Ingredient();
-        setIngredientParameters(i, name, quantity, quantityUnit);
-        Recipie r = em.find(Recipie.class, recipieId);
-        if (r != null) {
-            i.setRecipieInvolved(r);
-            persist(i);
-            em.flush();
-        }
-        return i.getId();
-    }
-
-    @Override
     public String modifyIngredient(Long ingredientId, String name, int quantity, 
                                      String quantityUnit) {
         String str = "";
         Ingredient i  = em.find(Ingredient.class, ingredientId);
         if (i != null) {
             setIngredientParameters(i, name, quantity, quantityUnit);
-            persist(i);
-            em.flush();
-            str = str.concat("Ingrédient modifié!");
-        } else {
-            str = str.concat("Impossible de modifier l'ingrédient demandé!");
-        }
-        return str;
-    }
-
-    @Override
-    public String modifyIngredient(Long ingredientId, String name, int quantity, 
-                                     String quantityUnit, Long recipieId) {
-        String str = "";
-        Ingredient i  = em.find(Ingredient.class, ingredientId);
-        if (i != null) {
-            setIngredientParameters(i, name, quantity, quantityUnit);
-            Recipie r = em.find(Recipie.class, recipieId);
-            if (r != null) {
-                i.setRecipieInvolved(r);
-            }
             persist(i);
             em.flush();
             str = str.concat("Ingrédient modifié!");
@@ -86,12 +53,16 @@ public class IngredientsManager implements IngredientsManagerLocal {
         if (i != null) {
             em.remove(i);
             str = str.concat("Ingrédient supprimé!");
-        } else {
+        } else
             str = str.concat("Impossible de supprimer l'ingrédient demandé!");
-        }
         return str;
     }
     
+    @Override
+    public List<Ingredient> findAllIngredients() {
+        return em.createNamedQuery("findAllIngredients").getResultList();
+    }
+
     public void persist(Object object) {
         em.persist(object);
     }

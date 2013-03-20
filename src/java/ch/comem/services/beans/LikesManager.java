@@ -1,4 +1,4 @@
-package ch.comem.services;
+package ch.comem.services.beans;
 
 import ch.comem.model.Liking;
 import ch.comem.model.Membership;

@@ -1,7 +1,7 @@
 package ch.comem.services.rest;
 
 import ch.comem.model.Membership;
-import ch.comem.services.MembersManagerLocal;
+import ch.comem.services.beans.MembersManagerLocal;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
