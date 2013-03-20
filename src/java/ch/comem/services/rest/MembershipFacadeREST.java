@@ -21,7 +21,7 @@ import javax.ws.rs.Produces;
  * @author Pierre-Alexandre
  */
 @Stateless
-@Path("ch.comem.model.membership")
+@Path("memberships")
 public class MembershipFacadeREST {
     @EJB
     private MembersManagerLocal mm;

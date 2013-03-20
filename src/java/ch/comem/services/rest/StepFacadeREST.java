@@ -18,7 +18,7 @@ import javax.ws.rs.PathParam;
  * @author Pierre-Alexandre
  */
 @Stateless
-@Path("ch.comem.model.step")
+@Path("steps")
 public class StepFacadeREST {
     @EJB
     private StepsManagerLocal sm;

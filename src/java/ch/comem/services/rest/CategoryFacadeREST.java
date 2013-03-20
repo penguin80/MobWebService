@@ -21,7 +21,7 @@ import javax.ws.rs.Produces;
  * @author Pierre-Alexandre
  */
 @Stateless
-@Path("ch.comem.model.category")
+@Path("categories")
 public class CategoryFacadeREST {
     @EJB
     private CategoriesManagerLocal cm;

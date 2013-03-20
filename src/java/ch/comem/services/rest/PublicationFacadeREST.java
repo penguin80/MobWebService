@@ -21,7 +21,7 @@ import javax.ws.rs.Produces;
  * @author Pierre-Alexandre
  */
 @Stateless
-@Path("ch.comem.model.publication")
+@Path("publications")
 public class PublicationFacadeREST {
     @EJB
     private PublicationsManagerLocal pm;

@@ -21,7 +21,7 @@ import javax.ws.rs.Produces;
  * @author Pierre-Alexandre
  */
 @Stateless
-@Path("ch.comem.model.comment")
+@Path("comments")
 public class CommentFacadeREST {
     @EJB
     private CommentsManagerLocal cm;

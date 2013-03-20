@@ -21,7 +21,7 @@ import javax.ws.rs.Produces;
  * @author Pierre-Alexandre
  */
 @Stateless
-@Path("ch.comem.model.ingredient")
+@Path("ingredients")
 public class IngredientFacadeREST {
     @EJB
     private IngredientsManagerLocal im;

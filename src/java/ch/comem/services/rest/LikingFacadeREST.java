@@ -21,7 +21,7 @@ import javax.ws.rs.Produces;
  * @author Pierre-Alexandre
  */
 @Stateless
-@Path("ch.comem.model.liking")
+@Path("likings")
 public class LikingFacadeREST {
     @EJB
     private LikesManagerLocal lm;

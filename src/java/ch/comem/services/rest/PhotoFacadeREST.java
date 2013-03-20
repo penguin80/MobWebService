@@ -21,7 +21,7 @@ import javax.ws.rs.Produces;
  * @author Pierre-Alexandre
  */
 @Stateless
-@Path("ch.comem.model.photo")
+@Path("photos")
 public class PhotoFacadeREST {
     @EJB
     private PhotosManagerLocal pm;
