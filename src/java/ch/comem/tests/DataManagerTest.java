@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package ch.comem.tests;
 
 import ch.comem.services.beans.CategoriesManagerLocal;
@@ -20,7 +16,7 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.jws.WebService;
 
-/** Toto
+/**
  *
  * @author Pierre-Alexandre
  */
