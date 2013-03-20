@@ -83,10 +83,19 @@ public class RecipieManager implements RecipieManagerLocal {
 
     @Override
     public List<Recipie> findAllRecipies() {
-
         return em.createNamedQuery("findAllRecipies").getResultList();
     }
 
+    @Override
+    public List<Ingredient> findAllIngredientsFromRecipieName(String name) {
+        return em.createNamedQuery("findAllIngredientsFromRecipieId").setParameter("name", name).getResultList();
+    }
+    
+    @Override
+    public List<Step> findAllStepsFromRecipieName(String name) {
+        return em.createNamedQuery("findAllStepsFromRecipieId").setParameter("name", name).getResultList();
+    }
+    
     public void persist(Object object) {
         em.persist(object);
     }    

@@ -36,6 +36,7 @@ public class RecipieFacadeREST {
 
     @POST
     @Consumes({"application/xml", "application/json"})
+    @Produces({"application/xml", "application/json"})
     public Recipie create(Recipie entity) {
         List<Ingredient> ingredients = entity.getIngredients();
         List<Long> ingredientIds = new ArrayList<>();
@@ -51,7 +52,8 @@ public class RecipieFacadeREST {
 
     @PUT
     @Consumes({"application/xml", "application/json"})
-    public void edit(Recipie entity) {
+    @Produces({"application/xml", "application/json"})
+    public Recipie edit(Recipie entity) {
         List<Ingredient> ingredients = entity.getIngredients();
         List<Long> ingredientIds = new ArrayList<>();
         for (Ingredient i : ingredients)
@@ -61,6 +63,7 @@ public class RecipieFacadeREST {
         for (Step s : steps)
             stepIds.add(s.getId());
         rm.modifyRecipie(entity.getId(), entity.getName(), ingredientIds, stepIds);
+        return getEntityManager().find(Recipie.class, entity.getId());
     }
 
     @DELETE
@@ -124,6 +127,20 @@ public class RecipieFacadeREST {
         return rDTOList;
     }
     
+    @GET 
+    @Path("searchIngredients/{name}")
+    @Produces({"application/xml", "application/json"})
+    public List<Ingredient> findIngredientsByName(@PathParam("name") String name) {
+        return rm.findAllIngredientsFromRecipieName(name);
+    }
+    
+    @GET
+    @Path("searchSteps/{name}")
+    @Produces({"application/xml", "application/json"})
+    public List<Step> findStepsByName(@PathParam("name") String name) {
+        return rm.findAllStepsFromRecipieName(name);
+    }
+
     @GET
     @Produces({"application/xml", "application/json"})
     public List<RecipieDTO> findAll() {

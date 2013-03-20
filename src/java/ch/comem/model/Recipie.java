@@ -12,6 +12,9 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -22,7 +25,13 @@ import org.codehaus.jackson.annotate.JsonIgnore;
  *
  * @author raphaelbaumann
  */
-@NamedQuery(name="findAllRecipies", query="SELECT r FROM Recipie r")
+@NamedQueries({
+    @NamedQuery(name="findAllRecipies", query="SELECT r FROM Recipie r"),
+    @NamedQuery(name="findAllIngredientsFromRecipieId", 
+                query="SELECT i FROM Recipie r JOIN r.ingredients i WHERE r.name = :name"),
+    @NamedQuery(name="findAllStepsFromRecipieId", 
+                query="SELECT s FROM Recipie r JOIN r.steps s WHERE r.name = :name")
+})
 @Entity
 @XmlRootElement
 public class Recipie implements Serializable {
@@ -32,8 +41,14 @@ public class Recipie implements Serializable {
     private Long id;
     private String name;
     @OneToMany(fetch=FetchType.LAZY)
+    @JoinTable(name="recipie_step",
+               joinColumns=@JoinColumn(name="Recipie_ID"),
+               inverseJoinColumns=@JoinColumn(name="steps_ID"))
     private List<Step> steps = new ArrayList<>();
     @OneToMany(fetch=FetchType.LAZY)
+    @JoinTable(name="recipie_ingredient",
+               joinColumns=@JoinColumn(name="Recipie_ID"),
+               inverseJoinColumns=@JoinColumn(name="ingredients_ID"))
     private List<Ingredient> ingredients = new ArrayList<>();
 
     public String getName() {
