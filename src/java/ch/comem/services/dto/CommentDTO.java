@@ -2,11 +2,10 @@ package ch.comem.services.dto;
 
 import java.io.Serializable;
 import javax.xml.bind.annotation.XmlRootElement;
-import org.codehaus.jackson.annotate.JsonAutoDetect;
 
 /**
  *
- * @author raphaelbaumann
+ * @author Pierre-Alexandre
  */
 @XmlRootElement(name="comment")
 public class CommentDTO implements Serializable {
@@ -16,33 +15,33 @@ public class CommentDTO implements Serializable {
     private PublicationDTO publicationCom;
     private MembershipDTO memberCommenting;
 
-//    public String getTexte() {
-//        return texte;
-//    }
+    public String getTexte() {
+        return texte;
+    }
 
     public void setTexte(String texte) {
         this.texte = texte;
     }
 
-//    public PublicationDTO getPublication() {
-//        return publicationCom;
-//    }
+    public PublicationDTO getPublication() {
+        return publicationCom;
+    }
 
     public void addPublication(PublicationDTO publication) {
         this.publicationCom = publication;
     }
     
-//    public MembershipDTO getMemberCommenting() {
-//        return memberCommenting;
-//    }
+    public MembershipDTO getMemberCommenting() {
+        return memberCommenting;
+    }
 
     public void setMemberCommenting(MembershipDTO memberCommenting) {
         this.memberCommenting = memberCommenting;
     }
 
-//    public Long getId() {
-//        return id;
-//    }
+    public Long getId() {
+        return id;
+    }
 
     public void setId(Long id) {
         this.id = id;

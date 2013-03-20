@@ -4,11 +4,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlRootElement;
-import org.codehaus.jackson.annotate.JsonAutoDetect;
 
 /**
  *
- * @author raphaelbaumann
+ * @author Pierre-Alexandre
  */
 @XmlRootElement(name="membership")
 public class MembershipDTO implements Serializable {
@@ -27,41 +26,41 @@ public class MembershipDTO implements Serializable {
     private List<CommentDTO> commentsConcerned = new ArrayList<>();
     private List<LikingDTO> likesConcerned = new ArrayList<>();
     
-//    public String getFirstName() {
-//        return firstName;
-//    }
+    public String getFirstName() {
+        return firstName;
+    }
 
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
 
-//    public String getLastName() {
-//        return lastName;
-//    }
+    public String getLastName() {
+        return lastName;
+    }
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
 
-//    public int getAge() {
-//        return age;
-//    }
+    public int getAge() {
+        return age;
+    }
 
     public void setAge(int age) {
         this.age = age;
     }
 
-//    public String getPseudo() {
-//        return pseudo;
-//    }
+    public String getPseudo() {
+        return pseudo;
+    }
 
     public void setPseudo(String pseudo) {
         this.pseudo = pseudo;
     }
 
-//    public String getEmail() {
-//        return email;
-//    }
+    public String getEmail() {
+        return email;
+    }
 
     public void setEmail(String email) {
         this.email = email;
@@ -69,9 +68,9 @@ public class MembershipDTO implements Serializable {
 
 //    @XmlTransient
 //    @JsonIgnore
-//    public List<PublicationDTO> getPublicationsConcerned() {
-//        return publicationsConcerned;
-//    }
+    public List<PublicationDTO> getPublicationsConcerned() {
+        return publicationsConcerned;
+    }
 
     public void addPublication(PublicationDTO publication) {
         publicationsConcerned.add(publication);
@@ -80,9 +79,9 @@ public class MembershipDTO implements Serializable {
 
 //    @XmlTransient
 //    @JsonIgnore
-//    public Collection<CommentDTO> getCommentsConcerned() {
-//        return commentsConcerned;
-//    }
+    public List<CommentDTO> getCommentsConcerned() {
+        return commentsConcerned;
+    }
 
     public void addComment(CommentDTO comment) {
         commentsConcerned.add(comment);
@@ -91,18 +90,18 @@ public class MembershipDTO implements Serializable {
 
 //    @XmlTransient
 //    @JsonIgnore
-//    public Collection<LikingDTO> getLikesConcerned() {
-//        return likesConcerned;
-//    }
+    public List<LikingDTO> getLikesConcerned() {
+        return likesConcerned;
+    }
 
     public void addLike(LikingDTO like) {
         likesConcerned.add(like);
         like.setMemberLiking(this);
     }
 
-//    public Long getId() {
-//        return id;
-//    }
+    public Long getId() {
+        return id;
+    }
 
     public void setId(Long id) {
         this.id = id;

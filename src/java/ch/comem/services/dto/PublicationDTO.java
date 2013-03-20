@@ -4,11 +4,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlRootElement;
-import org.codehaus.jackson.annotate.JsonAutoDetect;
 
 /**
  *
- * @author raphaelbaumann
+ * @author Pierre-Alexandre
  */
 @XmlRootElement(name="publication")
 public class PublicationDTO implements Serializable {
@@ -23,13 +22,13 @@ public class PublicationDTO implements Serializable {
     private MembershipDTO memberInvolved;
     private List<LikingDTO> likes = new ArrayList<>();
 
-//    public String getDateOfPublication() {
-//        return dateOfPublication;
-//    }
+    public String getDateOfPublication() {
+        return dateOfPublication;
+    }
 
-//    public PhotoDTO getImagingPhoto() {
-//        return imagingPhoto;
-//    }
+    public PhotoDTO getImagingPhoto() {
+        return imagingPhoto;
+    }
 
     public void setImagingPhoto(PhotoDTO imagingPhoto) {
         this.imagingPhoto = imagingPhoto;
@@ -39,25 +38,25 @@ public class PublicationDTO implements Serializable {
         this.dateOfPublication = dateOfPublication;
     }
 
-//    public String getDateOfLastPublication() {
-//        return dateOfLastPublication;
-//    }
+    public String getDateOfLastPublication() {
+        return dateOfLastPublication;
+    }
 
     public void setDateOfLastPublication(String dateOfLastPublication) {
         this.dateOfLastPublication = dateOfLastPublication;
     }
     
-//    public Long getId() {
-//        return id;
-//    }
+    public Long getId() {
+        return id;
+    }
 
     public void setId(Long id) {
         this.id = id;
     }
 
-//    public RecipieDTO getRecepie() {
-//        return recepie;
-//    }
+    public RecipieDTO getRecepie() {
+        return recepie;
+    }
 
     public void setRecepie(RecipieDTO recepie) {
         this.recepie = recepie;
@@ -65,26 +64,26 @@ public class PublicationDTO implements Serializable {
 
 //    @XmlTransient
 //    @JsonIgnore
-//    public Collection<CommentDTO> getComment() {
-//        return comment;
-//    }
+    public List<CommentDTO> getComment() {
+        return comments;
+    }
 
     public void addComment(CommentDTO comment) {
         comments.add(comment);
         comment.addPublication(this);
     }
 
-//    public CategoryDTO getCategoryConcerned() {
-//        return categoryConcerned;
-//    }
+    public CategoryDTO getCategoryConcerned() {
+        return categoryConcerned;
+    }
 
     public void setCategoryConcerned(CategoryDTO categoryConcerned) {
         this.categoryConcerned = categoryConcerned;
     }
 
-//    public MembershipDTO getMemberInvolved() {
-//        return memberInvolved;
-//    }
+    public MembershipDTO getMemberInvolved() {
+        return memberInvolved;
+    }
 
     public void setMemberInvolved(MembershipDTO memberInvolved) {
         this.memberInvolved = memberInvolved;
@@ -92,9 +91,9 @@ public class PublicationDTO implements Serializable {
 
 //    @XmlTransient
 //    @JsonIgnore
-//    public Collection<LikingDTO> getLikes() {
-//        return likes;
-//    }
+    public List<LikingDTO> getLikes() {
+        return likes;
+    }
 
     public void addLike(LikingDTO like) {
         likes.add(like);

@@ -2,11 +2,10 @@ package ch.comem.services.dto;
 
 import java.io.Serializable;
 import javax.xml.bind.annotation.XmlRootElement;
-import org.codehaus.jackson.annotate.JsonAutoDetect;
 
 /**
  *
- * @author raphaelbaumann
+ * @author Pierre-Alexandre
  */
 @XmlRootElement(name="likingS")
 public class LikingDTO implements Serializable {
@@ -16,33 +15,33 @@ public class LikingDTO implements Serializable {
     private PublicationDTO publicationLiked;
     private MembershipDTO memberLiking;
 
-//    public boolean isStatus() {
-//        return status;
-//    }
+    public boolean isStatus() {
+        return status;
+    }
 
     public void setStatus(boolean status) {
         this.status = status;
     }
 
-//    public PublicationDTO getPublication() {
-//        return publicationLiked;
-//    }
+    public PublicationDTO getPublication() {
+        return publicationLiked;
+    }
 
     public void setPublication(PublicationDTO publication) {
         this.publicationLiked = publication;
     }
 
-//    public MembershipDTO getMemberLiking() {
-//        return memberLiking;
-//    }
+    public MembershipDTO getMemberLiking() {
+        return memberLiking;
+    }
 
     public void setMemberLiking(MembershipDTO memberLiking) {
         this.memberLiking = memberLiking;
     }
 
-//    public Long getId() {
-//        return id;
-//    }
+    public Long getId() {
+        return id;
+    }
 
     public void setId(Long id) {
         this.id = id;

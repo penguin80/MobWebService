@@ -2,11 +2,10 @@ package ch.comem.services.dto;
 
 import java.io.Serializable;
 import javax.xml.bind.annotation.XmlRootElement;
-import org.codehaus.jackson.annotate.JsonAutoDetect;
 
 /**
  *
- * @author raphaelbaumann
+ * @author Pierre-Alexandre
  */
 @XmlRootElement(name="photo")
 public class PhotoDTO implements Serializable {
@@ -20,25 +19,25 @@ public class PhotoDTO implements Serializable {
         this.publication = publication;
     }
 
-//    public String getSource() {
-//        return source;
-//    }
+    public String getSource() {
+        return source;
+    }
 
     public void setSource(String source) {
         this.source = source;
     }
 
-//    public String getAlt() {
-//        return alt;
-//    }
+    public String getAlt() {
+        return alt;
+    }
 
     public void setAlt(String alt) {
         this.alt = alt;
     }
 
-//    public Long getId() {
-//        return id;
-//    }
+    public Long getId() {
+        return id;
+    }
 
     public void setId(Long id) {
         this.id = id;

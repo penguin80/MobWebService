@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package ch.comem.services.beans;
 
 import ch.comem.model.Ingredient;
@@ -16,7 +12,7 @@ import javax.persistence.PersistenceContext;
 
 /**
  *
- * @author raphaelbaumann
+ * @author Pierre-Alexandre
  */
 @Stateless
 public class RecipieManager implements RecipieManagerLocal {
