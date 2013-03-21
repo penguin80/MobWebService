@@ -40,7 +40,6 @@ public class CategoryDTO implements Serializable {
 
     public void addPublication(PublicationDTO publication) {
         categorizedPublications.add(publication);
-        publication.setCategoryConcerned(this);
     }
     
     @Override

@@ -6,13 +6,12 @@ package ch.comem.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -27,10 +26,8 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @NamedQueries({
     @NamedQuery(name="findAllPublications", query="SELECT p FROM Publication p"),
-    @NamedQuery(name="findPhotoByPublicationId", 
-                query="SELECT ph FROM Publication p JOIN p.imagingPhoto ph WHERE p.id = :id"),
-    @NamedQuery(name="findNameByPublicationId",
-                query="SELECT r FROM Publication p JOIN p.recepie r WHERE p.id = :id")
+    @NamedQuery(name="findPublicationsByRecipieName",
+                query="SELECT p FROM Publication p JOIN p.recepie r WHERE r.name = :name")
 })
 @Entity
 @XmlRootElement
@@ -48,56 +45,54 @@ public class Publication implements Serializable {
     @OneToOne(fetch=FetchType.LAZY)
     private Recipie recepie;
     @OneToMany(mappedBy="publicationCom", fetch=FetchType.LAZY)
-    private Collection<Comment> comment = new ArrayList<>();
-    @ManyToOne(fetch=FetchType.LAZY)
-    private Category categoryConcerned;
-    @ManyToOne(fetch=FetchType.LAZY)
-    private Membership memberInvolved;
+    private List<Comment> comment = new ArrayList<>();
     @OneToMany(mappedBy="publicationLiked", fetch=FetchType.LAZY)
-    private Collection<Liking> likes = new ArrayList<>();
+    private List<Liking> likes = new ArrayList<>();
+    @ManyToOne(fetch=FetchType.LAZY)
+    private Category category;
 
     public String getDateOfPublication() {
         return dateOfPublication;
-    }
-
-    public Photo getImagingPhoto() {
-        return imagingPhoto;
-    }
-
-    public void setImagingPhoto(Photo imagingPhoto) {
-        this.imagingPhoto = imagingPhoto;
-    }
-
-    public void setDateOfPublication(String dateOfPublication) {
-        this.dateOfPublication = dateOfPublication;
     }
 
     public long getLongDate() {
         return longDate;
     }
 
-    public void setLongDate(long longDate) {
-        this.longDate = longDate;
-    }
-    
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
+    public Photo getImagingPhoto() {
+        return imagingPhoto;
     }
 
     public Recipie getRecepie() {
         return recepie;
     }
 
-    public void setRecepie(Recipie recepie) {
-        this.recepie = recepie;
+    public List<Comment> getComment() {
+        return comment;
     }
 
-    public Collection<Comment> getComment() {
-        return comment;
+    public List<Liking> getLikes() {
+        return likes;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setDateOfPublication(String dateOfPublication) {
+        this.dateOfPublication = dateOfPublication;
+    }
+    
+    public void setLongDate(long longDate) {
+        this.longDate = longDate;
+    }
+
+    public void setImagingPhoto(Photo imagingPhoto) {
+        this.imagingPhoto = imagingPhoto;
+    }
+
+    public void setRecepie(Recipie recepie) {
+        this.recepie = recepie;
     }
 
     public void addComment(Comment comment) {
@@ -105,29 +100,21 @@ public class Publication implements Serializable {
         comment.addPublication(this);
     }
 
-    public Category getCategoryConcerned() {
-        return categoryConcerned;
-    }
-
-    public void setCategoryConcerned(Category categoryConcerned) {
-        this.categoryConcerned = categoryConcerned;
-    }
-
-    public Membership getMemberInvolved() {
-        return memberInvolved;
-    }
-
-    public void setMemberInvolved(Membership memberInvolved) {
-        this.memberInvolved = memberInvolved;
-    }
-
-    public Collection<Liking> getLikes() {
-        return likes;
-    }
-
     public void addLike(Liking like) {
         getLikes().add(like);
         like.setPublication(this);
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     @Override

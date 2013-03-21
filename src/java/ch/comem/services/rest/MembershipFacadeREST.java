@@ -1,9 +1,26 @@
 package ch.comem.services.rest;
 
+import ch.comem.model.Category;
+import ch.comem.model.Ingredient;
 import ch.comem.model.Membership;
 import ch.comem.model.Photo;
+import ch.comem.model.Publication;
+import ch.comem.model.Recipie;
+import ch.comem.model.Step;
+import ch.comem.services.beans.CategoriesManagerLocal;
+import ch.comem.services.beans.IngredientsManagerLocal;
 import ch.comem.services.beans.MembersManagerLocal;
+import ch.comem.services.beans.PhotosManagerLocal;
+import ch.comem.services.beans.PublicationsManagerLocal;
+import ch.comem.services.beans.RecipieManagerLocal;
+import ch.comem.services.beans.StepsManagerLocal;
+import ch.comem.services.dto.CategoryDTO;
+import ch.comem.services.dto.IngredientDTO;
 import ch.comem.services.dto.MembershipDTO;
+import ch.comem.services.dto.PhotoDTO;
+import ch.comem.services.dto.PublicationDTO;
+import ch.comem.services.dto.RecipieDTO;
+import ch.comem.services.dto.StepDTO;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
@@ -26,6 +43,18 @@ import javax.ws.rs.Produces;
 @Stateless
 @Path("memberships")
 public class MembershipFacadeREST {
+    @EJB
+    private IngredientsManagerLocal im;
+    @EJB
+    private StepsManagerLocal sm;
+    @EJB
+    private PhotosManagerLocal phm;
+    @EJB
+    private CategoriesManagerLocal cm;
+    @EJB
+    private RecipieManagerLocal rm;
+    @EJB
+    private PublicationsManagerLocal pum;
     @EJB
     private MembersManagerLocal mm;
     @PersistenceContext(unitName = "PastyChefPU")
@@ -61,6 +90,111 @@ public class MembershipFacadeREST {
                         entity.getLastName(), entity.getAge(), 
                         entity.getPseudo(), entity.getEmail());
         return getEntityManager().find(Membership.class, entity.getId());
+    }
+    
+    @PUT
+    @Path("{id}")
+    @Consumes({"application/xml", "application/json"})
+    @Produces({"application/xml", "application/json"})
+    public PublicationDTO publish(@PathParam("id") Long id, Publication p) {
+        Membership m = getEntityManager().find(Membership.class, id);
+        PublicationDTO pDTO = null;
+        if (m != null && p != null) {
+            Photo ph = p.getImagingPhoto();
+            Long photoId = null;
+            if (ph != null)
+                photoId = phm.createPhoto(ph.getSource(), ph.getAlt());
+            Long categoryId = null;
+            Category c = p.getCategory();
+            if (c != null)
+                categoryId = cm.createCategory(c.getName());
+            List<Long> ingredientIds = null;
+            List<Long> stepIds = null;
+            Long recipieId = null; 
+            Recipie r = p.getRecepie();
+            if (r != null) {
+                List<Ingredient> iList = r.getIngredients();
+                if (iList != null && !iList.isEmpty()) {
+                    ingredientIds = new ArrayList<>();
+                    for(Ingredient i : iList) {
+                        Long iId = im.createIngredient(i.getName(), 
+                                                       i.getQuantity(), 
+                                                       i.getQuantityUnit());
+                        ingredientIds.add(iId);
+                    }
+                }
+                List<Step> sList = r.getSteps();
+                if (sList != null && !sList.isEmpty()) {
+                    stepIds = new ArrayList<>();
+                    for(Step s : sList) {
+                        Long sId = sm.createStep(s.getStepNumber(), 
+                                                 s.getDescription());
+                        stepIds.add(sId);
+                    }
+                }
+                recipieId = rm.createRecipie(p.getRecepie().getName(), 
+                                             ingredientIds, stepIds);
+            }
+            pum.createPublication(photoId, categoryId, recipieId);
+            mm.ownPublication(id, p.getId());
+            pDTO = new PublicationDTO();
+            pDTO.setId(p.getId());
+            pDTO.setDateOfPublication(p.getDateOfPublication());
+            pDTO.setLongDate(p.getLongDate());
+            Photo phCreated = getEntityManager().find(Photo.class, photoId);
+            PhotoDTO phDTO = null;
+            if (phCreated != null) {
+                phDTO = new PhotoDTO();
+                phDTO.setId(phCreated.getId());
+                phDTO.setSource(phCreated.getSource());
+                phDTO.setAlt(phCreated.getAlt());
+            }
+            pDTO.setImagingPhoto(phDTO);
+            Recipie rCreated = getEntityManager().find(Recipie.class, recipieId);
+            RecipieDTO rDTO = null;
+            if (rCreated != null) {
+                rDTO = new RecipieDTO();
+                rDTO.setId(rCreated.getId());
+                rDTO.setName(rCreated.getName());
+                List<Ingredient> iList = rCreated.getIngredients();
+                List<IngredientDTO> iDTOList = null;
+                if (iList != null && !iList.isEmpty()) {
+                    iDTOList = new ArrayList<>();
+                    for (Ingredient i : iList) {
+                        IngredientDTO iDTO = new IngredientDTO();
+                        iDTO.setId(i.getId());
+                        iDTO.setName(i.getName());
+                        iDTO.setQuantity(i.getQuantity());
+                        iDTO.setQuantityUnit(i.getQuantityUnit());
+                        iDTOList.add(iDTO);
+                    }
+                }
+                rDTO.setIngredients(iDTOList);
+                List<Step> sList = rCreated.getSteps();
+                List<StepDTO> sDTOList = null;
+                if (sList != null && !sList.isEmpty()) {
+                    sDTOList = new ArrayList<>();
+                    for (Step s : sList) {
+                        StepDTO sDTO = new StepDTO();
+                        sDTO.setId(s.getId());
+                        sDTO.setStepNumber(s.getStepNumber());
+                        sDTO.setDescription(s.getDescription());
+                        sDTOList.add(sDTO);
+                    }
+                }
+                rDTO.setSteps(sDTOList);
+            }
+            pDTO.setRecepie(rDTO);
+            Category cCreated = getEntityManager().find(Category.class, categoryId);
+            CategoryDTO cDTO = null;
+            if (cCreated != null) {
+                cDTO = new CategoryDTO();
+                cDTO.setId(cCreated.getId());
+                cDTO.setName(cCreated.getName());
+            }
+            pDTO.setCategory(cDTO);
+        }
+        return pDTO;
     }
 
     @DELETE

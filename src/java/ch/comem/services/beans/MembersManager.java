@@ -124,7 +124,18 @@ public class MembersManager implements MembersManagerLocal {
 
     @Override
     public List<Photo> findAllPhotosFromMemberId(Long memberId) {
-        return em.createNamedQuery("findAllPhotosFromMemberId").setParameter("id", memberId).getResultList();
+        List<Publication> puList = em.createNamedQuery("findAllPublicationsFromMemberId").setParameter("id", memberId).getResultList();
+        List<Photo> phList = null;
+        if (puList != null && !puList.isEmpty()) {
+            for (Publication pu : puList) {
+                Photo ph = new Photo();
+                ph.setId(pu.getImagingPhoto().getId());
+                ph.setSource(pu.getImagingPhoto().getSource());
+                ph.setAlt(pu.getImagingPhoto().getAlt());
+                phList.add(ph);
+            }
+        }
+        return phList;
     }
 
     public void persist(Object object) {

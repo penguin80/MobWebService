@@ -12,6 +12,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 
 /**
  *
@@ -27,12 +28,14 @@ public class StepFacadeREST {
 
     @POST
     @Consumes({"application/xml", "application/json"})
+    @Produces({"application/xml", "application/json"})
     public void create(Step entity) {
         sm.createStep(entity.getStepNumber(), entity.getDescription());
     }
 
     @PUT
     @Consumes({"application/xml", "application/json"})
+    @Produces({"application/xml", "application/json"})
     public void edit(Step entity) {
         sm.modifyStep(entity.getId(), entity.getStepNumber(), 
                       entity.getDescription());

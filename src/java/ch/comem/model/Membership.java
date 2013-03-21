@@ -12,6 +12,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -24,8 +26,8 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @NamedQueries({
     @NamedQuery(name="findAllMembers", query="SELECT m FROM Membership m"),
-    @NamedQuery(name="findAllPhotosFromMember", 
-                query="SELECT p.imagingPhoto FROM Membership m JOIN m.publicationsConcerned p WHERE m.id = :id")
+    @NamedQuery(name="findAllPublicationsFromMemberId", 
+                query="SELECT p FROM Membership m JOIN m.publicationsConcerned p WHERE m.id = :id")
 })
 @Entity
 @XmlRootElement
@@ -45,7 +47,10 @@ public class Membership implements Serializable {
 //                    message="{invalid.email}")
     protected String email;
 
-    @OneToMany(mappedBy="memberInvolved", fetch=FetchType.LAZY)
+    @OneToMany(fetch=FetchType.LAZY)
+    @JoinTable(name="membership_publication",
+               joinColumns=@JoinColumn(name="Membership_ID"),
+               inverseJoinColumns=@JoinColumn(name="publicationsConcerned_ID"))    
     private List<Publication> publicationsConcerned = new ArrayList<>();
     @OneToMany(mappedBy="memberCommenting", fetch=FetchType.LAZY)
     private List<Comment> commentsConcerned = new ArrayList<>();
@@ -98,7 +103,6 @@ public class Membership implements Serializable {
 
     public void addPublication(Publication publication) {
         getPublicationsConcerned().add(publication);
-        publication.setMemberInvolved(this);
     }
     
     public List<Comment> getCommentsConcerned() {

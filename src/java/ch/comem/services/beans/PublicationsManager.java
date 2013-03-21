@@ -3,7 +3,6 @@ package ch.comem.services.beans;
 import ch.comem.model.Category;
 import ch.comem.model.Comment;
 import ch.comem.model.Liking;
-import ch.comem.model.Membership;
 import ch.comem.model.Photo;
 import ch.comem.model.Publication;
 import ch.comem.model.Recipie;
@@ -79,45 +78,34 @@ public class PublicationsManager implements PublicationsManagerLocal {
         return str;
     }
     
-    private void setPublicationParameters(Publication p, Long photoId, 
-                                             Long categoryId, Long publisherId) {
+    private void setPublicationParameters(Publication p, Long categoryId, Long recipieId) {
+        Category categoryConcerned = em.find(Category.class, categoryId);
+        if (categoryConcerned != null)
+            p.setCategory(categoryConcerned);
+        Recipie r = em.find(Recipie.class, recipieId);
+        if (r != null)
+            p.setRecepie(r);
+    }
+
+    @Override
+    public Long createPublication(Long photoId, Long categoryId, Long recipieId) {
+        Publication p = new Publication();
         p.setDateOfPublication(buildDate(p));
         Photo photo = em.find(Photo.class, photoId);
         if (photo != null)
             p.setImagingPhoto(photo);
-        Category categoryConcerned = em.find(Category.class, categoryId);
-        if (categoryConcerned != null)
-            p.setCategoryConcerned(categoryConcerned);
-        Membership publisher = em.find(Membership.class, publisherId);
-        if (publisher != null)
-            p.setMemberInvolved(publisher);
-    }
-
-    @Override
-    public Long createPublication(Long photoId, Long categoryId, 
-                                    Long publisherId, Long recipieId) {
-        Publication p = new Publication();
-        setPublicationParameters(p, photoId, categoryId, publisherId);
-        Recipie r = em.find(Recipie.class, recipieId);
-        if (r != null)
-            p.setRecepie(r);
+        setPublicationParameters(p, categoryId, recipieId);
         persist(p);
         em.flush();
         return p.getId();
     }
     
     @Override
-    public String modifyPublication(Long publicationId, Long photoId,
-                                      Long categoryId, Long recipieId) {
+    public String modifyPublication(Long publicationId, Long categoryId, Long recipieId) {
         String str = "";
         Publication p = em.find(Publication.class, publicationId);
         if (p != null) {
-            Category categoryConcerned = em.find(Category.class, categoryId);
-            if (categoryConcerned != null)
-                p.setCategoryConcerned(categoryConcerned);
-            Recipie r = em.find(Recipie.class, recipieId);
-            if (r != null)
-                p.setRecepie(r);
+            setPublicationParameters(p, categoryId, recipieId);
             persist(p);
             em.flush();
             str = str.concat("Publication modifiée");
@@ -163,23 +151,18 @@ public class PublicationsManager implements PublicationsManagerLocal {
         return str;
     }
 
-    public void persist(Object object) {
-        em.persist(object);
-    }
-
     @Override
     public List<Publication> findAllPublications() {
-        return null;
+        return em.createNamedQuery("findAllPublications").getResultList();
     }
 
     @Override
-    public Photo findPhotoFromPublicationId(Long publicationId) {
-        return null;
+    public List<Publication> findPublicationsFromRecipieName(String name) {
+        return em.createNamedQuery("findPublicationsByRecipieName").setParameter("name", name).getResultList();
     }
 
-    @Override
-    public Recipie findRecipieFromPublicationId(Long publicationId) {
-        return null;
+    public void persist(Object object) {
+        em.persist(object);
     }
     
 }

@@ -4,6 +4,7 @@
  */
 package ch.comem.services.beans;
 
+import ch.comem.model.Publication;
 import javax.ejb.Local;
 
 /**
