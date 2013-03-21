@@ -11,17 +11,21 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
-import org.codehaus.jackson.annotate.JsonIgnore;
 
 /**
  *
  * @author raphaelbaumann
  */
+@NamedQueries({
+    @NamedQuery(name="findAllMembers", query="SELECT m FROM Membership m"),
+    @NamedQuery(name="findAllPhotosFromMember", 
+                query="SELECT p.imagingPhoto FROM Membership m JOIN m.publicationsConcerned p WHERE m.id = :id")
+})
 @Entity
 @XmlRootElement
 public class Membership implements Serializable {
@@ -87,8 +91,6 @@ public class Membership implements Serializable {
         this.email = email;
     }
 
-    @XmlTransient
-    @JsonIgnore
     public Collection<Publication> getPublicationsConcerned() {
         return publicationsConcerned;
     }
@@ -97,9 +99,7 @@ public class Membership implements Serializable {
         getPublicationsConcerned().add(publication);
         publication.setMemberInvolved(this);
     }
-
-    @XmlTransient
-    @JsonIgnore
+    
     public Collection<Comment> getCommentsConcerned() {
         return commentsConcerned;
     }
@@ -109,8 +109,6 @@ public class Membership implements Serializable {
         comment.setMemberCommenting(this);
     }
 
-    @XmlTransient
-    @JsonIgnore
     public Collection<Liking> getLikesConcerned() {
         return likesConcerned;
     }

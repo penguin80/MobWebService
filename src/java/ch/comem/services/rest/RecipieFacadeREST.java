@@ -3,7 +3,9 @@ package ch.comem.services.rest;
 import ch.comem.model.Ingredient;
 import ch.comem.model.Recipie;
 import ch.comem.model.Step;
+import ch.comem.services.beans.IngredientsManagerLocal;
 import ch.comem.services.beans.RecipieManagerLocal;
+import ch.comem.services.beans.StepsManagerLocal;
 import ch.comem.services.dto.IngredientDTO;
 import ch.comem.services.dto.RecipieDTO;
 import ch.comem.services.dto.StepDTO;
@@ -30,23 +32,113 @@ import javax.ws.rs.Produces;
 @Path("recipies")
 public class RecipieFacadeREST {
     @EJB
+    private StepsManagerLocal sm;
+    @EJB
+    private IngredientsManagerLocal im;
+    @EJB
     private RecipieManagerLocal rm;
     @PersistenceContext(unitName = "PastyChefPU")
     private EntityManager em;
 
+    private List<Long> setIngredientIds(Recipie r) {
+        List<Long> ingredientIds = new ArrayList<>();
+        List<Ingredient> ingredients = r.getIngredients();
+        for (Ingredient i : ingredients) {
+            Long iId = im.createIngredient(i.getName(), i.getQuantity(), i.getQuantityUnit());
+            ingredientIds.add(iId);
+        }
+        return ingredientIds;
+    }
+    
+    private List<Long> setStepIds(Recipie r)  {
+        List<Long> stepIds = null;
+        List<Step> steps = r.getSteps();
+        if (steps != null) {
+            stepIds = new ArrayList<>();
+            for (Step s : steps) {
+                Long sId = sm.createStep(s.getStepNumber(), s.getDescription());
+                stepIds.add(sId);
+            }
+        }
+        return stepIds;
+    }
+    
+    private List<Long> mergeIngredientIds(Recipie previousR, Recipie updatedR) {
+        List<Long> ingredientIds = new ArrayList<>();
+        List<Ingredient> previousIngredients = previousR.getIngredients();
+        List<Ingredient> updatedIngredients = updatedR.getIngredients();
+        if (previousIngredients != null && updatedIngredients != null) {
+            for (Ingredient upI : updatedIngredients) {
+                Long iId = null;
+                for (Ingredient prevI : previousIngredients) {
+                    if (iId == null) {
+                        if (upI.getName().equals(prevI.getName()) &&
+                            upI.getQuantity() == prevI.getQuantity() &&
+                            upI.getQuantityUnit().equals(prevI.getQuantityUnit()))
+                            iId = prevI.getId();
+                        else if ((upI.getName().equals(prevI.getName()) &&
+                                 (upI.getQuantity() == prevI.getQuantity() ||
+                                 upI.getQuantityUnit().equals(prevI.getQuantityUnit()))) ||
+                                
+                                 (upI.getQuantity() == prevI.getQuantity() && 
+                                 (upI.getName().equals(prevI.getName())) || 
+                                 upI.getQuantityUnit().equals(prevI.getQuantityUnit())) ||
+                                
+                                 (upI.getQuantityUnit().equals(prevI.getQuantityUnit()) &&
+                                 (upI.getName().equals(prevI.getName()) || 
+                                 upI.getQuantity() == prevI.getQuantity()))) {
+                            im.modifyIngredient(prevI.getId(), upI.getName(), 
+                                                upI.getQuantity(), upI.getQuantityUnit());
+                            iId = prevI.getId();
+                        }
+                    }
+                }
+                if (iId == null)
+                    iId = im.createIngredient(upI.getName(), upI.getQuantity(), 
+                                              upI.getQuantityUnit());
+                ingredientIds.add(iId);
+            }
+        }
+        return ingredientIds;
+    }
+    
+    private List<Long> mergeStepIds(Recipie previousR, Recipie updatedR) {
+        List<Long> stepIds = null;
+        List<Step> previousSteps = previousR.getSteps();
+        List<Step> updatedSteps = updatedR.getSteps();
+        if (previousSteps != null && updatedSteps != null) {
+            stepIds = new ArrayList<>();
+            for (Step upS : updatedSteps) {
+                Long sId = null;
+                for (Step prevS : previousSteps) {
+                    if (sId == null) {
+                        if (upS.getStepNumber() == prevS.getStepNumber() &&
+                            upS.getDescription().equals(prevS.getDescription()))
+                            sId = prevS.getId();
+                        else if ((upS.getStepNumber() == prevS.getStepNumber() && 
+                                 !upS.getDescription().equals(prevS.getDescription())) ||
+                                 (upS.getDescription().equals(prevS.getDescription()) &&
+                                 upS.getStepNumber() != prevS.getStepNumber())) {
+                            sm.modifyStep(prevS.getId(), upS.getStepNumber(), upS.getDescription());
+                            sId = prevS.getId();
+                        }
+                    }
+                }
+                if (sId == null)
+                    sId = sm.createStep(upS.getStepNumber(), upS.getDescription());
+                stepIds.add(sId);
+            }
+        }
+        return stepIds;
+    }
+    
     @POST
     @Consumes({"application/xml", "application/json"})
     @Produces({"application/xml", "application/json"})
     public Recipie create(Recipie entity) {
-        List<Ingredient> ingredients = entity.getIngredients();
-        List<Long> ingredientIds = new ArrayList<>();
-        for (Ingredient i : ingredients)
-            ingredientIds.add(i.getId());
-        List<Step> steps = entity.getSteps();
-        List<Long> stepIds = new ArrayList<>();
-        for (Step s : steps)
-            stepIds.add(s.getId());
-        Long recipieId = rm.createRecipie(entity.getName(), ingredientIds, stepIds);
+        List<Long> iIds = setIngredientIds(entity);
+        List<Long> sIds = setStepIds(entity);
+        Long recipieId = rm.createRecipie(entity.getName(), iIds, sIds);
         return getEntityManager().find(Recipie.class, recipieId);
     }
 
@@ -54,15 +146,12 @@ public class RecipieFacadeREST {
     @Consumes({"application/xml", "application/json"})
     @Produces({"application/xml", "application/json"})
     public Recipie edit(Recipie entity) {
-        List<Ingredient> ingredients = entity.getIngredients();
-        List<Long> ingredientIds = new ArrayList<>();
-        for (Ingredient i : ingredients)
-            ingredientIds.add(i.getId());
-        List<Step> steps = entity.getSteps();
-        List<Long> stepIds = new ArrayList<>();
-        for (Step s : steps)
-            stepIds.add(s.getId());
-        rm.modifyRecipie(entity.getId(), entity.getName(), ingredientIds, stepIds);
+//        Recipie r = getEntityManager().find(Recipie.class, entity.getId());
+//        List<Long> iIds = mergeIngredientIds(r, entity);
+//        List<Long> sIds = mergeStepIds(r, entity);
+        List<Long> iIds = setIngredientIds(entity);
+        List<Long> sIds = setStepIds(entity);
+        rm.modifyRecipie(entity.getId(), entity.getName(), iIds, sIds);
         return getEntityManager().find(Recipie.class, entity.getId());
     }
 
@@ -171,6 +260,10 @@ public class RecipieFacadeREST {
 
     protected EntityManager getEntityManager() {
         return em;
+    }
+
+    public void persist(Object object) {
+        em.persist(object);
     }
     
 }

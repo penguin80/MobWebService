@@ -18,8 +18,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
-import org.codehaus.jackson.annotate.JsonIgnore;
 
 /**
  *
@@ -59,8 +57,6 @@ public class Recipie implements Serializable {
         this.name = name;
     }
     
-    @XmlTransient
-    @JsonIgnore
     public List<Step> getSteps() {
         return steps;
     }
@@ -69,8 +65,6 @@ public class Recipie implements Serializable {
         this.steps = steps;
     }
 
-    @XmlTransient
-    @JsonIgnore
     public List<Ingredient> getIngredients() {
         return ingredients;
     }

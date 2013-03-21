@@ -1,7 +1,10 @@
 package ch.comem.services.rest;
 
 import ch.comem.model.Membership;
+import ch.comem.model.Photo;
 import ch.comem.services.beans.MembersManagerLocal;
+import ch.comem.services.dto.MembershipDTO;
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -30,6 +33,7 @@ public class MembershipFacadeREST {
 
     @POST
     @Consumes({"application/xml", "application/json"})
+    @Produces({"application/xml", "application/json"})
     public void create(Membership entity) {
         mm.createMember(entity.getFirstName(), entity.getLastName(), 
                         entity.getAge(), entity.getPseudo(), entity.getEmail());
@@ -37,6 +41,7 @@ public class MembershipFacadeREST {
 
     @PUT
     @Consumes({"application/xml", "application/json"})
+    @Produces({"application/xml", "application/json"})
     public void edit(Membership entity) {
         mm.modifyMember(entity.getId(), entity.getFirstName(), 
                         entity.getLastName(), entity.getAge(), 
@@ -52,29 +57,70 @@ public class MembershipFacadeREST {
     @GET
     @Path("{id}")
     @Produces({"application/xml", "application/json"})
-    public Membership find(@PathParam("id") Long id) {
-        return getEntityManager().find(Membership.class, id);
+    public MembershipDTO find(@PathParam("id") Long id) {
+        Membership m = getEntityManager().find(Membership.class, id);
+        MembershipDTO mDTO = null;
+        if (m != null) {
+            mDTO = new MembershipDTO();
+            mDTO.setId(m.getId());
+            mDTO.setFirstName(m.getFirstName());
+            mDTO.setLastName(m.getLastName());
+            mDTO.setAge(m.getAge());
+            mDTO.setPseudo(m.getPseudo());
+            mDTO.setEmail(m.getEmail());
+        }
+        return mDTO;
     }
 
-//    @GET
-//    @Produces({"application/xml", "application/json"})
-//    public List<Membership> findAll() {
-//        return super.findAll();
-//    }
+    private List<MembershipDTO> setMembershipList(List<Membership> mList) {
+        List<MembershipDTO> mDTOList = null;
+        if (mList != null && !mList.isEmpty()) {
+            mDTOList = new ArrayList<>();
+            for (Membership m : mList) {
+                MembershipDTO mDTO = new MembershipDTO();
+                mDTO.setId(m.getId());
+                mDTO.setFirstName(m.getFirstName());
+                mDTO.setLastName(m.getLastName());
+                mDTO.setPseudo(m.getPseudo());
+                mDTOList.add(mDTO);
+            }
+        }
+        return mDTOList;
+    }
+    
+    @GET 
+    @Path("searchPhotos/{id}")
+    @Produces({"application/xml", "application/json"})
+    public List<Photo> findPhotosByMemberId(@PathParam("id") Long id) {
+        return mm.findAllPhotosFromMemberId(id);
+    }
+    
+    @GET
+    @Produces({"application/xml", "application/json"})
+    public List<MembershipDTO> findAll() {
+        List<Membership> mList = mm.findAllMembers();
+        return setMembershipList(mList);
+    }
 
-//    @GET
-//    @Path("{from}/{to}")
-//    @Produces({"application/xml", "application/json"})
-//    public List<Membership> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
-//        return super.findRange(new int[]{from, to});
-//    }
+    @GET
+    @Path("{from}/{to}")
+    @Produces({"application/xml", "application/json"})
+    public List<MembershipDTO> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
+        List<Membership> allMembers = mm.findAllMembers();
+        List<MembershipDTO> subSelectionDTO = null;
+        if (allMembers != null && !allMembers.isEmpty()) {
+            List<Membership> subSelection = allMembers.subList(from.intValue(), to.intValue());
+            subSelectionDTO = setMembershipList(subSelection);
+        }
+        return subSelectionDTO;
+    }
 
-//    @GET
-//    @Path("count")
-//    @Produces("text/plain")
-//    public String countREST() {
-//        return String.valueOf(super.count());
-//    }
+    @GET
+    @Path("count")
+    @Produces("text/plain")
+    public String countREST() {
+        return String.valueOf(mm.findAllMembers().size());
+    }
 
     protected EntityManager getEntityManager() {
         return em;

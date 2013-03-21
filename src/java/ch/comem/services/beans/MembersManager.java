@@ -3,7 +3,9 @@ package ch.comem.services.beans;
 import ch.comem.model.Comment;
 import ch.comem.model.Liking;
 import ch.comem.model.Membership;
+import ch.comem.model.Photo;
 import ch.comem.model.Publication;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -115,6 +117,16 @@ public class MembersManager implements MembersManagerLocal {
         return str;
     }
         
+    @Override
+    public List<Membership> findAllMembers() {
+        return em.createNamedQuery("findAllMembers").getResultList();
+    }
+
+    @Override
+    public List<Photo> findAllPhotosFromMemberId(Long memberId) {
+        return em.createNamedQuery("findAllPhotosFromMemberId").setParameter("id", memberId).getResultList();
+    }
+
     public void persist(Object object) {
         em.persist(object);
     }

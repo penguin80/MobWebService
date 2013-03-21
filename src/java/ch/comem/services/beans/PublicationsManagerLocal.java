@@ -1,8 +1,9 @@
 package ch.comem.services.beans;
 
-import ch.comem.model.Category;
-import ch.comem.model.Membership;
 import ch.comem.model.Photo;
+import ch.comem.model.Publication;
+import ch.comem.model.Recipie;
+import java.util.List;
 import javax.ejb.Local;
 
 /**
@@ -23,4 +24,10 @@ public interface PublicationsManagerLocal {
     String addComment(Long publicationId, Long commentId);
     
     String addLike(Long publicationId, Long likeId);
+
+    List<Publication> findAllPublications();
+
+    Photo findPhotoFromPublicationId(Long publicationId);
+
+    Recipie findRecipieFromPublicationId(Long publicationId);
 }

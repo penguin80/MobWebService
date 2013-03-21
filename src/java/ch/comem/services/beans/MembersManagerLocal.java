@@ -4,6 +4,9 @@
  */
 package ch.comem.services.beans;
 
+import ch.comem.model.Membership;
+import ch.comem.model.Photo;
+import java.util.List;
 import javax.ejb.Local;
 
 /**
@@ -26,5 +29,9 @@ public interface MembersManagerLocal {
     String postComment(Long id, Long commentId);
     
     String ownPublication(Long id, Long publicationId);
+
+    List<Membership> findAllMembers();
+
+    List<Photo> findAllPhotosFromMemberId(Long memberId);
     
 }

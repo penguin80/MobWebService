@@ -13,17 +13,24 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
-import org.codehaus.jackson.annotate.JsonIgnore;
 
 /**
  *
  * @author raphaelbaumann
  */
+@NamedQueries({
+    @NamedQuery(name="findAllPublications", query="SELECT p FROM Publication p"),
+    @NamedQuery(name="findPhotoByPublicationId", 
+                query="SELECT ph FROM Publication p JOIN p.imagingPhoto ph WHERE p.id = :id"),
+    @NamedQuery(name="findNameByPublicationId",
+                query="SELECT r FROM Publication p JOIN p.recepie r WHERE p.id = :id")
+})
 @Entity
 @XmlRootElement
 public class Publication implements Serializable {
@@ -88,8 +95,6 @@ public class Publication implements Serializable {
         this.recepie = recepie;
     }
 
-    @XmlTransient
-    @JsonIgnore
     public Collection<Comment> getComment() {
         return comment;
     }
@@ -115,8 +120,6 @@ public class Publication implements Serializable {
         this.memberInvolved = memberInvolved;
     }
 
-    @XmlTransient
-    @JsonIgnore
     public Collection<Liking> getLikes() {
         return likes;
     }

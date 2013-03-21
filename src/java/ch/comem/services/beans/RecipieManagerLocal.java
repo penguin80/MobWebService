@@ -7,7 +7,6 @@ package ch.comem.services.beans;
 import ch.comem.model.Ingredient;
 import ch.comem.model.Recipie;
 import ch.comem.model.Step;
-import java.util.Collection;
 import java.util.List;
 import javax.ejb.Local;
 
@@ -18,14 +17,14 @@ import javax.ejb.Local;
 @Local
 public interface RecipieManagerLocal {
 
-    Long createRecipie(String name, Collection<Long> ingredientIds, 
-                        Collection<Long> stepIds);
+    Long createRecipie(String name, List<Long> ingredientIds, 
+                        List<Long> stepIds);
 
     String deleteRecipie(Long recipieId);
 
     String modifyRecipie(Long recipieId, String name, 
-                          Collection<Long> ingredientIds, 
-                          Collection<Long> stepIds);
+                          List<Long> ingredientIds, 
+                          List<Long> stepIds);
     
     List<Recipie> findAllRecipies();
 

@@ -1,7 +1,6 @@
 package ch.comem.services.beans;
 
 import ch.comem.model.Step;
-import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -53,11 +52,6 @@ public class StepsManager implements StepsManagerLocal {
         } else
             str = str.concat("Impossible de supprimer l'étape demandée!");
         return str;
-    }
-
-    @Override
-    public List<Step> findAllSteps() {
-        return em.createNamedQuery("findAllSteps").getResultList();
     }
 
     public void persist(Object object) {

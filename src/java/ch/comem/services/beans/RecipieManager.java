@@ -4,7 +4,6 @@ import ch.comem.model.Ingredient;
 import ch.comem.model.Recipie;
 import ch.comem.model.Step;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -20,8 +19,8 @@ public class RecipieManager implements RecipieManagerLocal {
     private EntityManager em;
     
     private void setRecipieParameters(Recipie r, String name, 
-                                        Collection<Long> ingredientIds, 
-                                        Collection<Long> stepIds) {
+                                        List<Long> ingredientIds, 
+                                        List<Long> stepIds) {
         r.setName(name);
         List<Ingredient> ingredients = new ArrayList<>();
         for(Long id : ingredientIds) {
@@ -29,17 +28,20 @@ public class RecipieManager implements RecipieManagerLocal {
             ingredients.add(ing);
         }
         r.setIngredients(ingredients);
-        List<Step> steps = new ArrayList<>();
-        for (Long id : stepIds) {
-            Step s = em.find(Step.class, id);
-            steps.add(s);
+        List<Step> steps = null;
+        if (stepIds != null) {
+            steps = new ArrayList<>();
+            for (Long id : stepIds) {
+                Step s = em.find(Step.class, id);
+                steps.add(s);
+            }
         }
         r.setSteps(steps);
     }
 
     @Override
-    public Long createRecipie(String name, Collection<Long> ingredientIds, 
-                               Collection<Long> stepIds) {
+    public Long createRecipie(String name, List<Long> ingredientIds, 
+                               List<Long> stepIds) {
         Recipie recipie = new Recipie();
         setRecipieParameters(recipie, name, ingredientIds, stepIds);
         persist(recipie);
@@ -62,8 +64,8 @@ public class RecipieManager implements RecipieManagerLocal {
     
     @Override
     public String modifyRecipie(Long recipieId, String name, 
-                                 Collection<Long> ingredientIds, 
-                                 Collection<Long> stepIds) {
+                                 List<Long> ingredientIds, 
+                                 List<Long> stepIds) {
                     String str = "";
         Recipie r  = em.find(Recipie.class, recipieId);
         if (r != null) {

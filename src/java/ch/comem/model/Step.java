@@ -5,14 +5,12 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.NamedQuery;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
  * @author Pierre-Alexandre
  */
-@NamedQuery(name="findAllSteps", query="SELECT s FROM Step s")
 @Entity
 @XmlRootElement
 public class Step implements Serializable {

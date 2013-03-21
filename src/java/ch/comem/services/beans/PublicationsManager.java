@@ -9,6 +9,7 @@ import ch.comem.model.Publication;
 import ch.comem.model.Recipie;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -175,6 +176,21 @@ public class PublicationsManager implements PublicationsManagerLocal {
 
     public void persist(Object object) {
         em.persist(object);
+    }
+
+    @Override
+    public List<Publication> findAllPublications() {
+        return null;
+    }
+
+    @Override
+    public Photo findPhotoFromPublicationId(Long publicationId) {
+        return null;
+    }
+
+    @Override
+    public Recipie findRecipieFromPublicationId(Long publicationId) {
+        return null;
     }
     
 }

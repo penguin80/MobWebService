@@ -10,7 +10,6 @@ import ch.comem.services.beans.PublicationsManagerLocal;
 import ch.comem.services.beans.RecipieManagerLocal;
 import ch.comem.services.beans.StepsManagerLocal;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -95,8 +94,8 @@ public class DataManagerTest implements DataManagerTestLocal {
         Long i1 = im.createIngredient("étudiants", 3000, "personnes");
         Long i2 = im.createIngredient("professeurs", 200, "personnes");
         Long i3 = im.createIngredient("cours", 80, "branches");
-        Collection<Long> stepsId = new ArrayList<>();
-        Collection<Long> ingredientsId = new ArrayList<>();
+        List<Long> stepsId = new ArrayList<>();
+        List<Long> ingredientsId = new ArrayList<>();
         ingredientsId.add(i1);
         ingredientsId.add(i2);
         ingredientsId.add(i3);
