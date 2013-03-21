@@ -4,6 +4,9 @@ import ch.comem.model.Membership;
 import ch.comem.model.Photo;
 import ch.comem.services.beans.MembersManagerLocal;
 import ch.comem.services.dto.MembershipDTO;
+import com.sun.jersey.api.client.Client;
+import com.sun.jersey.api.client.ClientResponse;
+import com.sun.jersey.api.client.WebResource;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
@@ -35,6 +38,36 @@ public class MembershipFacadeREST {
     @Consumes({"application/xml", "application/json"})
     @Produces({"application/xml", "application/json"})
     public void create(Membership entity) {
+        
+        try {
+ 
+            Client client = Client.create();
+
+            WebResource webResource = client.resource("http://localhost:8080/PastryChefGamification/webresources/player");
+            String input = "{\"firstName\":\" "+ entity.getFirstName() 
+                            + "\",\"lastName\": \""+ entity.getLastName() 
+                            + "\",\"email\": \""+ entity.getEmail() 
+                            + "\",\"application\": {\"id\": 1 }}";
+              
+		ClientResponse response = webResource.type("application/json")
+		   .post(ClientResponse.class, input);
+ 
+		if (response.getStatus() != 201) {
+			throw new RuntimeException("Failed : HTTP error code : "
+			     + response.getStatus());
+		}
+ 
+		System.out.println("Output from Server .... \n");
+		String output = response.getEntity(String.class);
+		System.out.println(output);
+ 
+	  } catch (Exception e) {
+ 
+		e.printStackTrace();
+
+	  }
+ 
+
         mm.createMember(entity.getFirstName(), entity.getLastName(), 
                         entity.getAge(), entity.getPseudo(), entity.getEmail());
     }
