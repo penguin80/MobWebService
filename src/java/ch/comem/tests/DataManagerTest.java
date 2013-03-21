@@ -105,8 +105,7 @@ public class DataManagerTest implements DataManagerTestLocal {
                                   "I.destroy@everything.com");
         Long cam1 = cam.createCategory("Crèmes et Flans");
 //        Long cam1 = cam.createCategory("Cancres et Surdoués");
-        Long pum1 = pum.createPublication(ph1, cam1, m1);
-//        Long pum1 = pum.createPublication(ph1, cam1, m1, r1);
+        Long pum1 = pum.createPublication(ph1, cam1, m1, r1);
     }
     
 }

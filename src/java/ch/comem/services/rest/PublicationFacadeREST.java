@@ -40,7 +40,7 @@ public class PublicationFacadeREST {
     @PUT
     @Consumes({"application/xml", "application/json"})
     public void edit(Publication entity) {
-        pm.modifyPublication(entity.getId(),
+        pm.modifyPublication(entity.getId(), entity.getImagingPhoto().getId(),
                              entity.getCategoryConcerned().getId(), 
                              entity.getRecepie().getId());
     }

@@ -23,7 +23,7 @@ public class PublicationsManager implements PublicationsManagerLocal {
     @PersistenceContext(unitName = "PastyChefPU")
     private EntityManager em;
     
-    private String buildDate() {
+    private String buildDate(Publication p) {
         String str = "";
         Calendar c = GregorianCalendar.getInstance();
         int day = c.get(Calendar.DAY_OF_MONTH);
@@ -74,13 +74,14 @@ public class PublicationsManager implements PublicationsManagerLocal {
         str = str.concat(day + " " + mString + " " + year + " à " + hours + ":" + 
                            minutes  + ":" + seconds);
         System.out.println(str);
+        if (p.getId() == null)
+            p.setLongDate(c.getTimeInMillis());
         return str;
     }
     
     private void setPublicationParameters(Publication p, Long photoId, 
                                              Long categoryId, Long publisherId) {
-        p.setDateOfPublication(buildDate());
-        p.setDateOfLastPublication(null);
+        p.setDateOfPublication(buildDate(p));
         Photo photo = em.find(Photo.class, photoId);
         if (photo != null)
             p.setImagingPhoto(photo);
@@ -90,17 +91,6 @@ public class PublicationsManager implements PublicationsManagerLocal {
         Membership publisher = em.find(Membership.class, publisherId);
         if (publisher != null)
             p.setMemberInvolved(publisher);
-    }
-
-    @Override
-    public Long createPublication(Long photoId, Long categoryId, 
-                                    Long publisherId) {
-        Publication p = new Publication();
-        setPublicationParameters(p, photoId, categoryId, publisherId);
-        p.setRecepie(null);
-        persist(p);
-        em.flush();
-        return p.getId();
     }
 
     @Override
@@ -117,12 +107,11 @@ public class PublicationsManager implements PublicationsManagerLocal {
     }
     
     @Override
-    public String modifyPublication(Long publicationId, Long categoryId, 
-                                      Long recipieId) {
+    public String modifyPublication(Long publicationId, Long photoId,
+                                      Long categoryId, Long recipieId) {
         String str = "";
         Publication p = em.find(Publication.class, publicationId);
         if (p != null) {
-            p.setDateOfLastPublication(buildDate());
             Category categoryConcerned = em.find(Category.class, categoryId);
             if (categoryConcerned != null)
                 p.setCategoryConcerned(categoryConcerned);

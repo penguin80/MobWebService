@@ -40,7 +40,8 @@ public class Publication implements Serializable {
     private Long id;
     @NotNull
     private String dateOfPublication;
-    private String dateOfLastPublication;
+    @NotNull
+    private long longDate;
     @OneToOne
     @JoinColumn(name="PHOTOID", referencedColumnName="ID")
     private Photo imagingPhoto;
@@ -71,12 +72,12 @@ public class Publication implements Serializable {
         this.dateOfPublication = dateOfPublication;
     }
 
-    public String getDateOfLastPublication() {
-        return dateOfLastPublication;
+    public long getLongDate() {
+        return longDate;
     }
 
-    public void setDateOfLastPublication(String dateOfLastPublication) {
-        this.dateOfLastPublication = dateOfLastPublication;
+    public void setLongDate(long longDate) {
+        this.longDate = longDate;
     }
     
     public Long getId() {

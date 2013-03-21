@@ -12,14 +12,12 @@ import javax.ejb.Local;
  */
 @Local
 public interface PublicationsManagerLocal {
-
-    Long createPublication(Long photoId, Long categoryId, Long publisherId);
     
     Long createPublication(Long photoId, Long categoryId, Long publisherId, 
                              Long recipieId);
     
-    String modifyPublication(Long publicationId, Long categoryId, 
-                               Long recipieId);
+    String modifyPublication(Long publicationId, Long photoId,
+                               Long categoryId, Long recipieId);
     
     String addComment(Long publicationId, Long commentId);
     
