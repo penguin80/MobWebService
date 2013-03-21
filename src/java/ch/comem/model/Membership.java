@@ -6,8 +6,9 @@ package ch.comem.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -44,12 +45,12 @@ public class Membership implements Serializable {
 //                    message="{invalid.email}")
     protected String email;
 
-    @OneToMany(mappedBy="memberInvolved")
-    private Collection<Publication> publicationsConcerned = new ArrayList<>();
-    @OneToMany(mappedBy="memberCommenting")
-    private Collection<Comment> commentsConcerned = new ArrayList<>();
-    @OneToMany(mappedBy="memberLiking")
-    private Collection<Liking> likesConcerned = new ArrayList<>();
+    @OneToMany(mappedBy="memberInvolved", fetch=FetchType.LAZY)
+    private List<Publication> publicationsConcerned = new ArrayList<>();
+    @OneToMany(mappedBy="memberCommenting", fetch=FetchType.LAZY)
+    private List<Comment> commentsConcerned = new ArrayList<>();
+    @OneToMany(mappedBy="memberLiking", fetch=FetchType.LAZY)
+    private List<Liking> likesConcerned = new ArrayList<>();
     
     public String getFirstName() {
         return firstName;
@@ -91,7 +92,7 @@ public class Membership implements Serializable {
         this.email = email;
     }
 
-    public Collection<Publication> getPublicationsConcerned() {
+    public List<Publication> getPublicationsConcerned() {
         return publicationsConcerned;
     }
 
@@ -100,7 +101,7 @@ public class Membership implements Serializable {
         publication.setMemberInvolved(this);
     }
     
-    public Collection<Comment> getCommentsConcerned() {
+    public List<Comment> getCommentsConcerned() {
         return commentsConcerned;
     }
 
@@ -109,7 +110,7 @@ public class Membership implements Serializable {
         comment.setMemberCommenting(this);
     }
 
-    public Collection<Liking> getLikesConcerned() {
+    public List<Liking> getLikesConcerned() {
         return likesConcerned;
     }
 

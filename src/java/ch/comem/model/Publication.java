@@ -8,6 +8,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -42,18 +43,17 @@ public class Publication implements Serializable {
     private String dateOfPublication;
     @NotNull
     private long longDate;
-    @OneToOne
-    @JoinColumn(name="PHOTOID", referencedColumnName="ID")
+    @OneToOne(fetch=FetchType.LAZY)
     private Photo imagingPhoto;
-    @OneToOne
+    @OneToOne(fetch=FetchType.LAZY)
     private Recipie recepie;
-    @OneToMany(mappedBy="publicationCom")
+    @OneToMany(mappedBy="publicationCom", fetch=FetchType.LAZY)
     private Collection<Comment> comment = new ArrayList<>();
-    @ManyToOne
+    @ManyToOne(fetch=FetchType.LAZY)
     private Category categoryConcerned;
-    @ManyToOne
+    @ManyToOne(fetch=FetchType.LAZY)
     private Membership memberInvolved;
-    @OneToMany(mappedBy="publicationLiked")
+    @OneToMany(mappedBy="publicationLiked", fetch=FetchType.LAZY)
     private Collection<Liking> likes = new ArrayList<>();
 
     public String getDateOfPublication() {

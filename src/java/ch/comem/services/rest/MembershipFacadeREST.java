@@ -31,21 +31,36 @@ public class MembershipFacadeREST {
     @PersistenceContext(unitName = "PastyChefPU")
     private EntityManager em;
 
+    private MembershipDTO setInitialMembershipDTO(Membership m) {
+        MembershipDTO mDTO = new MembershipDTO();
+        mDTO.setId(m.getId());
+        mDTO.setFirstName(m.getFirstName());
+        mDTO.setLastName(m.getLastName());
+        mDTO.setAge(m.getAge());
+        mDTO.setPseudo(m.getPseudo());
+        mDTO.setEmail(m.getEmail());
+        return mDTO;
+    }
+    
     @POST
     @Consumes({"application/xml", "application/json"})
     @Produces({"application/xml", "application/json"})
-    public void create(Membership entity) {
-        mm.createMember(entity.getFirstName(), entity.getLastName(), 
-                        entity.getAge(), entity.getPseudo(), entity.getEmail());
+    public MembershipDTO create(Membership entity) {
+        Long mId =  mm.createMember(entity.getFirstName(), entity.getLastName(), 
+                                    entity.getAge(), entity.getPseudo(), 
+                                    entity.getEmail());
+        Membership m = getEntityManager().find(Membership.class, mId);
+        return setInitialMembershipDTO(m);
     }
 
     @PUT
     @Consumes({"application/xml", "application/json"})
     @Produces({"application/xml", "application/json"})
-    public void edit(Membership entity) {
+    public Membership edit(Membership entity) {
         mm.modifyMember(entity.getId(), entity.getFirstName(), 
                         entity.getLastName(), entity.getAge(), 
                         entity.getPseudo(), entity.getEmail());
+        return getEntityManager().find(Membership.class, entity.getId());
     }
 
     @DELETE

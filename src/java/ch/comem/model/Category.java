@@ -8,6 +8,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -30,7 +31,7 @@ public class Category implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    @OneToMany(mappedBy="categoryConcerned")
+    @OneToMany(mappedBy="categoryConcerned", fetch=FetchType.LAZY)
     private Collection<Publication> categorizedPublications = new ArrayList<>();
     
     public Long getId() {
@@ -49,8 +50,6 @@ public class Category implements Serializable {
         this.name = name;
     }
     
-    @XmlTransient
-    @JsonIgnore
     public Collection<Publication> getCategorizedPublications() {
         return categorizedPublications;
     }
