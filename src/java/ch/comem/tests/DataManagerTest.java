@@ -59,7 +59,7 @@ public class DataManagerTest implements DataManagerTestLocal {
         for (int index = 0; index < 10; index++) {
             long x = mm.createMember(firstNames[index], lastNames[index], ages[index], 
                                      "pseudo" + index, firstNames[index] + "." + 
-                                     lastNames[index] + "@test.org");
+                                     lastNames[index] + "@test.org", "toto" + index);
         }
     }
 

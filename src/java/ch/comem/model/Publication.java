@@ -26,6 +26,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @NamedQueries({
     @NamedQuery(name="findAllPublications", query="SELECT p FROM Publication p"),
+    @NamedQuery(name="findLatestPublications", query="SELECT p FROM Publication p ORDER BY p.longDate DESC"),
     @NamedQuery(name="findPublicationsByRecipieName",
                 query="SELECT p FROM Publication p JOIN p.recepie r WHERE r.name = :name")
 })

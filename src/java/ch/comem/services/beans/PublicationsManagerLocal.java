@@ -22,4 +22,6 @@ public interface PublicationsManagerLocal {
     List<Publication> findAllPublications();
 
     List<Publication> findPublicationsFromRecipieName(String name);
+
+    List<Publication> findLatestPublications();
 }

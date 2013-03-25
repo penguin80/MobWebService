@@ -7,6 +7,7 @@ package ch.comem.model;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -17,6 +18,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -56,6 +58,8 @@ public class Membership implements Serializable {
     private List<Comment> commentsConcerned = new ArrayList<>();
     @OneToMany(mappedBy="memberLiking", fetch=FetchType.LAZY)
     private List<Liking> likesConcerned = new ArrayList<>();
+    @OneToOne(cascade=CascadeType.PERSIST, fetch=FetchType.LAZY)
+    private Authentication authenticate;
     
     public String getFirstName() {
         return firstName;
@@ -121,6 +125,14 @@ public class Membership implements Serializable {
     public void addLike(Liking like) {
         getLikesConcerned().add(like);
         like.setMemberLiking(this);
+    }
+
+    public Authentication getAuthenticate() {
+        return authenticate;
+    }
+
+    public void setAuthenticate(Authentication autenticate) {
+        this.authenticate = autenticate;
     }
 
     public Long getId() {

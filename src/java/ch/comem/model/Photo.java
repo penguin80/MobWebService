@@ -6,9 +6,11 @@ package ch.comem.model;
 
 import java.io.Serializable;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -16,6 +18,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  *
  * @author raphaelbaumann
  */
+
 @Entity
 @XmlRootElement
 public class Photo implements Serializable {
@@ -26,6 +29,8 @@ public class Photo implements Serializable {
     @NotNull
     private String source;
     private String alt;
+    @OneToOne(mappedBy="imagingPhoto", fetch=FetchType.LAZY)
+    private Publication publicationConcerned;
 
     public String getSource() {
         return source;
@@ -41,6 +46,14 @@ public class Photo implements Serializable {
 
     public void setAlt(String alt) {
         this.alt = alt;
+    }
+
+    public Publication getPublicationConcerned() {
+        return publicationConcerned;
+    }
+
+    public void setPublicationConcerned(Publication publicationConcerned) {
+        this.publicationConcerned = publicationConcerned;
     }
 
     public Long getId() {
