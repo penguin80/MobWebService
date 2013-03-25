@@ -6,11 +6,14 @@ package ch.comem.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -23,8 +26,8 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @NamedQueries({
     @NamedQuery(name="findAllMembers", query="SELECT m FROM Membership m"),
-    @NamedQuery(name="findAllPhotosFromMember", 
-                query="SELECT p.imagingPhoto FROM Membership m JOIN m.publicationsConcerned p WHERE m.id = :id")
+    @NamedQuery(name="findAllPublicationsFromMemberId", 
+                query="SELECT p FROM Membership m JOIN m.publicationsConcerned p WHERE m.id = :id")
 })
 @Entity
 @XmlRootElement
@@ -44,12 +47,15 @@ public class Membership implements Serializable {
 //                    message="{invalid.email}")
     protected String email;
 
-    @OneToMany(mappedBy="memberInvolved")
-    private Collection<Publication> publicationsConcerned = new ArrayList<>();
-    @OneToMany(mappedBy="memberCommenting")
-    private Collection<Comment> commentsConcerned = new ArrayList<>();
-    @OneToMany(mappedBy="memberLiking")
-    private Collection<Liking> likesConcerned = new ArrayList<>();
+    @OneToMany(fetch=FetchType.LAZY)
+    @JoinTable(name="membership_publication",
+               joinColumns=@JoinColumn(name="Membership_ID"),
+               inverseJoinColumns=@JoinColumn(name="publicationsConcerned_ID"))    
+    private List<Publication> publicationsConcerned = new ArrayList<>();
+    @OneToMany(mappedBy="memberCommenting", fetch=FetchType.LAZY)
+    private List<Comment> commentsConcerned = new ArrayList<>();
+    @OneToMany(mappedBy="memberLiking", fetch=FetchType.LAZY)
+    private List<Liking> likesConcerned = new ArrayList<>();
     
     public String getFirstName() {
         return firstName;
@@ -91,16 +97,15 @@ public class Membership implements Serializable {
         this.email = email;
     }
 
-    public Collection<Publication> getPublicationsConcerned() {
+    public List<Publication> getPublicationsConcerned() {
         return publicationsConcerned;
     }
 
     public void addPublication(Publication publication) {
         getPublicationsConcerned().add(publication);
-        publication.setMemberInvolved(this);
     }
     
-    public Collection<Comment> getCommentsConcerned() {
+    public List<Comment> getCommentsConcerned() {
         return commentsConcerned;
     }
 
@@ -109,7 +114,7 @@ public class Membership implements Serializable {
         comment.setMemberCommenting(this);
     }
 
-    public Collection<Liking> getLikesConcerned() {
+    public List<Liking> getLikesConcerned() {
         return likesConcerned;
     }
 

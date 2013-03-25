@@ -14,90 +14,77 @@ public class PublicationDTO implements Serializable {
     private static final long serialVersionUID = 1L;
     private Long id;
     private String dateOfPublication;
-    private String dateOfLastPublication;
+    private long longDate;
     private PhotoDTO imagingPhoto;
     private RecipieDTO recepie;
     private List<CommentDTO> comments = new ArrayList<>();
-    private CategoryDTO categoryConcerned;
-    private MembershipDTO memberInvolved;
     private List<LikingDTO> likes = new ArrayList<>();
-
+    private CategoryDTO category;
+    
     public String getDateOfPublication() {
         return dateOfPublication;
+    }
+
+    public long getLongDate() {
+        return longDate;
     }
 
     public PhotoDTO getImagingPhoto() {
         return imagingPhoto;
     }
 
-    public void setImagingPhoto(PhotoDTO imagingPhoto) {
-        this.imagingPhoto = imagingPhoto;
+    public RecipieDTO getRecepie() {
+        return recepie;
+    }
+
+    public List<CommentDTO> getComment() {
+        return comments;
+    }
+
+    public CategoryDTO getCategory() {
+        return category;
+    }
+
+    public List<LikingDTO> getLikes() {
+        return likes;
     }
 
     public void setDateOfPublication(String dateOfPublication) {
         this.dateOfPublication = dateOfPublication;
     }
-
-    public String getDateOfLastPublication() {
-        return dateOfLastPublication;
-    }
-
-    public void setDateOfLastPublication(String dateOfLastPublication) {
-        this.dateOfLastPublication = dateOfLastPublication;
-    }
     
-    public Long getId() {
-        return id;
+    public void setLongDate(long longDate) {
+        this.longDate = longDate;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public RecipieDTO getRecepie() {
-        return recepie;
+    public void setImagingPhoto(PhotoDTO imagingPhoto) {
+        this.imagingPhoto = imagingPhoto;
     }
 
     public void setRecepie(RecipieDTO recepie) {
         this.recepie = recepie;
     }
 
-//    @XmlTransient
-//    @JsonIgnore
-    public List<CommentDTO> getComment() {
-        return comments;
-    }
-
     public void addComment(CommentDTO comment) {
-        comments.add(comment);
+        getComment().add(comment);
         comment.addPublication(this);
     }
 
-    public CategoryDTO getCategoryConcerned() {
-        return categoryConcerned;
-    }
-
-    public void setCategoryConcerned(CategoryDTO categoryConcerned) {
-        this.categoryConcerned = categoryConcerned;
-    }
-
-    public MembershipDTO getMemberInvolved() {
-        return memberInvolved;
-    }
-
-    public void setMemberInvolved(MembershipDTO memberInvolved) {
-        this.memberInvolved = memberInvolved;
-    }
-
-//    @XmlTransient
-//    @JsonIgnore
-    public List<LikingDTO> getLikes() {
-        return likes;
+    public void setCategory(CategoryDTO categoryConcerned) {
+        this.category = categoryConcerned;
     }
 
     public void addLike(LikingDTO like) {
-        likes.add(like);
+        getLikes().add(like);
         like.setPublication(this);
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     @Override

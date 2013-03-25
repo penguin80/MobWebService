@@ -74,7 +74,6 @@ public class MembershipDTO implements Serializable {
 
     public void addPublication(PublicationDTO publication) {
         publicationsConcerned.add(publication);
-        publication.setMemberInvolved(this);
     }
 
 //    @XmlTransient

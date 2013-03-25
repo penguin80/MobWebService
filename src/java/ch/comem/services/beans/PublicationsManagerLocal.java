@@ -1,8 +1,6 @@
 package ch.comem.services.beans;
 
-import ch.comem.model.Photo;
 import ch.comem.model.Publication;
-import ch.comem.model.Recipie;
 import java.util.List;
 import javax.ejb.Local;
 
@@ -12,14 +10,10 @@ import javax.ejb.Local;
  */
 @Local
 public interface PublicationsManagerLocal {
-
-    Long createPublication(Long photoId, Long categoryId, Long publisherId);
     
-    Long createPublication(Long photoId, Long categoryId, Long publisherId, 
-                             Long recipieId);
+    Long createPublication(Long photoId, Long categoryId, Long recipieId);
     
-    String modifyPublication(Long publicationId, Long categoryId, 
-                               Long recipieId);
+    String modifyPublication(Long publicationId, Long categoryId, Long recipieId);
     
     String addComment(Long publicationId, Long commentId);
     
@@ -27,7 +21,5 @@ public interface PublicationsManagerLocal {
 
     List<Publication> findAllPublications();
 
-    Photo findPhotoFromPublicationId(Long publicationId);
-
-    Recipie findRecipieFromPublicationId(Long publicationId);
+    List<Publication> findPublicationsFromRecipieName(String name);
 }

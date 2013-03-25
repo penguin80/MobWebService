@@ -6,22 +6,26 @@ package ch.comem.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
-import org.codehaus.jackson.annotate.JsonIgnore;
 
 /**
  *
  * @author raphaelbaumann
  */
-@NamedQuery(name="findAllCategories", query="SELECT c FROM Category c")
+@NamedQueries({
+    @NamedQuery(name="findAllCategories", query="SELECT c FROM Category c"),
+    @NamedQuery(name="findAllPublicationsFromCategoryName", 
+                query="SELECT p FROM Category c JOIN c.categorizedPublications p WHERE c.name = :name")
+})
 @Entity
 @XmlRootElement
 public class Category implements Serializable {
@@ -30,8 +34,8 @@ public class Category implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    @OneToMany(mappedBy="categoryConcerned")
-    private Collection<Publication> categorizedPublications = new ArrayList<>();
+    @OneToMany(mappedBy="category", fetch=FetchType.LAZY)
+    private List<Publication> categorizedPublications = new ArrayList<>();
     
     public Long getId() {
         return id;
@@ -49,15 +53,12 @@ public class Category implements Serializable {
         this.name = name;
     }
     
-    @XmlTransient
-    @JsonIgnore
-    public Collection<Publication> getCategorizedPublications() {
+    public List<Publication> getCategorizedPublications() {
         return categorizedPublications;
     }
 
     public void addPublication(Publication publication) {
         getCategorizedPublications().add(publication);
-        publication.setCategoryConcerned(this);
     }
     
     @Override
