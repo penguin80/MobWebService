@@ -44,7 +44,7 @@ public class MembershipFacadeREST {
             Client client = Client.create();
 
             WebResource webResource = client.resource("http://localhost:8080/PastryChefGamification/webresources/player");
-            String input = "{\"firstName\":\" "+ entity.getFirstName() 
+            String input = "{\"firstName\":\" "+ entity.getFirstName()
                             + "\",\"lastName\": \""+ entity.getLastName() 
                             + "\",\"email\": \""+ entity.getEmail() 
                             + "\",\"application\": {\"id\": 1 }}";
