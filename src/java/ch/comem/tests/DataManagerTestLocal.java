@@ -18,5 +18,7 @@ public interface DataManagerTestLocal {
     void testRelationRecipieIngredients();
 
     void testPublicationRelations();
+
+    void populateCategoryTable();
     
 }

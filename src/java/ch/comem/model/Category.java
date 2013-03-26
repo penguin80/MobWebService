@@ -22,6 +22,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author raphaelbaumann
  */
 @NamedQueries({
+    @NamedQuery(name="findAllCategoryNames", query="SELECT c.name FROM Category c"),
     @NamedQuery(name="findAllCategories", query="SELECT c FROM Category c ORDER BY c.name"),
     @NamedQuery(name="findAllPublicationsFromCategoryName", 
                 query="SELECT p FROM Category c JOIN c.categorizedPublications p WHERE c.name = :name")

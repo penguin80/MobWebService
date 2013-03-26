@@ -18,11 +18,44 @@ public class CategoriesManager implements CategoriesManagerLocal {
     
     @Override
     public Long createCategory(String name) {
+        List<String> allNamesAvailable = findAllCategoryNames();
         Category c = new Category();
-        c.setName(name);
-        persist(c);
-        em.flush();
-        return c.getId();
+        Long id = null;
+        if (allNamesAvailable == null || allNamesAvailable.isEmpty()) {
+            c.setName(name);
+            persist(c);
+            em.flush();
+            id = c.getId();
+        } else {
+            if (!allNamesAvailable.contains(name)) {
+                c.setName(name);
+                persist(c);
+                em.flush();
+                id = c.getId();
+            }
+        }
+        return id;
+    }    
+    
+    @Override
+    public Long useCategory(String name) {
+        List<String> allNamesAvailable = findAllCategoryNames();
+        Long id = null;
+        if (allNamesAvailable.contains(name)) {
+            List<Category> cList = findAllCategories();
+            for (Category c : cList) {
+                if (id == null) {
+                    if (c.getName().equals(name))
+                        id = c.getId();
+                }
+            }
+        }
+        return id;
+    }
+
+    @Override
+    public List<String> findAllCategoryNames() {
+        return em.createNamedQuery("findAllCategoryNames").getResultList();
     }
 
     @Override

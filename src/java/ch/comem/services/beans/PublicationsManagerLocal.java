@@ -14,7 +14,7 @@ public interface PublicationsManagerLocal {
     Long createPublication(Long memberId, Long photoId, Long categoryId, 
                              Long recipieId);
     
-    Long modifyPublication(Long publicationId, Long categoryId, Long recipieId);
+    Long modifyPublication(Long publicationId, Long recipieId);
     
     List<Publication> findAllPublications();
 
