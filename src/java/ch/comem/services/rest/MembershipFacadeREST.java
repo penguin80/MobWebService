@@ -83,6 +83,15 @@ public class MembershipFacadeREST {
     @Produces({"application/xml", "application/json"})
     public MembershipDTO create(Membership entity) {
 
+        
+         Authentication a = entity.getAuthenticate();
+        String emailStored = am.createAccount(entity.getEmail(), a.getPassword());
+        Long mId =  mm.createMember(entity.getFirstName(), entity.getLastName(), 
+                                    entity.getAge(), entity.getPseudo(), 
+                                    emailStored, a.getPassword());
+        Membership m = getEntityManager().find(Membership.class, mId);
+        
+        
         try {
  
             Client client = Client.create();
@@ -90,7 +99,8 @@ public class MembershipFacadeREST {
             WebResource webResource = client.resource("http://localhost:8080/PastryChefGamification/webresources/player");
             String input = "{\"firstName\":\" "+ entity.getFirstName()
                             + "\",\"lastName\": \""+ entity.getLastName() 
-                            + "\",\"email\": \""+ entity.getEmail() 
+                            + "\",\"email\": \""+ entity.getEmail()
+                            + "\",\"memberId\": \""+ m.getId()
                             + "\",\"application\": {\"id\": 1 }}";
               
 		ClientResponse response = webResource.type("application/json")
@@ -111,12 +121,6 @@ public class MembershipFacadeREST {
 
 	  }
 
-        Authentication a = entity.getAuthenticate();
-        String emailStored = am.createAccount(entity.getEmail(), a.getPassword());
-        Long mId =  mm.createMember(entity.getFirstName(), entity.getLastName(), 
-                                    entity.getAge(), entity.getPseudo(), 
-                                    emailStored, a.getPassword());
-        Membership m = getEntityManager().find(Membership.class, mId);
         return setInitialMembershipDTO(m);
     }
 
