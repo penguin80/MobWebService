@@ -52,7 +52,7 @@ public class DataManagerTest implements DataManagerTestLocal {
     
     private String[] sources = {"www.heig-vd.ch/assets/bg_logo.png", 
                                 "www.heig-vd.ch/assets/hesso-logo.png",
-                                "labelattitude.comem.ch/img/logoComem.png"};
+                                "ec.pond5.com/s3/000732169_iconv.jpeg"};
 
     @Override
     public void testMethods() {
@@ -90,22 +90,22 @@ public class DataManagerTest implements DataManagerTestLocal {
 
     @Override
     public void testPublicationRelations() {
-        String name = "TestEcole";
-        Long i1 = im.createIngredient("étudiants", 3000, "personnes");
-        Long i2 = im.createIngredient("professeurs", 200, "personnes");
-        Long i3 = im.createIngredient("cours", 80, "branches");
+        String name = "TestDestructor";
+        Long i1 = im.createIngredient("méchants", 3000, "personnes");
+        Long i2 = im.createIngredient("M1 Abrams", 200, "tanks");
+        Long i3 = im.createIngredient("caches de méchants", 8, "buildings");
         List<Long> stepsId = new ArrayList<>();
         List<Long> ingredientsId = new ArrayList<>();
         ingredientsId.add(i1);
         ingredientsId.add(i2);
         ingredientsId.add(i3);
         Long r1 = rm.createRecipie(name, ingredientsId, stepsId);
-        Long ph1 = phm.createPhoto(sources[2], "Logo de Comem+");
-//        Long m1 = mm.createMember(firstNames[5], lastNames[5], ages[5], "Chuck", 
-//                                  "i.destroy@everything.com");
+        Long ph1 = phm.createPhoto(sources[2], "Chuck Norris was here");
+        Long m1 = mm.createMember(firstNames[5], lastNames[5], ages[5], "Chuck", 
+                                  "i.destroy@everything.com", "invincible");
         Long cam1 = cam.createCategory("Crèmes et Flans");
 //        Long cam1 = cam.createCategory("Cancres et Surdoués");
-        Long pum1 = pum.createPublication(ph1, cam1, r1);
+        Long pum1 = pum.createPublication(m1, ph1, cam1, r1);
     }
     
 }

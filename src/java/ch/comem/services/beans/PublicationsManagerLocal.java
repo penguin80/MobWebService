@@ -11,14 +11,11 @@ import javax.ejb.Local;
 @Local
 public interface PublicationsManagerLocal {
     
-    Long createPublication(Long photoId, Long categoryId, Long recipieId);
+    Long createPublication(Long memberId, Long photoId, Long categoryId, 
+                             Long recipieId);
     
-    String modifyPublication(Long publicationId, Long categoryId, Long recipieId);
+    Long modifyPublication(Long publicationId, Long categoryId, Long recipieId);
     
-    String addComment(Long publicationId, Long commentId);
-    
-    String addLike(Long publicationId, Long likeId);
-
     List<Publication> findAllPublications();
 
     List<Publication> findPublicationsFromRecipieName(String name);

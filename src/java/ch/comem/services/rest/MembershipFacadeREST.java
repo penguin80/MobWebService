@@ -177,17 +177,17 @@ public class MembershipFacadeREST {
                 recipieId = rm.createRecipie(p.getRecepie().getName(), 
                                              ingredientIds, stepIds);
             }
-            pum.createPublication(photoId, categoryId, recipieId);
-            mm.ownPublication(id, p.getId());
+            Long pId = pum.createPublication(m.getId(), photoId, categoryId, 
+                                             recipieId);
+            Publication pCreated = getEntityManager().find(Publication.class, pId);
             pDTO = new PublicationDTO();
-            pDTO.setId(p.getId());
-            pDTO.setDateOfPublication(p.getDateOfPublication());
-            pDTO.setLongDate(p.getLongDate());
+            pDTO.setId(pCreated.getId());
+            pDTO.setDateOfPublication(pCreated.getDateOfPublication());
+            pDTO.setLongDate(pCreated.getLongDate());
             Photo phCreated = getEntityManager().find(Photo.class, photoId);
             PhotoDTO phDTO = null;
             if (phCreated != null) {
                 phDTO = new PhotoDTO();
-                phDTO.setId(phCreated.getId());
                 phDTO.setSource(phCreated.getSource());
                 phDTO.setAlt(phCreated.getAlt());
             }
@@ -196,7 +196,6 @@ public class MembershipFacadeREST {
             RecipieDTO rDTO = null;
             if (rCreated != null) {
                 rDTO = new RecipieDTO();
-                rDTO.setId(rCreated.getId());
                 rDTO.setName(rCreated.getName());
                 List<Ingredient> iList = rCreated.getIngredients();
                 List<IngredientDTO> iDTOList = null;
@@ -227,6 +226,11 @@ public class MembershipFacadeREST {
                 rDTO.setSteps(sDTOList);
             }
             pDTO.setRecepie(rDTO);
+            MembershipDTO mDTO = new MembershipDTO();
+            mDTO.setId(m.getId());
+            mDTO.setFirstName(m.getFirstName());
+            mDTO.setLastName(m.getLastName());
+            pDTO.setPublisher(mDTO);
             Category cCreated = getEntityManager().find(Category.class, categoryId);
             CategoryDTO cDTO = null;
             if (cCreated != null) {

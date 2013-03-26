@@ -5,7 +5,6 @@
 package ch.comem.services.beans;
 
 import ch.comem.model.Photo;
-import ch.comem.model.Publication;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;

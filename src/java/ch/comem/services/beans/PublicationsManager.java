@@ -3,6 +3,7 @@ package ch.comem.services.beans;
 import ch.comem.model.Category;
 import ch.comem.model.Comment;
 import ch.comem.model.Liking;
+import ch.comem.model.Membership;
 import ch.comem.model.Photo;
 import ch.comem.model.Publication;
 import ch.comem.model.Recipie;
@@ -88,67 +89,38 @@ public class PublicationsManager implements PublicationsManagerLocal {
     }
 
     @Override
-    public Long createPublication(Long photoId, Long categoryId, Long recipieId) {
-        Publication p = new Publication();
-        p.setDateOfPublication(buildDate(p));
-        Photo photo = em.find(Photo.class, photoId);
-        if (photo != null)
-            p.setImagingPhoto(photo);
-        setPublicationParameters(p, categoryId, recipieId);
-        persist(p);
-        em.flush();
-        return p.getId();
+    public Long createPublication(Long memberId, Long photoId, Long categoryId, 
+                                    Long recipieId) {
+        Membership m = em.find(Membership.class, memberId);
+        Long id = null;
+            if (m != null) {
+            Publication p = new Publication();
+            p.setDateOfPublication(buildDate(p));
+            Photo photo = em.find(Photo.class, photoId);
+            if (photo != null)
+                p.setImagingPhoto(photo);
+            setPublicationParameters(p, categoryId, recipieId);
+            p.setPublisher(m);
+            m.addPublication(p);
+            persist(p);
+            em.flush();
+            id = p.getId();
+        }
+        return id;
     }
     
     @Override
-    public String modifyPublication(Long publicationId, Long categoryId, Long recipieId) {
-        String str = "";
+    public Long modifyPublication(Long publicationId, Long categoryId, 
+                                      Long recipieId) {
         Publication p = em.find(Publication.class, publicationId);
+        Long id = null;
         if (p != null) {
             setPublicationParameters(p, categoryId, recipieId);
             persist(p);
             em.flush();
-            str = str.concat("Publication modifiée");
-        } else
-            str = str.concat("Impossible de modifier la publication demandée!");
-        return str;
-    }
-
-    @Override
-    public String addComment(Long publicationId, Long commentId) {
-        String str = "";
-        Publication p = em.find(Publication.class, publicationId);
-        if (p != null) {
-            Comment c = em.find(Comment.class, commentId);
-            if (c != null) {
-                p.addComment(c);
-                persist(p);
-                em.flush();
-                str = str.concat("Commentaire ajouté");
-            } else
-                str = str.concat("Commentaire inexistant!");
-        } else
-            str = str.concat("Impossible d'ajouter un commentaire à la " + 
-                             "publication demandée!");
-        return str;
-    }
-
-    @Override
-    public String addLike(Long publicationId, Long likeId) {
-        String str = "";
-        Publication p = em.find(Publication.class, publicationId);
-        if (p != null) {
-            Liking l = em.find(Liking.class, likeId);
-            if (l != null) {
-                p.addLike(l);
-                persist(p);
-                em.flush();
-                str = str.concat("Like ajouté");
-            } else
-                str = str.concat("Like inexistant!");
-        } else
-            str = str.concat("Impossible d'ajouter un like à la publication demandée!");
-        return str;
+            id = p.getId();
+        }
+        return id;
     }
 
     @Override

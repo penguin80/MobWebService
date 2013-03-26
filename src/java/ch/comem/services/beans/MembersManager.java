@@ -86,55 +86,6 @@ public class MembersManager implements MembersManagerLocal {
     }
     
     @Override
-    public void chooseLike(Long id, Long likeId) {
-        Membership m = em.find(Membership.class, id);
-        if (m != null) {
-            Liking l = em.find(Liking.class, likeId);
-            if (l != null) {
-                m.addLike(l);
-                persist(m);
-                em.flush();
-            }
-        }
-    }
-
-    @Override
-    public String postComment(Long id, Long commentId) {
-        String str = "";
-        Membership m = em.find(Membership.class, id);
-        if (m != null) {
-            Comment c = em.find(Comment.class, commentId);
-            if (c != null) {
-                m.addComment(c);
-                persist(m);
-                em.flush();
-                str = str.concat("Votre commentaire est publié");
-            } else
-                str = str.concat("Commentaire inexistant!");
-        } else
-            str = str.concat("Impossible de publier votre commentaire!");
-        return str;
-    }
-
-    @Override
-    public String ownPublication(Long id, Long publicationId) {
-        String str = "";
-        Membership m = em.find(Membership.class, id);
-        if (m != null) {
-            Publication p = em.find(Publication.class, publicationId);
-            if (p != null) {
-                m.addPublication(p);
-                persist(m);
-                em.flush();
-                str = str.concat("Vous avez publié une recette");
-            } else
-                str = str.concat("Publication inexistante!");
-        } else
-            str = str.concat("Impossible de publier votre recette!");
-        return str;
-    }
-        
-    @Override
     public List<Membership> findAllMembers() {
         return em.createNamedQuery("findAllMembers").getResultList();
     }
