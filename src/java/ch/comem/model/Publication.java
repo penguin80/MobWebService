@@ -45,6 +45,8 @@ public class Publication implements Serializable {
     private Photo imagingPhoto;
     @OneToOne(fetch=FetchType.LAZY)
     private Recipie recepie;
+    @ManyToOne(fetch=FetchType.LAZY)
+    private Membership publisher;
     @OneToMany(mappedBy="publicationCom", fetch=FetchType.LAZY)
     private List<Comment> comment = new ArrayList<>();
     @OneToMany(mappedBy="publicationLiked", fetch=FetchType.LAZY)
@@ -66,6 +68,10 @@ public class Publication implements Serializable {
 
     public Recipie getRecepie() {
         return recepie;
+    }
+
+    public Membership getPublisher() {
+        return publisher;
     }
 
     public List<Comment> getComment() {
@@ -94,6 +100,10 @@ public class Publication implements Serializable {
 
     public void setRecepie(Recipie recepie) {
         this.recepie = recepie;
+    }
+
+    public void setPublisher(Membership publisher) {
+        this.publisher = publisher;
     }
 
     public void addComment(Comment comment) {

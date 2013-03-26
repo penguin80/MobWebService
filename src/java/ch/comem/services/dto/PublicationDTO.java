@@ -17,10 +17,11 @@ public class PublicationDTO implements Serializable {
     private long longDate;
     private PhotoDTO imagingPhoto;
     private RecipieDTO recepie;
+    private MembershipDTO publisher;
     private List<CommentDTO> comments = new ArrayList<>();
     private List<LikingDTO> likes = new ArrayList<>();
     private CategoryDTO category;
-    
+
     public String getDateOfPublication() {
         return dateOfPublication;
     }
@@ -37,7 +38,11 @@ public class PublicationDTO implements Serializable {
         return recepie;
     }
 
-    public List<CommentDTO> getComment() {
+    public MembershipDTO getPublisher() {
+        return publisher;
+    }
+
+    public List<CommentDTO> getComments() {
         return comments;
     }
 
@@ -65,8 +70,12 @@ public class PublicationDTO implements Serializable {
         this.recepie = recepie;
     }
 
+    public void setPublisher(MembershipDTO publisher) {
+        this.publisher = publisher;
+    }
+    
     public void addComment(CommentDTO comment) {
-        getComment().add(comment);
+        getComments().add(comment);
         comment.addPublication(this);
     }
 

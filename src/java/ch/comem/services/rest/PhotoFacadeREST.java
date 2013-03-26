@@ -2,6 +2,7 @@ package ch.comem.services.rest;
 
 import ch.comem.model.Category;
 import ch.comem.model.Ingredient;
+import ch.comem.model.Membership;
 import ch.comem.model.Photo;
 import ch.comem.model.Publication;
 import ch.comem.model.Recipie;
@@ -9,6 +10,7 @@ import ch.comem.model.Step;
 import ch.comem.services.beans.PhotosManagerLocal;
 import ch.comem.services.dto.CategoryDTO;
 import ch.comem.services.dto.IngredientDTO;
+import ch.comem.services.dto.MembershipDTO;
 import ch.comem.services.dto.PhotoDTO;
 import ch.comem.services.dto.PublicationDTO;
 import ch.comem.services.dto.RecipieDTO;
@@ -108,6 +110,15 @@ public class PhotoFacadeREST {
                     rDTO.setSteps(sDTOList);
                 }
                 pDTO.setRecepie(rDTO);
+                Membership m = p.getPublisher();
+                MembershipDTO mDTO = null;
+                if (m != null) {
+                    mDTO = new MembershipDTO();
+                    mDTO.setId(m.getId());
+                    mDTO.setFirstName(m.getFirstName());
+                    mDTO.setLastName(m.getLastName());
+                }
+                pDTO.setPublisher(mDTO);
             }
         }
         return pDTO;

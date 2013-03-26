@@ -49,10 +49,7 @@ public class Membership implements Serializable {
 //                    message="{invalid.email}")
     protected String email;
 
-    @OneToMany(fetch=FetchType.LAZY)
-    @JoinTable(name="membership_publication",
-               joinColumns=@JoinColumn(name="Membership_ID"),
-               inverseJoinColumns=@JoinColumn(name="publicationsConcerned_ID"))    
+    @OneToMany(mappedBy="publisher", fetch=FetchType.LAZY)    
     private List<Publication> publicationsConcerned = new ArrayList<>();
     @OneToMany(mappedBy="memberCommenting", fetch=FetchType.LAZY)
     private List<Comment> commentsConcerned = new ArrayList<>();

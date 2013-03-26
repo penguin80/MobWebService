@@ -23,13 +23,7 @@ public interface MembersManagerLocal {
 
     Long modifyMember(Long id, String firstName, String lastName, int age, 
                          String pseudo, String email, String password);
-    
-    void chooseLike(Long id, Long likeId);
-    
-    String postComment(Long id, Long commentId);
-    
-    String ownPublication(Long id, Long publicationId);
-
+        
     List<Membership> findAllMembers();
 
     List<Photo> findAllPhotosFromMemberId(Long memberId);
