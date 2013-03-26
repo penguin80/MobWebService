@@ -12,10 +12,14 @@ import javax.ejb.Local;
 @Local
 public interface CategoriesManagerLocal {
 
-    Long createCategory(String name);
+    Long useCategory(String name);
     
     List<Category> findAllCategories();
 
     List<Publication> findAllPublicationsFromCategoryName(String name);
+
+    List<String> findAllCategoryNames();
+
+    Long createCategory(String name);
     
 }

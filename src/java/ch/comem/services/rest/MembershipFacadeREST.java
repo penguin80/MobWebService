@@ -149,7 +149,7 @@ public class MembershipFacadeREST {
             Long categoryId = null;
             Category c = p.getCategory();
             if (c != null)
-                categoryId = cm.createCategory(c.getName());
+                categoryId = cm.useCategory(c.getName());
             List<Long> ingredientIds = null;
             List<Long> stepIds = null;
             Long recipieId = null; 
@@ -183,7 +183,6 @@ public class MembershipFacadeREST {
             pDTO = new PublicationDTO();
             pDTO.setId(pCreated.getId());
             pDTO.setDateOfPublication(pCreated.getDateOfPublication());
-            pDTO.setLongDate(pCreated.getLongDate());
             Photo phCreated = getEntityManager().find(Photo.class, photoId);
             PhotoDTO phDTO = null;
             if (phCreated != null) {
@@ -203,7 +202,6 @@ public class MembershipFacadeREST {
                     iDTOList = new ArrayList<>();
                     for (Ingredient i : iList) {
                         IngredientDTO iDTO = new IngredientDTO();
-                        iDTO.setId(i.getId());
                         iDTO.setName(i.getName());
                         iDTO.setQuantity(i.getQuantity());
                         iDTO.setQuantityUnit(i.getQuantityUnit());
@@ -217,7 +215,6 @@ public class MembershipFacadeREST {
                     sDTOList = new ArrayList<>();
                     for (Step s : sList) {
                         StepDTO sDTO = new StepDTO();
-                        sDTO.setId(s.getId());
                         sDTO.setStepNumber(s.getStepNumber());
                         sDTO.setDescription(s.getDescription());
                         sDTOList.add(sDTO);

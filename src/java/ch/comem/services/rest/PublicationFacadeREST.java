@@ -7,7 +7,12 @@ import ch.comem.model.Photo;
 import ch.comem.model.Publication;
 import ch.comem.model.Recipie;
 import ch.comem.model.Step;
+import ch.comem.services.beans.CategoriesManagerLocal;
+import ch.comem.services.beans.IngredientsManagerLocal;
+import ch.comem.services.beans.PhotosManagerLocal;
 import ch.comem.services.beans.PublicationsManagerLocal;
+import ch.comem.services.beans.RecipieManagerLocal;
+import ch.comem.services.beans.StepsManagerLocal;
 import ch.comem.services.dto.CategoryDTO;
 import ch.comem.services.dto.IngredientDTO;
 import ch.comem.services.dto.MembershipDTO;
@@ -37,7 +42,17 @@ import javax.ws.rs.Produces;
 @Path("publications")
 public class PublicationFacadeREST {
     @EJB
-    private PublicationsManagerLocal pm;
+    private RecipieManagerLocal rm;
+    @EJB
+    private StepsManagerLocal sm;
+    @EJB
+    private IngredientsManagerLocal im;
+    @EJB
+    private CategoriesManagerLocal cam;
+    @EJB
+    private PhotosManagerLocal phm;
+    @EJB
+    private PublicationsManagerLocal pum;
     @PersistenceContext(unitName = "PastyChefPU")
     private EntityManager em;
 
@@ -45,10 +60,48 @@ public class PublicationFacadeREST {
     @Consumes({"application/xml", "application/json"})
     @Produces({"application/xml", "application/json"})
     public Publication create(Publication entity) {
-        Long pId = pm.createPublication(entity.getPublisher().getId(),
-                                        entity.getImagingPhoto().getId(),
-                                        entity.getCategory().getId(),
-                                        entity.getRecepie().getId());
+        Membership m = entity.getPublisher();
+        Long memberId = null;
+        if (m != null)
+            memberId = m.getId();
+        Photo ph = entity.getImagingPhoto();
+        Long photoId = null;
+        if (ph != null)
+            photoId = phm.createPhoto(ph.getSource(), ph.getAlt());
+        Category c = entity.getCategory();
+        Long categoryId = null;
+        if (c != null)
+            categoryId = cam.useCategory(c.getName());
+        Recipie r = entity.getRecepie();
+        Long recipieId = null;
+        if (r != null) {
+            List<Ingredient> iList = r.getIngredients();
+            List<Long> ingredientIds = null;
+            if (iList != null && !iList.isEmpty()) {
+                ingredientIds = new ArrayList<>();
+                for(Ingredient i : iList) {
+                    Long iId = im.createIngredient(i.getName(), 
+                                                   i.getQuantity(), 
+                                                   i.getQuantityUnit());
+                    ingredientIds.add(iId);
+                }
+            }
+            List<Step> sList = r.getSteps();
+            List<Long> stepIds = null;
+            if (sList != null && !sList.isEmpty()) {
+                stepIds = new ArrayList<>();
+                for(Step s : sList) {
+                    Long sId = sm.createStep(s.getStepNumber(), 
+                                             s.getDescription());
+                    stepIds.add(sId);
+                }
+            }
+            recipieId = rm.createRecipie(r.getName(), ingredientIds, stepIds);
+        }
+        Long pId = pum.createPublication(memberId,
+                                        photoId,
+                                        categoryId,
+                                        recipieId);
         return getEntityManager().find(Publication.class, pId);
     }
 
@@ -56,8 +109,7 @@ public class PublicationFacadeREST {
     @Consumes({"application/xml", "application/json"})
     @Produces({"application/xml", "application/json"})
     public Publication edit(Publication entity) {
-        pm.modifyPublication(entity.getId(), entity.getCategory().getId(),
-                             entity.getRecepie().getId());
+        pum.modifyPublication(entity.getId(), entity.getRecepie().getId());
         return getEntityManager().find(Publication.class, entity.getId());
     }
 
@@ -75,7 +127,6 @@ public class PublicationFacadeREST {
             pDTO = new PublicationDTO();
             pDTO.setId(p.getId());
             pDTO.setDateOfPublication(p.getDateOfPublication());
-            pDTO.setLongDate(p.getLongDate());
             Membership m = p.getPublisher();
             MembershipDTO mDTO = null;
             if (m != null) {
@@ -89,7 +140,6 @@ public class PublicationFacadeREST {
             PhotoDTO phDTO = null;
             if (ph != null) {
                 phDTO = new PhotoDTO();
-                phDTO.setId(ph.getId());
                 phDTO.setSource(ph.getSource());
                 phDTO.setAlt(ph.getAlt());
             }
@@ -98,7 +148,6 @@ public class PublicationFacadeREST {
             RecipieDTO rDTO = null;
             if (r != null) {
                 rDTO = new RecipieDTO();
-                rDTO.setId(r.getId());
                 rDTO.setName(r.getName());
                 List<Ingredient> iList = r.getIngredients();
                 List<IngredientDTO> iDTOList = null;
@@ -106,7 +155,6 @@ public class PublicationFacadeREST {
                     iDTOList = new ArrayList<>();
                     for (Ingredient i : iList) {
                         IngredientDTO iDTO = new IngredientDTO();
-                        iDTO.setId(i.getId());
                         iDTO.setName(i.getName());
                         iDTO.setQuantity(i.getQuantity());
                         iDTO.setQuantityUnit(i.getQuantityUnit());
@@ -120,7 +168,6 @@ public class PublicationFacadeREST {
                     sDTOList = new ArrayList<>();
                     for (Step s : sList) {
                         StepDTO sDTO = new StepDTO();
-                        sDTO.setId(s.getId());
                         sDTO.setStepNumber(s.getStepNumber());
                         sDTO.setDescription(s.getDescription());
                         sDTOList.add(sDTO);
@@ -172,7 +219,7 @@ public class PublicationFacadeREST {
     @Path("searchRecipie/{name}")
     @Produces({"application/xml", "application/json"})
     public List<PublicationDTO> findPublicationsFromRecipieName(@PathParam("name") String name) {
-        List<Publication> pList = pm.findPublicationsFromRecipieName(name);
+        List<Publication> pList = pum.findPublicationsFromRecipieName(name);
         return setPublicationList(pList);
     }
     
@@ -180,14 +227,14 @@ public class PublicationFacadeREST {
     @Path("searchLatestPublications")
     @Produces({"application/xml", "application/json"})
     public List<PublicationDTO> findLatestPublications() {
-        List<Publication> pList = pm.findLatestPublications();
+        List<Publication> pList = pum.findLatestPublications();
         return setPublicationList(pList);
     }
 
     @GET
     @Produces({"application/xml", "application/json"})
     public List<PublicationDTO> findAll() {
-        List<Publication> pList = pm.findAllPublications();
+        List<Publication> pList = pum.findAllPublications();
         return setPublicationList(pList);
     }  
 
@@ -195,7 +242,7 @@ public class PublicationFacadeREST {
     @Path("{from}/{to}")
     @Produces({"application/xml", "application/json"})
     public List<PublicationDTO> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
-        List<Publication> allPublications = pm.findAllPublications();
+        List<Publication> allPublications = pum.findAllPublications();
         List<PublicationDTO> subSelectionDTO = null;
         if (allPublications != null && !allPublications.isEmpty()) {
             List<Publication> subSelection = allPublications.subList(from.intValue(), to.intValue());
@@ -209,11 +256,15 @@ public class PublicationFacadeREST {
     @Path("count")
     @Produces("text/plain")
     public String countREST() {
-        return String.valueOf(pm.findAllPublications().size());
+        return String.valueOf(pum.findAllPublications().size());
     }
 
     protected EntityManager getEntityManager() {
         return em;
+    }
+
+    public void persist(Object object) {
+        em.persist(object);
     }
     
 }

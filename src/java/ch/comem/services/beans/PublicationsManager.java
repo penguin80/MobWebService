@@ -79,10 +79,18 @@ public class PublicationsManager implements PublicationsManagerLocal {
         return str;
     }
     
-    private void setPublicationParameters(Publication p, Long categoryId, Long recipieId) {
+    private void setPublicationParameters(Publication p, Long photoId, 
+                                             Long categoryId, Long recipieId) {
+        Photo photo = em.find(Photo.class, photoId);
+        if (photo != null) {
+            p.setImagingPhoto(photo);
+            photo.setPublicationConcerned(p);
+        }
         Category categoryConcerned = em.find(Category.class, categoryId);
-        if (categoryConcerned != null)
+        if (categoryConcerned != null) {
             p.setCategory(categoryConcerned);
+            categoryConcerned.addPublication(p);
+        }
         Recipie r = em.find(Recipie.class, recipieId);
         if (r != null)
             p.setRecepie(r);
@@ -96,10 +104,7 @@ public class PublicationsManager implements PublicationsManagerLocal {
             if (m != null) {
             Publication p = new Publication();
             p.setDateOfPublication(buildDate(p));
-            Photo photo = em.find(Photo.class, photoId);
-            if (photo != null)
-                p.setImagingPhoto(photo);
-            setPublicationParameters(p, categoryId, recipieId);
+            setPublicationParameters(p, photoId, categoryId, recipieId);
             p.setPublisher(m);
             m.addPublication(p);
             persist(p);
@@ -110,12 +115,13 @@ public class PublicationsManager implements PublicationsManagerLocal {
     }
     
     @Override
-    public Long modifyPublication(Long publicationId, Long categoryId, 
-                                      Long recipieId) {
+    public Long modifyPublication(Long publicationId, Long recipieId) {
         Publication p = em.find(Publication.class, publicationId);
         Long id = null;
         if (p != null) {
-            setPublicationParameters(p, categoryId, recipieId);
+            Recipie r = em.find(Recipie.class, recipieId);
+            if (r != null)
+                p.setRecepie(r);
             persist(p);
             em.flush();
             id = p.getId();

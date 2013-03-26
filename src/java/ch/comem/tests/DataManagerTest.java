@@ -103,9 +103,26 @@ public class DataManagerTest implements DataManagerTestLocal {
         Long ph1 = phm.createPhoto(sources[2], "Chuck Norris was here");
         Long m1 = mm.createMember(firstNames[5], lastNames[5], ages[5], "Chuck", 
                                   "i.destroy@everything.com", "invincible");
-        Long cam1 = cam.createCategory("Crèmes et Flans");
+        Long cam1 = cam.useCategory("Crèmes et flans");
 //        Long cam1 = cam.createCategory("Cancres et Surdoués");
         Long pum1 = pum.createPublication(m1, ph1, cam1, r1);
+    }
+
+    @Override
+    public void populateCategoryTable() {
+        cam.createCategory("Biscuits");
+        cam.createCategory("Gateaux");
+        cam.createCategory("Petits gâteaux");
+        cam.createCategory("Gâteaux d'anniversaire");
+        cam.createCategory("Macarons");
+        cam.createCategory("Cake pops");
+        cam.createCategory("Cupcakes");
+        cam.createCategory("Gâteaux au yaourt");
+        cam.createCategory("Pâtes à sucre");
+        cam.createCategory("Crèmes et flans");
+        cam.createCategory("Vacherins glacés");
+        cam.createCategory("Tartes");
+        cam.createCategory("Muffins");
     }
     
 }
