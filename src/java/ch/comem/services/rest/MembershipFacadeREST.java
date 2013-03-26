@@ -281,10 +281,35 @@ public class MembershipFacadeREST {
     }
     
     @GET 
-    @Path("searchPhotos/{id}")
+    @Path("searchPublications/{id}")
     @Produces({"application/xml", "application/json"})
-    public List<Photo> findPhotosByMemberId(@PathParam("id") Long id) {
-        return mm.findAllPhotosFromMemberId(id);
+    public List<PublicationDTO> findPublicationsByMemberId(@PathParam("id") Long id) {
+        List<Publication> puList = mm.findAllPublicationsFromMemberId(id);
+        List<PublicationDTO> puDTOList = null;
+        if (puList != null && !puList.isEmpty()) {
+            puDTOList = new ArrayList<>();
+            for (Publication pu : puList) {
+                PublicationDTO puDTO = new PublicationDTO();
+                Photo ph = pu.getImagingPhoto();
+                PhotoDTO phDTO = null;
+                if (ph != null) {
+                    phDTO = new PhotoDTO();
+                    phDTO.setId(ph.getId());
+                    phDTO.setSource(ph.getSource());
+                    phDTO.setAlt(ph.getAlt());
+                } 
+                puDTO.setImagingPhoto(phDTO);
+                Recipie r = pu.getRecepie();
+                RecipieDTO rDTO = null;
+                if (r != null) {
+                    rDTO = new RecipieDTO();
+                    rDTO.setName(r.getName());
+                }
+                puDTO.setRecepie(rDTO);
+                puDTOList.add(puDTO);
+            }
+        }
+        return puDTOList;
     }
     
     @GET
