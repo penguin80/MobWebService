@@ -1,5 +1,6 @@
 package ch.comem.services.rest;
 
+import ch.comem.model.Authentication;
 import ch.comem.model.Category;
 import ch.comem.model.Ingredient;
 import ch.comem.model.Membership;
@@ -7,6 +8,7 @@ import ch.comem.model.Photo;
 import ch.comem.model.Publication;
 import ch.comem.model.Recipie;
 import ch.comem.model.Step;
+import ch.comem.services.beans.AuthenticationsManagerLocal;
 import ch.comem.services.beans.CategoriesManagerLocal;
 import ch.comem.services.beans.IngredientsManagerLocal;
 import ch.comem.services.beans.MembersManagerLocal;
@@ -47,6 +49,8 @@ import javax.ws.rs.Produces;
 @Path("memberships")
 public class MembershipFacadeREST {
     @EJB
+    private AuthenticationsManagerLocal am;
+    @EJB
     private IngredientsManagerLocal im;
     @EJB
     private StepsManagerLocal sm;
@@ -77,8 +81,8 @@ public class MembershipFacadeREST {
     @POST
     @Consumes({"application/xml", "application/json"})
     @Produces({"application/xml", "application/json"})
-    public void create(Membership entity) {
-        
+    public MembershipDTO create(Membership entity) {
+
         try {
  
             Client client = Client.create();
@@ -106,20 +110,28 @@ public class MembershipFacadeREST {
 		e.printStackTrace();
 
 	  }
- 
 
-        mm.createMember(entity.getFirstName(), entity.getLastName(), 
-                        entity.getAge(), entity.getPseudo(), entity.getEmail());
+        Authentication a = entity.getAuthenticate();
+        String emailStored = am.createAccount(entity.getEmail(), a.getPassword());
+        Long mId =  mm.createMember(entity.getFirstName(), entity.getLastName(), 
+                                    entity.getAge(), entity.getPseudo(), 
+                                    emailStored, a.getPassword());
+        Membership m = getEntityManager().find(Membership.class, mId);
+        return setInitialMembershipDTO(m);
     }
 
     @PUT
     @Consumes({"application/xml", "application/json"})
     @Produces({"application/xml", "application/json"})
-    public Membership edit(Membership entity) {
-        mm.modifyMember(entity.getId(), entity.getFirstName(), 
-                        entity.getLastName(), entity.getAge(), 
-                        entity.getPseudo(), entity.getEmail());
-        return getEntityManager().find(Membership.class, entity.getId());
+    public MembershipDTO edit(Membership entity) {
+        Authentication a = entity.getAuthenticate();
+        am.modifyAccount(entity.getEmail(), a.getPassword());
+        Long mId =mm.modifyMember(entity.getId(), entity.getFirstName(), 
+                                  entity.getLastName(), entity.getAge(), 
+                                  entity.getPseudo(), entity.getEmail(), 
+                                  a.getPassword());
+        Membership m = getEntityManager().find(Membership.class, mId);
+        return setInitialMembershipDTO(m);
     }
     
     @PUT

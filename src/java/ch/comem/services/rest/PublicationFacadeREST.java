@@ -163,6 +163,14 @@ public class PublicationFacadeREST {
         List<Publication> pList = pm.findPublicationsFromRecipieName(name);
         return setPublicationList(pList);
     }
+    
+    @GET
+    @Path("searchLatestPublications")
+    @Produces({"application/xml", "application/json"})
+    public List<PublicationDTO> findLatestPublications() {
+        List<Publication> pList = pm.findLatestPublications();
+        return setPublicationList(pList);
+    }
 
     @GET
     @Produces({"application/xml", "application/json"})

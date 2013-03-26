@@ -1,5 +1,6 @@
 package ch.comem.services.dto;
 
+import ch.comem.model.Authentication;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +26,7 @@ public class MembershipDTO implements Serializable {
     private List<PublicationDTO> publicationsConcerned = new ArrayList<>();
     private List<CommentDTO> commentsConcerned = new ArrayList<>();
     private List<LikingDTO> likesConcerned = new ArrayList<>();
+    private Authentication autenticate;
     
     public String getFirstName() {
         return firstName;
@@ -96,6 +98,14 @@ public class MembershipDTO implements Serializable {
     public void addLike(LikingDTO like) {
         likesConcerned.add(like);
         like.setMemberLiking(this);
+    }
+
+    public Authentication getAutenticate() {
+        return autenticate;
+    }
+
+    public void setAutenticate(Authentication autenticate) {
+        this.autenticate = autenticate;
     }
 
     public Long getId() {

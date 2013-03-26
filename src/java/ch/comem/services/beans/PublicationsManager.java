@@ -155,6 +155,11 @@ public class PublicationsManager implements PublicationsManagerLocal {
     public List<Publication> findAllPublications() {
         return em.createNamedQuery("findAllPublications").getResultList();
     }
+    
+    @Override
+    public List<Publication> findLatestPublications() {
+        return em.createNamedQuery("findLatestPublications").setMaxResults(5).getResultList();
+    }
 
     @Override
     public List<Publication> findPublicationsFromRecipieName(String name) {

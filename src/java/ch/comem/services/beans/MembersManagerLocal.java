@@ -17,12 +17,12 @@ import javax.ejb.Local;
 public interface MembersManagerLocal {
 
     Long createMember(String firstName, String lastName, int age, 
-                       String pseudo, String email);
+                       String pseudo, String email, String password);
 
     String deleteMember(Long id);
 
-    String modifyMember(Long id, String firstName, String lastName, int age, 
-                         String pseudo, String email);
+    Long modifyMember(Long id, String firstName, String lastName, int age, 
+                         String pseudo, String email, String password);
     
     void chooseLike(Long id, Long likeId);
     

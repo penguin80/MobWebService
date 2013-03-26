@@ -1,17 +1,27 @@
 package ch.comem.services.rest;
 
+import ch.comem.model.Category;
+import ch.comem.model.Ingredient;
 import ch.comem.model.Photo;
+import ch.comem.model.Publication;
+import ch.comem.model.Recipie;
+import ch.comem.model.Step;
 import ch.comem.services.beans.PhotosManagerLocal;
+import ch.comem.services.dto.CategoryDTO;
+import ch.comem.services.dto.IngredientDTO;
+import ch.comem.services.dto.PhotoDTO;
+import ch.comem.services.dto.PublicationDTO;
+import ch.comem.services.dto.RecipieDTO;
+import ch.comem.services.dto.StepDTO;
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -45,8 +55,62 @@ public class PhotoFacadeREST {
     @GET
     @Path("{id}")
     @Produces({"application/xml", "application/json"})
-    public Photo find(@PathParam("id") Long id) {
-        return getEntityManager().find(Photo.class, id);
+    public PublicationDTO find(@PathParam("id") Long id) {
+        Photo ph = getEntityManager().find(Photo.class, id);
+        PublicationDTO pDTO = null;
+        if (ph != null) {
+            PhotoDTO phDTO = new PhotoDTO();
+            phDTO.setSource(ph.getSource());
+            phDTO.setAlt(ph.getAlt());
+            Publication p = ph.getPublicationConcerned();
+            if (p != null) {
+                pDTO = new PublicationDTO();
+                pDTO.setId(p.getId());
+                pDTO.setDateOfPublication(p.getDateOfPublication());
+                pDTO.setLongDate(p.getLongDate());
+                Category c = p.getCategory();
+                CategoryDTO cDTO = null;
+                if (c != null) {
+                    cDTO = new CategoryDTO();
+                    cDTO.setName(c.getName());
+                }
+                pDTO.setCategory(cDTO);
+                pDTO.setImagingPhoto(phDTO);
+                Recipie r = p.getRecepie();
+                RecipieDTO rDTO = null;
+                if (r != null) {
+                    rDTO = new RecipieDTO();
+                    rDTO.setName(r.getName());
+                    List<Ingredient> iList = r.getIngredients();
+                    List<IngredientDTO> iDTOList = null;
+                    if (iList != null && !iList.isEmpty()) {
+                        iDTOList = new ArrayList<>();
+                        for (Ingredient i : iList) {
+                            IngredientDTO iDTO = new IngredientDTO();
+                            iDTO.setName(i.getName());
+                            iDTO.setQuantity(i.getQuantity());
+                            iDTO.setQuantityUnit(i.getQuantityUnit());
+                            iDTOList.add(iDTO);
+                        }
+                    }
+                    rDTO.setIngredients(iDTOList);
+                    List<Step> sList = r.getSteps();
+                    List<StepDTO> sDTOList = null;
+                    if (sList != null && !sList.isEmpty()) {
+                        sDTOList = new ArrayList<>();
+                        for (Step s : sList) {
+                            StepDTO sDTO = new StepDTO();
+                            sDTO.setStepNumber(s.getStepNumber());
+                            sDTO.setDescription(s.getDescription());
+                            sDTOList.add(sDTO);
+                        }
+                    }
+                    rDTO.setSteps(sDTOList);
+                }
+                pDTO.setRecepie(rDTO);
+            }
+        }
+        return pDTO;
     }
 
 //    @GET
