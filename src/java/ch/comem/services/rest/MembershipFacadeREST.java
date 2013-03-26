@@ -281,7 +281,7 @@ public class MembershipFacadeREST {
     }
     
     @GET 
-    @Path("searchPublications/{id}")
+    @Path("searchPhotos/{id}")
     @Produces({"application/xml", "application/json"})
     public List<PublicationDTO> findPublicationsByMemberId(@PathParam("id") Long id) {
         List<Publication> puList = mm.findAllPublicationsFromMemberId(id);

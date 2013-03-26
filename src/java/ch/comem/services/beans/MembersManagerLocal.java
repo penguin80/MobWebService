@@ -1,11 +1,7 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package ch.comem.services.beans;
 
 import ch.comem.model.Membership;
-import ch.comem.model.Photo;
+import ch.comem.model.Publication;
 import java.util.List;
 import javax.ejb.Local;
 
@@ -26,6 +22,6 @@ public interface MembersManagerLocal {
         
     List<Membership> findAllMembers();
 
-    List<Photo> findAllPhotosFromMemberId(Long memberId);
+    List<Publication> findAllPublicationsFromMemberId(Long memberId);
     
 }

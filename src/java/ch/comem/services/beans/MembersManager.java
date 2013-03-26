@@ -1,12 +1,8 @@
 package ch.comem.services.beans;
 
 import ch.comem.model.Authentication;
-import ch.comem.model.Comment;
-import ch.comem.model.Liking;
 import ch.comem.model.Membership;
-import ch.comem.model.Photo;
 import ch.comem.model.Publication;
-import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -91,20 +87,8 @@ public class MembersManager implements MembersManagerLocal {
     }
 
     @Override
-    public List<Photo> findAllPhotosFromMemberId(Long memberId) {
-        List<Publication> puList = em.createNamedQuery("findAllPublicationsFromMemberId").setParameter("id", memberId).getResultList();
-        List<Photo> phList = null;
-        if (puList != null && !puList.isEmpty()) {
-            phList = new ArrayList<>();
-            for (Publication pu : puList) {
-                Photo ph = new Photo();
-                ph.setId(pu.getImagingPhoto().getId());
-                ph.setSource(pu.getImagingPhoto().getSource());
-                ph.setAlt(pu.getImagingPhoto().getAlt());
-                phList.add(ph);
-            }
-        }
-        return phList;
+    public List<Publication> findAllPublicationsFromMemberId(Long memberId) {
+        return em.createNamedQuery("findAllPublicationsFromMemberId").setParameter("id", memberId).getResultList();
     }
 
     public void persist(Object object) {
