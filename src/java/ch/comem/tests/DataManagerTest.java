@@ -1,5 +1,8 @@
 package ch.comem.tests;
 
+import ch.comem.model.Membership;
+import ch.comem.model.Photo;
+import ch.comem.model.Publication;
 import ch.comem.services.beans.CategoriesManagerLocal;
 import ch.comem.services.beans.CommentsManagerLocal;
 import ch.comem.services.beans.IngredientsManagerLocal;
@@ -9,11 +12,18 @@ import ch.comem.services.beans.PhotosManagerLocal;
 import ch.comem.services.beans.PublicationsManagerLocal;
 import ch.comem.services.beans.RecipieManagerLocal;
 import ch.comem.services.beans.StepsManagerLocal;
+import com.sun.jersey.api.client.Client;
+import com.sun.jersey.api.client.ClientResponse;
+import com.sun.jersey.api.client.WebResource;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.jws.WebService;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 /**
  *
@@ -40,6 +50,8 @@ public class DataManagerTest implements DataManagerTestLocal {
     private IngredientsManagerLocal im;
     @EJB
     private CommentsManagerLocal com;
+    @PersistenceContext(unitName = "PastyChefPU")
+    private EntityManager em;
     
     
     private String[] firstNames = {"Paul", "Arthur", "Danielle", "Georges",
@@ -57,9 +69,46 @@ public class DataManagerTest implements DataManagerTestLocal {
     @Override
     public void testMethods() {
         for (int index = 0; index < 10; index++) {
-            long x = mm.createMember(firstNames[index], lastNames[index], ages[index], 
+            Long x = mm.createMember(firstNames[index], lastNames[index], ages[index], 
                                      "pseudo" + index, firstNames[index] + "." + 
                                      lastNames[index] + "@test.org", "toto" + index);
+            
+            Membership m = em.find(Membership.class, x);
+
+            Calendar c = new GregorianCalendar();
+            try {
+ 
+                Client client = Client.create();
+
+    //            WebResource webResource = client.resource("http://localhost:8080/PastryChefGamification/webresources/player");
+                WebResource webResource = client.resource("http://localhost:8080/PastryChefGame/webresources/player");
+                String input = "{\"firstName\":\""+ m.getFirstName()
+                                + "\",\"lastName\": \""+ m.getLastName() 
+                                + "\",\"email\": \""+ m.getEmail() 
+                                + "\",\"memberId\": "+ m.getId()
+                                + ",\"application\": {\"id\": 1 }}";
+
+                    webResource.type("application/json").post(ClientResponse.class, input);
+
+    //            WebResource webResource2 = client.resource("http://localhost:8080/PastryChefGamification/webresources/event");
+                WebResource webResource2 = client.resource("http://localhost:8080/PastryChefGame/webresources/event");
+                String input2 = "{\"type\":\""+ "Création de compte"
+                                + "\",\"timeInMillis\": " + c.getTimeInMillis()
+                                + ",\"player\": {\"memberId\": " + m.getId() + "}"
+                                + ",\"application\": {\"id\": 1 }}";
+
+                    webResource2.type("application/json").post(ClientResponse.class, input2);
+
+    //		if (response.getStatus() != 201) {
+    //			throw new RuntimeException("Failed : HTTP error code : "
+    //			     + response.getStatus());
+    //		}
+
+            } catch (Exception e) {
+
+                    e.printStackTrace();
+
+            }
         }
     }
 
@@ -101,11 +150,85 @@ public class DataManagerTest implements DataManagerTestLocal {
         ingredientsId.add(i3);
         Long r1 = rm.createRecipie(name, ingredientsId, stepsId);
         Long ph1 = phm.createPhoto(sources[2], "Chuck Norris was here");
-        Long m1 = mm.createMember(firstNames[5], lastNames[5], ages[5], "Chuck", 
-                                  "i.destroy@everything.com", "invincible");
+        Long m1 = new Long(6);
         Long cam1 = cam.useCategory("Crèmes et flans");
 //        Long cam1 = cam.createCategory("Cancres et Surdoués");
         Long pum1 = pum.createPublication(m1, ph1, cam1, r1);
+        
+        String publicationType = null;
+        Photo ph = em.find(Photo.class, ph1);
+        Membership m = em.find(Membership.class, m1);
+        Publication pDTO = em.find(Publication.class, pum1);
+        if (ph != null) {
+            publicationType = "Publication Photo";
+            if (!stepsId.isEmpty())
+                publicationType = "Publication Photo + Recette Complète";
+        }
+        
+        Calendar cal = new GregorianCalendar();
+        try {
+ 
+            Client client = Client.create();
+
+//            WebResource webResource = client.resource("http://localhost:8080/PastryChefGamification/webresources/event");
+            WebResource webResource = client.resource("http://localhost:8080/PastryChefGame/webresources/event");
+            if (pDTO != null && m != null && 
+                pDTO.getCategory() != null &&
+                pDTO.getCategory().getName() != null && 
+                !pDTO.getCategory().getName().isEmpty()) {
+                
+                String input = "{\"type\":\"" + pDTO.getCategory().getName();
+                input = input.concat("\",\"timeInMillis\": "+ cal.getTimeInMillis());
+                input = input.concat(",\"player\": {\"memberId\": " + m.getId() + "}");
+                input = input.concat(",\"application\": {\"id\": 1 }}");
+                ClientResponse response = webResource.type("application/json").post(ClientResponse.class, 
+                                                                                    input);
+		System.out.println("Output from Server .... \n");
+		String output = response.getEntity(String.class);
+		System.out.println(output);
+             }
+              
+            if (m != null) {
+                int nbPublication = m.getPublicationsConcerned().size();
+                String input2 = "";
+                if (nbPublication == 1)
+                    input2 = input2.concat("{\"type\":\"Première publication");
+                else
+                    input2 = input2.concat("{\"type\":\""+ nbPublication + "ème publication");
+                input2 = input2.concat("\",\"timeInMillis\": "+ cal.getTimeInMillis());
+                input2 = input2.concat(",\"player\": {\"memberId\": " + m.getId() + "}");
+                input2 = input2.concat(",\"application\": {\"id\": 1 }}");
+                ClientResponse response2 = webResource.type("application/json").post(ClientResponse.class, 
+                                                                                    input2);
+		System.out.println("Output from Server .... \n");
+		String output2 = response2.getEntity(String.class);
+		System.out.println(output2);
+            }
+            
+            if (m != null && publicationType != null) {
+                String input3 = "{\"type\":\""+ publicationType;
+                input3 = input3.concat("\",\"timeInMillis\": "+ cal.getTimeInMillis());
+                input3 = input3.concat(",\"player\": {\"memberId\": " + m.getId() + "}");
+                input3 = input3.concat(",\"application\": {\"id\": 1 }}");
+                ClientResponse response3 = webResource.type("application/json").post(ClientResponse.class, 
+                                                                                    input3);
+		System.out.println("Output from Server .... \n");
+		String output3 = response3.getEntity(String.class);
+		System.out.println(output3);
+            }
+            
+//		if (response.getStatus() != 201) {
+//			throw new RuntimeException("Failed : HTTP error code : "
+//			     + response.getStatus());
+//		}
+ 
+
+        } catch (Exception e) {
+ 
+		e.printStackTrace();
+                
+        }
+
     }
 
     @Override
@@ -123,6 +246,10 @@ public class DataManagerTest implements DataManagerTestLocal {
         cam.createCategory("Vacherins glacés");
         cam.createCategory("Tartes");
         cam.createCategory("Muffins");
+    }
+
+    public void persist(Object object) {
+        em.persist(object);
     }
     
 }

@@ -181,7 +181,7 @@ public class PublicationFacadeREST {
                 pDTO.getCategory().getName() != null && 
                 !pDTO.getCategory().getName().isEmpty()) {
                 
-                String input = "{\"type\":\" " + pDTO.getCategory().getName();
+                String input = "{\"type\":\"" + pDTO.getCategory().getName();
                 input = input.concat("\",\"timeInMillis\": \""+ cal.getTimeInMillis());
                 input = input.concat("\",\"player\": {\"memberId\": " + m.getId() + "}");
                 input = input.concat("\",\"application\": {\"id\": 1 }}");
@@ -198,7 +198,7 @@ public class PublicationFacadeREST {
                 if (nbPublication == 1)
                     input2 = input2.concat("{\"type\":\"Première publication");
                 else
-                    input2 = input2.concat("{\"type\":\" "+ nbPublication + "ème publication");
+                    input2 = input2.concat("{\"type\":\""+ nbPublication + "ème publication");
                 input2 = input2.concat("\",\"timeInMillis\": \""+ cal.getTimeInMillis());
                 input2 = input2.concat("\",\"player\": {\"memberId\": " + m.getId() + "}");
                 input2 = input2.concat("\",\"application\": {\"id\": 1 }}");
@@ -210,7 +210,7 @@ public class PublicationFacadeREST {
             }
             
             if (m != null && publicationType != null) {
-                String input3 = "{\"type\":\" "+ publicationType;
+                String input3 = "{\"type\":\""+ publicationType;
                 input3 = input3.concat("\",\"timeInMillis\": \""+ cal.getTimeInMillis());
                 input3 = input3.concat("\",\"player\": {\"memberId\": " + m.getId() + "}");
                 input3 = input3.concat("\",\"application\": {\"id\": 1 }}");

@@ -22,10 +22,13 @@ public class RecipieManager implements RecipieManagerLocal {
                                         List<Long> ingredientIds, 
                                         List<Long> stepIds) {
         r.setName(name);
-        List<Ingredient> ingredients = new ArrayList<>();
-        for(Long id : ingredientIds) {
-            Ingredient ing = em.find(Ingredient.class, id);
-            ingredients.add(ing);
+        List<Ingredient> ingredients = null;
+        if (ingredientIds != null) {
+            ingredients = new ArrayList<>();
+            for (Long id : ingredientIds) {
+                Ingredient i = em.find(Ingredient.class, id);
+                ingredients.add(i);
+            }
         }
         r.setIngredients(ingredients);
         List<Step> steps = null;

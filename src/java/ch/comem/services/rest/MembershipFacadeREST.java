@@ -96,21 +96,23 @@ public class MembershipFacadeREST {
  
             Client client = Client.create();
 
-            WebResource webResource = client.resource("http://localhost:8080/PastryChefGamification/webresources/player");
-            String input = "{\"firstName\":\" "+ m.getFirstName()
+//            WebResource webResource = client.resource("http://localhost:8080/PastryChefGamification/webresources/player");
+            WebResource webResource = client.resource("http://localhost:8080/PastryChefGame/webresources/player");
+            String input = "{\"firstName\":\""+ m.getFirstName()
                             + "\",\"lastName\": \""+ m.getLastName() 
                             + "\",\"email\": \""+ m.getEmail() 
-                            + "\",\"memberId\": \""+ m.getId()
-                            + "\",\"application\": {\"id\": 1 }}";
+                            + "\",\"memberId\": " + m.getId()
+                            + ",\"application\": {\"id\": 1 }}";
               
 		ClientResponse response = webResource.type("application/json")
 		   .post(ClientResponse.class, input);
  
-            WebResource webResource2 = client.resource("http://localhost:8080/PastryChefGamification/webresources/event");
-            String input2 = "{\"type\":\" "+ "Création de compte"
-                            + "\",\"timeInMillis\": \""+ c.getTimeInMillis()
-                            + "\",\"player\": {\"memberId\": " + m.getId() + "}"
-                            + "\",\"application\": {\"id\": 1 }}";
+//            WebResource webResource2 = client.resource("http://localhost:8080/PastryChefGamification/webresources/event");
+            WebResource webResource2 = client.resource("http://localhost:8080/PastryChefGame/webresources/event");
+            String input2 = "{\"type\":\""+ "Création de compte"
+                            + "\",\"timeInMillis\": "+ c.getTimeInMillis()
+                            + ",\"player\": {\"memberId\": " + m.getId() + "}"
+                            + ",\"application\": {\"id\": 1 }}";
               
 		ClientResponse response2 = webResource2.type("application/json")
 		   .post(ClientResponse.class, input2);
@@ -269,7 +271,7 @@ public class MembershipFacadeREST {
                 pDTO.getCategory().getName() != null && 
                 !pDTO.getCategory().getName().isEmpty()) {
                 
-                String input = "{\"type\":\" " + pDTO.getCategory().getName();
+                String input = "{\"type\":\"" + pDTO.getCategory().getName();
                 input = input.concat("\",\"timeInMillis\": \""+ cal.getTimeInMillis());
                 input = input.concat("\",\"player\": {\"memberId\": " + m.getId() + "}");
                 input = input.concat("\",\"application\": {\"id\": 1 }}");
@@ -286,7 +288,7 @@ public class MembershipFacadeREST {
                 if (nbPublication == 1)
                     input2 = input2.concat("{\"type\":\"Première publication");
                 else
-                    input2 = input2.concat("{\"type\":\" "+ nbPublication + "ème publication");
+                    input2 = input2.concat("{\"type\":\""+ nbPublication + "ème publication");
                 input2 = input2.concat("\",\"timeInMillis\": \""+ cal.getTimeInMillis());
                 input2 = input2.concat("\",\"player\": {\"memberId\": " + m.getId() + "}");
                 input2 = input2.concat("\",\"application\": {\"id\": 1 }}");
@@ -298,7 +300,7 @@ public class MembershipFacadeREST {
             }
             
             if (m != null && publicationType != null) {
-                String input3 = "{\"type\":\" "+ publicationType;
+                String input3 = "{\"type\":\""+ publicationType;
                 input3 = input3.concat("\",\"timeInMillis\": \""+ cal.getTimeInMillis());
                 input3 = input3.concat("\",\"player\": {\"memberId\": " + m.getId() + "}");
                 input3 = input3.concat("\",\"application\": {\"id\": 1 }}");

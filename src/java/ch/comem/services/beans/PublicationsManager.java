@@ -1,8 +1,6 @@
 package ch.comem.services.beans;
 
 import ch.comem.model.Category;
-import ch.comem.model.Comment;
-import ch.comem.model.Liking;
 import ch.comem.model.Membership;
 import ch.comem.model.Photo;
 import ch.comem.model.Publication;
@@ -101,7 +99,7 @@ public class PublicationsManager implements PublicationsManagerLocal {
                                     Long recipieId) {
         Membership m = em.find(Membership.class, memberId);
         Long id = null;
-            if (m != null) {
+        if (m != null) {
             Publication p = new Publication();
             p.setDateOfPublication(buildDate(p));
             setPublicationParameters(p, photoId, categoryId, recipieId);
