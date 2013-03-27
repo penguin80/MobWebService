@@ -27,6 +27,8 @@ import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -89,6 +91,7 @@ public class MembershipFacadeREST {
                                     emailStored, a.getPassword());
         Membership m = getEntityManager().find(Membership.class, mId);
 
+        Calendar c = new GregorianCalendar();
         try {
  
             Client client = Client.create();
@@ -103,6 +106,15 @@ public class MembershipFacadeREST {
 		ClientResponse response = webResource.type("application/json")
 		   .post(ClientResponse.class, input);
  
+            WebResource webResource2 = client.resource("http://localhost:8080/PastryChefGamification/webresources/event");
+            String input2 = "{\"type\":\" "+ "Création de compte"
+                            + "\",\"timeInMillis\": \""+ c.getTimeInMillis()
+                            + "\",\"player\": {\"memberId\": " + m.getId() + "}"
+                            + "\",\"application\": {\"id\": 1 }}";
+              
+		ClientResponse response2 = webResource2.type("application/json")
+		   .post(ClientResponse.class, input2);
+                
 //		if (response.getStatus() != 201) {
 //			throw new RuntimeException("Failed : HTTP error code : "
 //			     + response.getStatus());
@@ -112,7 +124,11 @@ public class MembershipFacadeREST {
 		String output = response.getEntity(String.class);
 		System.out.println(output);
  
-	  } catch (Exception e) {
+		System.out.println("Output from Server .... \n");
+		String output2 = response2.getEntity(String.class);
+		System.out.println(output2);
+
+        } catch (Exception e) {
  
 		e.printStackTrace();
 
@@ -142,6 +158,7 @@ public class MembershipFacadeREST {
     public PublicationDTO publish(@PathParam("id") Long id, Publication p) {
         Membership m = getEntityManager().find(Membership.class, id);
         PublicationDTO pDTO = null;
+        String publicationType = null;
         if (m != null && p != null) {
             Photo ph = p.getImagingPhoto();
             Long photoId = null;
@@ -190,6 +207,7 @@ public class MembershipFacadeREST {
                 phDTO = new PhotoDTO();
                 phDTO.setSource(phCreated.getSource());
                 phDTO.setAlt(phCreated.getAlt());
+                publicationType = "Publication Photo";
             }
             pDTO.setImagingPhoto(phDTO);
             Recipie rCreated = getEntityManager().find(Recipie.class, recipieId);
@@ -220,6 +238,7 @@ public class MembershipFacadeREST {
                         sDTO.setDescription(s.getDescription());
                         sDTOList.add(sDTO);
                     }
+                    publicationType = "Publication Photo + Recette Complète";
                 }
                 rDTO.setSteps(sDTOList);
             }
@@ -238,6 +257,70 @@ public class MembershipFacadeREST {
             }
             pDTO.setCategory(cDTO);
         }
+
+        Calendar cal = new GregorianCalendar();
+        try {
+ 
+            Client client = Client.create();
+
+            WebResource webResource = client.resource("http://localhost:8080/PastryChefGamification/webresources/event");
+            if (pDTO != null && m != null && 
+                pDTO.getCategory() != null &&
+                pDTO.getCategory().getName() != null && 
+                !pDTO.getCategory().getName().isEmpty()) {
+                
+                String input = "{\"type\":\" " + pDTO.getCategory().getName();
+                input = input.concat("\",\"timeInMillis\": \""+ cal.getTimeInMillis());
+                input = input.concat("\",\"player\": {\"memberId\": " + m.getId() + "}");
+                input = input.concat("\",\"application\": {\"id\": 1 }}");
+                ClientResponse response = webResource.type("application/json").post(ClientResponse.class, 
+                                                                                    input);
+		System.out.println("Output from Server .... \n");
+		String output = response.getEntity(String.class);
+		System.out.println(output);
+             }
+              
+            if (m != null) {
+                int nbPublication = m.getPublicationsConcerned().size();
+                String input2 = "";
+                if (nbPublication == 1)
+                    input2 = input2.concat("{\"type\":\"Première publication");
+                else
+                    input2 = input2.concat("{\"type\":\" "+ nbPublication + "ème publication");
+                input2 = input2.concat("\",\"timeInMillis\": \""+ cal.getTimeInMillis());
+                input2 = input2.concat("\",\"player\": {\"memberId\": " + m.getId() + "}");
+                input2 = input2.concat("\",\"application\": {\"id\": 1 }}");
+                ClientResponse response2 = webResource.type("application/json").post(ClientResponse.class, 
+                                                                                    input2);
+		System.out.println("Output from Server .... \n");
+		String output2 = response2.getEntity(String.class);
+		System.out.println(output2);
+            }
+            
+            if (m != null && publicationType != null) {
+                String input3 = "{\"type\":\" "+ publicationType;
+                input3 = input3.concat("\",\"timeInMillis\": \""+ cal.getTimeInMillis());
+                input3 = input3.concat("\",\"player\": {\"memberId\": " + m.getId() + "}");
+                input3 = input3.concat("\",\"application\": {\"id\": 1 }}");
+                ClientResponse response3 = webResource.type("application/json").post(ClientResponse.class, 
+                                                                                    input3);
+		System.out.println("Output from Server .... \n");
+		String output3 = response3.getEntity(String.class);
+		System.out.println(output3);
+            }
+            
+//		if (response.getStatus() != 201) {
+//			throw new RuntimeException("Failed : HTTP error code : "
+//			     + response.getStatus());
+//		}
+ 
+
+        } catch (Exception e) {
+ 
+		e.printStackTrace();
+
+	  }
+
         return pDTO;
     }
 
