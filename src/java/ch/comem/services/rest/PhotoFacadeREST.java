@@ -15,6 +15,8 @@ import ch.comem.services.dto.PhotoDTO;
 import ch.comem.services.dto.PublicationDTO;
 import ch.comem.services.dto.RecipieDTO;
 import ch.comem.services.dto.StepDTO;
+import com.sun.jersey.multipart.MultiPart;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
@@ -27,6 +29,8 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 /**
  *
@@ -40,11 +44,26 @@ public class PhotoFacadeREST {
     @PersistenceContext(unitName = "PastyChefPU")
     private EntityManager em;
 
+    
     @POST
-    @Consumes({"application/xml", "application/json"})
-    public void create(Photo entity) {
-        pm.createPhoto(entity.getSource(), entity.getAlt());
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    public Response uploadFile(MultiPart multipart) {
+        
+        Response r = null;
+
+        File f = multipart.getBodyParts().get(0).getEntityAs(File.class);
+        Photo ph = multipart.getBodyParts().get(1).getEntityAs(Photo.class);
+        pm.createPhoto(ph.getSource(), ph.getAlt());
+        
+        return r;
+  
     }
+    
+//    @POST
+//    @Consumes({"application/xml", "application/json"})
+//    public void create(Photo entity) {
+//        pm.createPhoto(entity.getSource(), entity.getAlt());
+//    }
 
 //    @PUT
 //    @Consumes({"application/xml", "application/json"})

@@ -10,6 +10,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -29,6 +30,8 @@ public class Photo implements Serializable {
     @NotNull
     private String source;
     private String alt;
+    @Lob
+    private byte[] image;
     @OneToOne(mappedBy="imagingPhoto", fetch=FetchType.LAZY)
     private Publication publicationConcerned;
 
@@ -46,6 +49,14 @@ public class Photo implements Serializable {
 
     public void setAlt(String alt) {
         this.alt = alt;
+    }
+
+    public byte[] getImage() {
+        return image;
+    }
+
+    public void setImage(byte[] image) {
+        this.image = image;
     }
 
     public Publication getPublicationConcerned() {
