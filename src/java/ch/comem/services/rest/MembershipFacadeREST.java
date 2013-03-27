@@ -318,9 +318,8 @@ public class MembershipFacadeREST {
         } catch (Exception e) {
  
 		e.printStackTrace();
-
-	  }
-
+                
+        }
         return pDTO;
     }
 
