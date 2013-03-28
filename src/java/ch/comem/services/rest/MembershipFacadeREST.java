@@ -93,7 +93,7 @@ public class MembershipFacadeREST {
 
         Calendar c = new GregorianCalendar();
         try {
- 
+
             Client client = Client.create();
 
 //            WebResource webResource = client.resource("http://localhost:8080/PastryChefGamification/webresources/player");
@@ -101,40 +101,30 @@ public class MembershipFacadeREST {
             String input = "{\"firstName\":\""+ m.getFirstName()
                             + "\",\"lastName\": \""+ m.getLastName() 
                             + "\",\"email\": \""+ m.getEmail() 
-                            + "\",\"memberId\": " + m.getId()
+                            + "\",\"memberId\": "+ m.getId()
                             + ",\"application\": {\"id\": 1 }}";
-              
-		ClientResponse response = webResource.type("application/json")
-		   .post(ClientResponse.class, input);
- 
+
+                webResource.type("application/json").post(ClientResponse.class, input);
+
 //            WebResource webResource2 = client.resource("http://localhost:8080/PastryChefGamification/webresources/event");
             WebResource webResource2 = client.resource("http://localhost:8080/PastryChefGame/webresources/event");
             String input2 = "{\"type\":\""+ "Création de compte"
-                            + "\",\"timeInMillis\": "+ c.getTimeInMillis()
+                            + "\",\"timeInMillis\": " + c.getTimeInMillis()
                             + ",\"player\": {\"memberId\": " + m.getId() + "}"
                             + ",\"application\": {\"id\": 1 }}";
-              
-		ClientResponse response2 = webResource2.type("application/json")
-		   .post(ClientResponse.class, input2);
-                
+
+                webResource2.type("application/json").post(ClientResponse.class, input2);
+
 //		if (response.getStatus() != 201) {
 //			throw new RuntimeException("Failed : HTTP error code : "
 //			     + response.getStatus());
 //		}
- 
-		System.out.println("Output from Server .... \n");
-		String output = response.getEntity(String.class);
-		System.out.println(output);
- 
-		System.out.println("Output from Server .... \n");
-		String output2 = response2.getEntity(String.class);
-		System.out.println(output2);
 
         } catch (Exception e) {
- 
-		e.printStackTrace();
 
-	  }
+                e.printStackTrace();
+
+        }
 
         return setInitialMembershipDTO(m);
     }
@@ -262,26 +252,23 @@ public class MembershipFacadeREST {
 
         Calendar cal = new GregorianCalendar();
         try {
- 
+
             Client client = Client.create();
 
-            WebResource webResource = client.resource("http://localhost:8080/PastryChefGamification/webresources/event");
+//            WebResource webResource = client.resource("http://localhost:8080/PastryChefGamification/webresources/event");
+            WebResource webResource = client.resource("http://localhost:8080/PastryChefGame/webresources/event");
             if (pDTO != null && m != null && 
                 pDTO.getCategory() != null &&
                 pDTO.getCategory().getName() != null && 
                 !pDTO.getCategory().getName().isEmpty()) {
-                
+
                 String input = "{\"type\":\"" + pDTO.getCategory().getName();
-                input = input.concat("\",\"timeInMillis\": \""+ cal.getTimeInMillis());
-                input = input.concat("\",\"player\": {\"memberId\": " + m.getId() + "}");
-                input = input.concat("\",\"application\": {\"id\": 1 }}");
-                ClientResponse response = webResource.type("application/json").post(ClientResponse.class, 
-                                                                                    input);
-		System.out.println("Output from Server .... \n");
-		String output = response.getEntity(String.class);
-		System.out.println(output);
+                input = input.concat("\",\"timeInMillis\": "+ cal.getTimeInMillis());
+                input = input.concat(",\"player\": {\"memberId\": " + m.getId() + "}");
+                input = input.concat(",\"application\": {\"id\": 1 }}");
+                webResource.type("application/json").post(ClientResponse.class, input);
              }
-              
+
             if (m != null) {
                 int nbPublication = m.getPublicationsConcerned().size();
                 String input2 = "";
@@ -289,38 +276,31 @@ public class MembershipFacadeREST {
                     input2 = input2.concat("{\"type\":\"Première publication");
                 else
                     input2 = input2.concat("{\"type\":\""+ nbPublication + "ème publication");
-                input2 = input2.concat("\",\"timeInMillis\": \""+ cal.getTimeInMillis());
-                input2 = input2.concat("\",\"player\": {\"memberId\": " + m.getId() + "}");
-                input2 = input2.concat("\",\"application\": {\"id\": 1 }}");
-                ClientResponse response2 = webResource.type("application/json").post(ClientResponse.class, 
-                                                                                    input2);
-		System.out.println("Output from Server .... \n");
-		String output2 = response2.getEntity(String.class);
-		System.out.println(output2);
+                input2 = input2.concat("\",\"timeInMillis\": "+ cal.getTimeInMillis());
+                input2 = input2.concat(",\"player\": {\"memberId\": " + m.getId() + "}");
+                input2 = input2.concat(",\"application\": {\"id\": 1 }}");
+                webResource.type("application/json").post(ClientResponse.class, input2);
             }
-            
+
             if (m != null && publicationType != null) {
                 String input3 = "{\"type\":\""+ publicationType;
-                input3 = input3.concat("\",\"timeInMillis\": \""+ cal.getTimeInMillis());
-                input3 = input3.concat("\",\"player\": {\"memberId\": " + m.getId() + "}");
-                input3 = input3.concat("\",\"application\": {\"id\": 1 }}");
-                ClientResponse response3 = webResource.type("application/json").post(ClientResponse.class, 
-                                                                                    input3);
-		System.out.println("Output from Server .... \n");
-		String output3 = response3.getEntity(String.class);
-		System.out.println(output3);
+                input3 = input3.concat("\",\"timeInMillis\": "+ cal.getTimeInMillis());
+                input3 = input3.concat(",\"player\": {\"memberId\": " + m.getId() + "}");
+                input3 = input3.concat(",\"application\": {\"id\": 1 }}");
+                webResource.type("application/json").post(ClientResponse.class, input3);
+
             }
-            
+
 //		if (response.getStatus() != 201) {
 //			throw new RuntimeException("Failed : HTTP error code : "
 //			     + response.getStatus());
 //		}
- 
+
 
         } catch (Exception e) {
- 
-		e.printStackTrace();
-                
+
+                e.printStackTrace();
+
         }
         return pDTO;
     }
