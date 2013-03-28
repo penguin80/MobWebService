@@ -1,5 +1,6 @@
 package ch.comem.services.rest;
 
+import ch.comem.config.Config;
 import ch.comem.model.Category;
 import ch.comem.model.Ingredient;
 import ch.comem.model.Membership;
@@ -176,7 +177,7 @@ public class PublicationFacadeREST {
 
             Client client = Client.create();
 
-            WebResource webResource = client.resource("http://localhost:8080/PastryChefGamification/webresources/event");
+            WebResource webResource = client.resource("http://"+Config.IP_ADDRESS+"/"+Config.APP_LOCATION+"/event");
             if (m != null && pDTO.getCategory() != null &&
                 pDTO.getCategory().getName() != null && 
                 !pDTO.getCategory().getName().isEmpty()) {
@@ -209,11 +210,6 @@ public class PublicationFacadeREST {
                 webResource.type("application/json").post(ClientResponse.class, input3);
 
             }
-
-//		if (response.getStatus() != 201) {
-//			throw new RuntimeException("Failed : HTTP error code : "
-//			     + response.getStatus());
-//		}
 
 
         } catch (Exception e) {

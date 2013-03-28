@@ -1,5 +1,6 @@
 package ch.comem.tests;
 
+import ch.comem.config.Config;
 import ch.comem.model.Membership;
 import ch.comem.model.Photo;
 import ch.comem.model.Publication;
@@ -80,7 +81,7 @@ public class DataManagerTest implements DataManagerTestLocal {
  
                 Client client = Client.create();
 
-               WebResource webResource = client.resource("http://localhost:8080/PastryChefGamification/webresources/player");
+               WebResource webResource = client.resource("http://"+Config.IP_ADDRESS+"/"+Config.APP_LOCATION+"/player");
 
                 String input = "{\"firstName\":\""+ m.getFirstName()
                                 + "\",\"lastName\": \""+ m.getLastName() 
@@ -90,7 +91,7 @@ public class DataManagerTest implements DataManagerTestLocal {
 
                     webResource.type("application/json").post(ClientResponse.class, input);
 
-                WebResource webResource2 = client.resource("http://localhost:8080/PastryChefGamification/webresources/event");
+                WebResource webResource2 = client.resource("http://"+Config.IP_ADDRESS+"/"+Config.APP_LOCATION+"/event");
 
                 String input2 = "{\"type\":\""+ "Création de compte"
                                 + "\",\"timeInMillis\": " + c.getTimeInMillis()
@@ -155,7 +156,7 @@ public class DataManagerTest implements DataManagerTestLocal {
 
                 Client client = Client.create();
 
-                WebResource webResource = client.resource("http://localhost:8080/PastryChefGamification/webresources/event");
+                WebResource webResource = client.resource("http://"+Config.IP_ADDRESS+"/"+Config.APP_LOCATION+"/event");
           
                 if (pDTO != null && m != null && 
                     pDTO.getCategory() != null &&
@@ -190,11 +191,6 @@ public class DataManagerTest implements DataManagerTestLocal {
                     webResource.type("application/json").post(ClientResponse.class, input3);
 
                 }
-
-    //		if (response.getStatus() != 201) {
-    //			throw new RuntimeException("Failed : HTTP error code : "
-    //			     + response.getStatus());
-    //		}
 
 
             } catch (Exception e) {
@@ -257,7 +253,7 @@ public class DataManagerTest implements DataManagerTestLocal {
  
             Client client = Client.create();
 
-            WebResource webResource = client.resource("http://localhost:8080/PastryChefGamification/webresources/event");
+            WebResource webResource = client.resource("http://"+Config.IP_ADDRESS+"/"+Config.APP_LOCATION+"/event");
             if (pDTO != null && m != null && 
                 pDTO.getCategory() != null &&
                 pDTO.getCategory().getName() != null && 
@@ -292,10 +288,6 @@ public class DataManagerTest implements DataManagerTestLocal {
 
             }
             
-//		if (response.getStatus() != 201) {
-//			throw new RuntimeException("Failed : HTTP error code : "
-//			     + response.getStatus());
-//		}
  
 
         } catch (Exception e) {
