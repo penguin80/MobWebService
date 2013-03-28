@@ -113,28 +113,96 @@ public class DataManagerTest implements DataManagerTestLocal {
     }
 
     @Override
-    public void testRelationRecipieIngredients() {
-        String name = "TestRecette";
-        Long i1 = im.createIngredient("farine", 300, "grammes");
-        Long i2 = im.createIngredient("sucre", 120, "grammes");
-        Long i3 = im.createIngredient("oeuf", 2, "unités");
-        Long i4 = im.createIngredient("cacao en poudre", 3, "c.s");
-        Long i5 = im.createIngredient("poudre à lever", 1, "c.c");
-        List<Long> ingredientsId = new ArrayList<>();
-        ingredientsId.add(i1);
-        ingredientsId.add(i2);
-        ingredientsId.add(i3);
-        ingredientsId.add(i4);
-        ingredientsId.add(i5);
-        Long s1 = sm.createStep(1, "Battre les oeufs");
-        Long s2 = sm.createStep(2, "Ajouter le sucre aux oeufs");
-        Long s3 = sm.createStep(3, "Blanchir les oeufs");
-        List<Long> stepsId = new ArrayList<>();
-        stepsId.add(s1);
-        stepsId.add(s2);
-        stepsId.add(s3);
-        Long recipieId = rm.createRecipie(name, ingredientsId, stepsId);
-        
+    public void addNewCompletePublication(Long memberId) {
+        if (memberId != null) {
+            String name = "TestRecette";
+            Long i1 = im.createIngredient("farine", 300, "grammes");
+            Long i2 = im.createIngredient("sucre", 120, "grammes");
+            Long i3 = im.createIngredient("oeuf", 2, "unités");
+            Long i4 = im.createIngredient("cacao en poudre", 3, "c.s");
+            Long i5 = im.createIngredient("poudre à lever", 1, "c.c");
+            List<Long> ingredientsId = new ArrayList<>();
+            ingredientsId.add(i1);
+            ingredientsId.add(i2);
+            ingredientsId.add(i3);
+            ingredientsId.add(i4);
+            ingredientsId.add(i5);
+            Long s1 = sm.createStep(1, "Battre les oeufs");
+            Long s2 = sm.createStep(2, "Ajouter le sucre aux oeufs");
+            Long s3 = sm.createStep(3, "Blanchir les oeufs");
+            List<Long> stepsId = new ArrayList<>();
+            stepsId.add(s1);
+            stepsId.add(s2);
+            stepsId.add(s3);
+            Long recipieId = rm.createRecipie(name, ingredientsId, stepsId);
+            Long photoId = phm.createPhoto(sources[1], "Logo HES-SO");
+            Long categoryId = cam.useCategory("Cupcakes");
+//            Long categoryId = cam.useCategory("Gâteaux");
+            Long publicationId = pum.createPublication(memberId, photoId, categoryId, recipieId);
+
+            String publicationType = null;
+            Photo ph = em.find(Photo.class, photoId);
+            Membership m = em.find(Membership.class, memberId);
+            Publication pDTO = em.find(Publication.class, publicationId);
+            if (ph != null) {
+                publicationType = "Publication Photo";
+                if (!stepsId.isEmpty())
+                    publicationType = "Publication Photo + Recette Complète";
+            }
+
+            Calendar cal = new GregorianCalendar();
+            try {
+
+                Client client = Client.create();
+
+    //            WebResource webResource = client.resource("http://localhost:8080/PastryChefGamification/webresources/event");
+                WebResource webResource = client.resource("http://localhost:8080/PastryChefGame/webresources/event");
+                if (pDTO != null && m != null && 
+                    pDTO.getCategory() != null &&
+                    pDTO.getCategory().getName() != null && 
+                    !pDTO.getCategory().getName().isEmpty()) {
+
+                    String input = "{\"type\":\"" + pDTO.getCategory().getName();
+                    input = input.concat("\",\"timeInMillis\": "+ cal.getTimeInMillis());
+                    input = input.concat(",\"player\": {\"memberId\": " + m.getId() + "}");
+                    input = input.concat(",\"application\": {\"id\": 1 }}");
+                    webResource.type("application/json").post(ClientResponse.class, input);
+                 }
+
+                if (m != null) {
+                    int nbPublication = m.getPublicationsConcerned().size();
+                    String input2 = "";
+                    if (nbPublication == 1)
+                        input2 = input2.concat("{\"type\":\"Première publication");
+                    else
+                        input2 = input2.concat("{\"type\":\""+ nbPublication + "ème publication");
+                    input2 = input2.concat("\",\"timeInMillis\": "+ cal.getTimeInMillis());
+                    input2 = input2.concat(",\"player\": {\"memberId\": " + m.getId() + "}");
+                    input2 = input2.concat(",\"application\": {\"id\": 1 }}");
+                    webResource.type("application/json").post(ClientResponse.class, input2);
+                }
+
+                if (m != null && publicationType != null) {
+                    String input3 = "{\"type\":\""+ publicationType;
+                    input3 = input3.concat("\",\"timeInMillis\": "+ cal.getTimeInMillis());
+                    input3 = input3.concat(",\"player\": {\"memberId\": " + m.getId() + "}");
+                    input3 = input3.concat(",\"application\": {\"id\": 1 }}");
+                    webResource.type("application/json").post(ClientResponse.class, input3);
+
+                }
+
+    //		if (response.getStatus() != 201) {
+    //			throw new RuntimeException("Failed : HTTP error code : "
+    //			     + response.getStatus());
+    //		}
+
+
+            } catch (Exception e) {
+
+                    e.printStackTrace();
+
+            }
+        }
     }
 
     @Override
@@ -143,15 +211,34 @@ public class DataManagerTest implements DataManagerTestLocal {
         Long i1 = im.createIngredient("méchants", 3000, "personnes");
         Long i2 = im.createIngredient("M1 Abrams", 200, "tanks");
         Long i3 = im.createIngredient("caches de méchants", 8, "buildings");
-        List<Long> stepsId = new ArrayList<>();
+        Long s1 = sm.createStep(1, "Donner un coup de pied dans un M1 Abrams");
+        Long s2 = sm.createStep(2, "Si le tank se retourne et explose sur un " + 
+                                "autre tank, continuer sur la lancée en " + 
+                                "retournant à l'étape 1");
+        Long s3 = sm.createStep(3, "Si le tank se retourne et explose contre un " + 
+                                "building, continuer sur la lancée en " + 
+                                "retournant à l'étape 1");
+        Long s4 = sm.createStep(4, "Si le tank se retourne et n'explose pas, " + 
+                                "alors il faut prendre le M1 Abrams par le canon " + 
+                                "et utiliser le reste du tank comme batte de " + 
+                                "baseball");
+        Long s5 = sm.createStep(5, "La destruction totale se termine quand il " + 
+                                "n'y a plus de méchants debouts, ni tanks en " + 
+                                "état de marche. Norrisproof");
         List<Long> ingredientsId = new ArrayList<>();
         ingredientsId.add(i1);
         ingredientsId.add(i2);
         ingredientsId.add(i3);
+        List<Long> stepsId = new ArrayList<>();
+        stepsId.add(s1);
+        stepsId.add(s2);
+        stepsId.add(s3);
+        stepsId.add(s4);
+        stepsId.add(s5);
         Long r1 = rm.createRecipie(name, ingredientsId, stepsId);
         Long ph1 = phm.createPhoto(sources[2], "Chuck Norris was here");
         Long m1 = new Long(6);
-        Long cam1 = cam.useCategory("Crèmes et flans");
+        Long cam1 = cam.useCategory("Gâteaux");
 //        Long cam1 = cam.createCategory("Cancres et Surdoués");
         Long pum1 = pum.createPublication(m1, ph1, cam1, r1);
         
@@ -181,11 +268,7 @@ public class DataManagerTest implements DataManagerTestLocal {
                 input = input.concat("\",\"timeInMillis\": "+ cal.getTimeInMillis());
                 input = input.concat(",\"player\": {\"memberId\": " + m.getId() + "}");
                 input = input.concat(",\"application\": {\"id\": 1 }}");
-                ClientResponse response = webResource.type("application/json").post(ClientResponse.class, 
-                                                                                    input);
-		System.out.println("Output from Server .... \n");
-		String output = response.getEntity(String.class);
-		System.out.println(output);
+                webResource.type("application/json").post(ClientResponse.class, input);
              }
               
             if (m != null) {
@@ -198,11 +281,7 @@ public class DataManagerTest implements DataManagerTestLocal {
                 input2 = input2.concat("\",\"timeInMillis\": "+ cal.getTimeInMillis());
                 input2 = input2.concat(",\"player\": {\"memberId\": " + m.getId() + "}");
                 input2 = input2.concat(",\"application\": {\"id\": 1 }}");
-                ClientResponse response2 = webResource.type("application/json").post(ClientResponse.class, 
-                                                                                    input2);
-		System.out.println("Output from Server .... \n");
-		String output2 = response2.getEntity(String.class);
-		System.out.println(output2);
+                webResource.type("application/json").post(ClientResponse.class, input2);
             }
             
             if (m != null && publicationType != null) {
@@ -210,11 +289,8 @@ public class DataManagerTest implements DataManagerTestLocal {
                 input3 = input3.concat("\",\"timeInMillis\": "+ cal.getTimeInMillis());
                 input3 = input3.concat(",\"player\": {\"memberId\": " + m.getId() + "}");
                 input3 = input3.concat(",\"application\": {\"id\": 1 }}");
-                ClientResponse response3 = webResource.type("application/json").post(ClientResponse.class, 
-                                                                                    input3);
-		System.out.println("Output from Server .... \n");
-		String output3 = response3.getEntity(String.class);
-		System.out.println(output3);
+                webResource.type("application/json").post(ClientResponse.class, input3);
+
             }
             
 //		if (response.getStatus() != 201) {
@@ -234,7 +310,7 @@ public class DataManagerTest implements DataManagerTestLocal {
     @Override
     public void populateCategoryTable() {
         cam.createCategory("Biscuits");
-        cam.createCategory("Gateaux");
+        cam.createCategory("Gâteaux");
         cam.createCategory("Petits gâteaux");
         cam.createCategory("Gâteaux d'anniversaire");
         cam.createCategory("Macarons");

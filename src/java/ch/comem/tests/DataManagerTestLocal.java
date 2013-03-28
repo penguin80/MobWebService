@@ -15,7 +15,7 @@ public interface DataManagerTestLocal {
 
     void testMethods();
 
-    void testRelationRecipieIngredients();
+    void addNewCompletePublication(Long memberId);
 
     void testPublicationRelations();
 
