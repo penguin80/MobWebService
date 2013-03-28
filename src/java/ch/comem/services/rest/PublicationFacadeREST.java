@@ -176,8 +176,7 @@ public class PublicationFacadeREST {
 
             Client client = Client.create();
 
-//            WebResource webResource = client.resource("http://localhost:8080/PastryChefGamification/webresources/event");
-            WebResource webResource = client.resource("http://localhost:8080/PastryChefGame/webresources/event");
+            WebResource webResource = client.resource("http://localhost:8080/PastryChefGamification/webresources/event");
             if (m != null && pDTO.getCategory() != null &&
                 pDTO.getCategory().getName() != null && 
                 !pDTO.getCategory().getName().isEmpty()) {
