@@ -13,12 +13,10 @@ import javax.ejb.Local;
 @Local
 public interface DataManagerTestLocal {
 
-    void testMethods();
+    void populateTables_Category_Member();
 
-    void addNewCompletePublication(Long memberId);
+    void addNewCompletePublicationForMemberAccordingtoMemberId(Long memberId);
 
-    void testPublicationRelations();
-
-    void populateCategoryTable();
+    void createFirstPublication();
     
 }

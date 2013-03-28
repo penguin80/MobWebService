@@ -33,6 +33,8 @@ import javax.persistence.PersistenceContext;
 @Stateless
 @WebService
 public class DataManagerTest implements DataManagerTestLocal {
+    @PersistenceContext(unitName = "PastyChefPU")
+    private EntityManager em;
     @EJB
     private StepsManagerLocal sm;
     @EJB
@@ -51,8 +53,6 @@ public class DataManagerTest implements DataManagerTestLocal {
     private IngredientsManagerLocal im;
     @EJB
     private CommentsManagerLocal com;
-    @PersistenceContext(unitName = "PastyChefPU")
-    private EntityManager em;
     
     
     private String[] firstNames = {"Paul", "Arthur", "Danielle", "Georges",
@@ -67,8 +67,28 @@ public class DataManagerTest implements DataManagerTestLocal {
                                 "www.heig-vd.ch/assets/hesso-logo.png",
                                 "ec.pond5.com/s3/000732169_iconv.jpeg"};
 
+    /** Method that populate the tables named Category and Membership.
+     * This method creates 13 categories and 10 members. Moreover, this method 
+     * transmits data to the Game engine which will also populate the tables 
+     * named Player, Player_Badge, Player_Event and Event. By default, each new 
+     * Member receives a Badge named "Newbie" (the Experience Badge).
+     * 
+     */
     @Override
-    public void testMethods() {
+    public void populateTables_Category_Member() {
+        cam.createCategory("Biscuits");
+        cam.createCategory("Gâteaux");
+        cam.createCategory("Petits gâteaux");
+        cam.createCategory("Gâteaux d'anniversaire");
+        cam.createCategory("Macarons");
+        cam.createCategory("Cake pops");
+        cam.createCategory("Cupcakes");
+        cam.createCategory("Gâteaux au yaourt");
+        cam.createCategory("Pâtes à sucre");
+        cam.createCategory("Crèmes et flans");
+        cam.createCategory("Vacherins glacés");
+        cam.createCategory("Tartes");
+        cam.createCategory("Muffins");
         for (int index = 0; index < 10; index++) {
             Long x = mm.createMember(firstNames[index], lastNames[index], ages[index], 
                                      "pseudo" + index, firstNames[index] + "." + 
@@ -100,11 +120,6 @@ public class DataManagerTest implements DataManagerTestLocal {
 
                     webResource2.type("application/json").post(ClientResponse.class, input2);
 
-    //		if (response.getStatus() != 201) {
-    //			throw new RuntimeException("Failed : HTTP error code : "
-    //			     + response.getStatus());
-    //		}
-
             } catch (Exception e) {
 
                     e.printStackTrace();
@@ -113,8 +128,20 @@ public class DataManagerTest implements DataManagerTestLocal {
         }
     }
 
+    /** Method that creates a complete Publication (also creates an Image 
+     * and a complete Recipie made up of a set of Ingredients and Steps, 
+     * uses an existing Category and depends on the parameter to assign 
+     * the created Publication to a Member). This method also transmits data 
+     * to the Game engine and adds an Event and possibly a Badge to the concerned 
+     * Player (and eventually upgrades the Experience Badge depending on the number 
+     * of points of that Player). Those modifications are toggled by commenting or 
+     * uncommenting lines about ingredientsId added, stepsId added and/or category 
+     * selection.
+     * 
+     * @param memberId : A memberId received
+     */
     @Override
-    public void addNewCompletePublication(Long memberId) {
+    public void addNewCompletePublicationForMemberAccordingtoMemberId(Long memberId) {
         if (memberId != null) {
             String name = "TestRecette";
             Long i1 = im.createIngredient("farine", 300, "grammes");
@@ -201,8 +228,18 @@ public class DataManagerTest implements DataManagerTestLocal {
         }
     }
 
+    /** Method that creates the first publication of member #6. This 
+     * method beforehand creates a complete recipie made up of ingredients and 
+     * steps and an image and uses the Category named "Gâteaux" and assigns that 
+     * created Publication to member #6. This method also transmits data to the 
+     * Game engine by creating 3 new Events (Events based on Category chosen, 
+     * number of Publications and type of Publication (complete or partial)). 
+     * Those Events will generate some points to the Player concerned and a Badge 
+     * (since the Category chosen is used for the first time).
+     * 
+     */
     @Override
-    public void testPublicationRelations() {
+    public void createFirstPublication() {
         String name = "TestDestructor";
         Long i1 = im.createIngredient("méchants", 3000, "personnes");
         Long i2 = im.createIngredient("M1 Abrams", 200, "tanks");
@@ -292,31 +329,10 @@ public class DataManagerTest implements DataManagerTestLocal {
 
         } catch (Exception e) {
  
-		e.printStackTrace();
+        e.printStackTrace();
                 
         }
 
-    }
-
-    @Override
-    public void populateCategoryTable() {
-        cam.createCategory("Biscuits");
-        cam.createCategory("Gâteaux");
-        cam.createCategory("Petits gâteaux");
-        cam.createCategory("Gâteaux d'anniversaire");
-        cam.createCategory("Macarons");
-        cam.createCategory("Cake pops");
-        cam.createCategory("Cupcakes");
-        cam.createCategory("Gâteaux au yaourt");
-        cam.createCategory("Pâtes à sucre");
-        cam.createCategory("Crèmes et flans");
-        cam.createCategory("Vacherins glacés");
-        cam.createCategory("Tartes");
-        cam.createCategory("Muffins");
-    }
-
-    public void persist(Object object) {
-        em.persist(object);
     }
     
 }
