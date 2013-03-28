@@ -96,8 +96,7 @@ public class MembershipFacadeREST {
 
             Client client = Client.create();
 
-//            WebResource webResource = client.resource("http://localhost:8080/PastryChefGamification/webresources/player");
-            WebResource webResource = client.resource("http://localhost:8080/PastryChefGame/webresources/player");
+            WebResource webResource = client.resource("http://localhost:8080/PastryChefGamification/webresources/player");
             String input = "{\"firstName\":\""+ m.getFirstName()
                             + "\",\"lastName\": \""+ m.getLastName() 
                             + "\",\"email\": \""+ m.getEmail() 
@@ -106,8 +105,7 @@ public class MembershipFacadeREST {
 
                 webResource.type("application/json").post(ClientResponse.class, input);
 
-//            WebResource webResource2 = client.resource("http://localhost:8080/PastryChefGamification/webresources/event");
-            WebResource webResource2 = client.resource("http://localhost:8080/PastryChefGame/webresources/event");
+            WebResource webResource2 = client.resource("http://localhost:8080/PastryChefGamification/webresources/event");
             String input2 = "{\"type\":\""+ "Création de compte"
                             + "\",\"timeInMillis\": " + c.getTimeInMillis()
                             + ",\"player\": {\"memberId\": " + m.getId() + "}"
@@ -255,8 +253,7 @@ public class MembershipFacadeREST {
 
             Client client = Client.create();
 
-//            WebResource webResource = client.resource("http://localhost:8080/PastryChefGamification/webresources/event");
-            WebResource webResource = client.resource("http://localhost:8080/PastryChefGame/webresources/event");
+            WebResource webResource = client.resource("http://localhost:8080/PastryChefGamification/webresources/event");
             if (pDTO != null && m != null && 
                 pDTO.getCategory() != null &&
                 pDTO.getCategory().getName() != null && 
